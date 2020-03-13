@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="static/assets/js/jquery.min.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="static/assets/css/style.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+		<script src="static/assets/js/scouts.js"></script>
+		<script src="static/assets/js/monitor.js"></script>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=0.8, minimal-ui">
+		<meta name="description" content="PyIris - Scouts">
+		<meta name="author" content="Angus Yim">
+		<meta name="theme-color" content="#ffffff" />
+		<title>PyIris - Scouts</title>
+	</head>
+	<body>
+		<nav>
+			<a href="home">Home</a>
+			<a href="generator" style="color: #13a10e" id="gen_link">Generator</a>
+			<a href="listeners" style="color: #3b79ff">Listeners</a>
+			<a href="scouts" style="color: #e74856">Scouts</a>
+		</nav>
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<div id="error" class="hide" style="font-size: small"></div>
+					<div id="success" class="hide" style="font-size: small"></div>
+
+					<h1 class="label" id="h1_scouts_heading">Scouts</h1>
+
+					<p class="center hide" id="p_fail_text"> No scouts are connected to PyIris <br>
+						To generate a scout, go to the generators page <br>
+						To connect to a scout, go to the listeners page
+					</p>
+
+					<div class="div_heading" id="div_scouts_table_heading">
+						<h2 class="custom_label" id="h2_scouts_table_heading">Scouts List</h2>
+					</div>
+					<div id="div_scouts_table">
+						<div id="div_scouts_table_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
+							<button id="button_scouts_table_bridge_0" class="select button_scouts_table" style = "width: 18% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_scouts_table_bridge_0_spinner"></i> Bridge</button>
+							<button id="button_scouts_table_disconnect_1" class="select button_scouts_table" style = "width: 18% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_scouts_table_disconnect_1_spinner"></i> Disconnect</button>
+							<button id="button_scouts_table_kill_2" class="select button_scouts_table" style = "width: 18% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_scouts_table_kill_2_spinner"></i> Kill</button>
+							<button id="button_scouts_table_ping_3" class="select button_scouts_table" style = "width: 18% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_scouts_table_ping_3_spinner"></i> Ping</button>
+							<button id="button_scouts_table_sleep_4" class="select button_scouts_table" style = "width: 18% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_scouts_table_sleep_4_spinner"></i> Sleep</button>
+						</div>
+
+						<br>
+						<br>
+
+						<table id="table_scouts">
+							<tr>
+								<th>ID</th>
+								<th>Remote Scout Host</th>
+								<th>Remote Scout Port</th>
+								<th>Connection thru</th>
+								<th>Name</th>
+								<th>Connection at</th>
+								<th>Connection type</th>
+								<th></th>
+							</tr>
+						</table>
+
+						<div id="div_scouts_table_sleep" class="hide">
+							<input type="number" id="input_scouts_table_scout_sleep_time" name="Sleep time" placeholder="Enter time to sleep (default is 10s)" style="width: 20em !important;" maxlength="100">
+							<button id="button_scouts_table_scout_sleep_time" class="select">Update</button>
+						</div>
+
+						<br>
+					</div>
+
+					<div id="div_direct" class=hide">
+						<div id="div_direct_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
+							<button id="button_direct_disconnect_0" class="select button_direct" style = "width: 23% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_direct_disconnect_0_spinner"></i> Disconnect</button>
+							<button id="button_direct_kill_1" class="select button_direct" style = "width: 23% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_direct_kill_1_spinner"></i> Kill</button>
+							<button id="button_direct_ping_2" class="select button_direct" style = "width: 23% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_direct_ping_2_spinner"></i> Ping</button>
+							<button id="button_direct_sleep_3" class="select button_direct" style = "width: 23% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_direct_sleep_3_spinner"></i> Sleep</button>
+						</div>
+						<br>
+						<div id="div_direct_sleep" class="hide">
+							<input type="number" id="input_direct_scout_sleep_time" name="Sleep time" placeholder="Enter time to sleep (default is 10s)" style="width: 20em !important;" maxlength="100">
+							<button id="button_direct_scout_sleep_time" class="select">Update</button>
+						</div>
+						<br>
+						<div id="div_direct_main_load">
+							<i class="fa fa-circle-o-notch fa-spin" id="i_direct_main_spinner"></i>
+						</div>
+						<br>
+
+						<div id="div_active_windows_dump">
+							<div class="div_heading" id="div_active_windows_dump_heading">
+								<span>
+									<a href="#!">
+										<img src="static/images/img.png" border="0" id="img_active_windows_dump_arrow" class="img_arrow" style="width: 30px; height: 30px; margin-top: 12px"/>
+									</a>
+									<h2 class="custom_label" id="h2_active_windows_dump_heading">Active Windows</h2>
+								</span>
+							</div>
+							<div id="div_active_windows_dump_content">
+								<button id="button_active_windows_dump" class="select">Show   <i class="fa fa-circle-o-notch fa-spin" id="i_active_windows_dump_spinner"></i></button>
+								<table id="table_active_windows_dump">
+									<tr>
+										<th>Active Windows</th>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<br>
+						<div id="div_browser">
+							<div class="div_heading" id="div_browser_heading">
+								<span>
+									<a href="#!">
+										<img src="static/images/img.png" border="0" id="img_browser_arrow" class="img_arrow" style="width: 30px; height: 30px; margin-top: 12px"/>
+									</a>
+									<h2 class="custom_label" id="h2_browser_heading">Open Webpage</h2>
+								</span>
+							</div>
+							<div id="div_browser_content">
+								<div id="div_browser_url_input">
+									<input type="text" id="input_browser_url_input" name="Browser Url" placeholder="URL to open" style="width: 20em !important;">
+									<button id="button_browser_url_input" class="select">Open</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<br>
+
+					<div id="copyright">
+						<a href="https://github.com/angus-y/PyIris-backdoor">GitHub</a><br>
+						Version 1.0.1<br>
+						Copyright © 2020 Angus Yim<br>
+						<a href="https://github.com/angus-y" target="_blank">https://github.com/angus-y</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
