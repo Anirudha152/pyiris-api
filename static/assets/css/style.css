@@ -273,10 +273,13 @@ nav a:hover{
     font-family: inherit;
 }
 button:hover, input[type="submit"]:hover, input[type="reset"]:hover, input[type="button"]:hover {
-	background: #42444a;
+	background: #42444a !important;
 }
 button:active, input[type="submit"]:active, input[type="reset"]:active, input[type="button"]:active {
 	transform: scale(.93);
+}
+button:disabled {
+    cursor: default !important;
 }
 
 /* Forms */
@@ -609,4 +612,20 @@ input:checked + .slider:before {
 #a_scout_link:hover {
     cursor: pointer;
 }
+
+#p_direct_components_console_output {
+    margin-top: 0px !important;
+    width: 100%;
+    background-color: #252629;
+    height: 400px;
+    overflow-y:auto;
+    border: solid #252629 1px;
+}
+
+#div_direct_components_console_header {
+    margin-bottom: 0px !important;
+    width: 100%;
+    border: solid #252629 1px;
+}
+
 

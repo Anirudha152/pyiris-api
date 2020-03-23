@@ -16,7 +16,7 @@ def main(scout_id):
                         config.app.logger.info("[library/commands/scout_interface/sleep] - Sleeping scout of ID : " + str(i))
                     elif interface == "CUI":
                         print(config.inf + 'Sleeping scout of ID : ' + i)
-                    config.scout_database[i][0].sendall(('sleep ' + sleep_dur).encode())
+                    config.scout_database[i][0].sendall(('g sleep ' + sleep_dur).encode())
                     data = config.scout_database[i][0].recv(999999).decode()
                     if interface == "GUI":
                         config.app.logger.info("[library/commands/scout_interface/sleep] - Message from scout: " + str(data))
@@ -40,7 +40,7 @@ def main(scout_id):
                 config.app.logger.info("[library/commands/scout_interface/sleep] - Sleeping scout of ID : " + str(scout_id))
             elif interface == "CUI":
                 print(config.inf + 'Sleeping scout of ID : ' + str(scout_id))
-            config.scout_database[slp_scout_id][0].sendall(('sleep ' + sleep_dur).encode())
+            config.scout_database[slp_scout_id][0].sendall(('g sleep ' + sleep_dur).encode())
             data = config.scout_database[slp_scout_id][0].recv(999999).decode()
             if interface == "GUI":
                 config.app.logger.info("[library/commands/scout_interface/sleep] - Message from scout: " + str(data))

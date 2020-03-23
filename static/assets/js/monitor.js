@@ -21,7 +21,6 @@ $(document).ready(function () {
             }
         }
         else if (MonitorGlobals.currentLocation === "scouts") {
-            console.log(ScoutGlobals.reloadedPage);
             if (!ScoutGlobals.reloadedPage) {
                 triggerAjax("monitor normal", true, '/monitor_process', afterDataReceived, undefined);
             } else if (ScoutGlobals.reloadedPage) {
