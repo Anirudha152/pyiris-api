@@ -30,6 +30,9 @@
     </expand>
     <select />
   </component>
+  <component name="FavoritesManager">
+    <favorites_list name="web_interface" />
+  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -136,7 +139,7 @@
       <workItem from="1584865975563" duration="8853000" />
       <workItem from="1584893547981" duration="5372000" />
       <workItem from="1584899076567" duration="997000" />
-      <workItem from="1584935034413" duration="2267000" />
+      <workItem from="1584935034413" duration="53967000" />
     </task>
     <servers />
   </component>

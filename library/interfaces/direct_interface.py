@@ -177,7 +177,7 @@ def main(scout_id, prompt=None):
                 elif command == 'exec_py_script':
                     data = 'exec_py ' + python_execute_editor.main()
                     print(config.inf + 'Attempting to run on scout...')
-                    print(send_and_recv.main(data, scout_id))
+                    print(send_and_recv.main("c " + data, scout_id))
                 elif command == 'exec_py_file':
                     python_execute_file.main(prompt, scout_id)
                 elif command == 'inj_valid':

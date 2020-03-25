@@ -10,7 +10,7 @@ ScoutGlobals = {
     "$this": undefined,
     "bridgedId": "-1",
     "error": true,
-    "loading": false
+    "readOnlyLength": 4
 };
 $(document).ready(function () {
     // SCOUTS INTERFACE !!
@@ -739,6 +739,298 @@ $(document).ready(function () {
         }
     }
 
+    $('.singleline').on('keypress, keydown', function(event) {
+        if ((event.which != 37 && (event.which != 39))
+            && ((this.selectionStart < ScoutGlobals.readOnlyLength)
+            || ((this.selectionStart == ScoutGlobals.readOnlyLength) && (event.which == 8)))) {
+            return false;
+        }
+    });
+    $(document).on('keypress, keydown', '.multiline', function(event) {
+        if (this.selectionStart < ScoutGlobals.readOnlyLength) {
+            document.getElementById($(this).attr('id')).selectionStart = $(this).val().length;
+            document.getElementById($(this).attr('id')).selectionEnd = $(this).val().length;
+        }
+        if (event.which === 37 && this.selectionStart === ScoutGlobals.readOnlyLength) {
+            return false;
+        }
+        if (event.which === 8) {
+            if (this.selectionStart !== this.selectionEnd) {
+                if (this.selectionStart < ScoutGlobals.readOnlyLength - 1) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
+                if (this.selectionStart === ScoutGlobals.readOnlyLength) {
+                    if ($(this).attr('id').split("_")[6] !== "0") {
+                        let $selector = $("#input_direct_components_python_command_input_" + (parseInt($(this).attr('id').split("_")[6], 10) - 1).toString());
+                        let valueOfDeletable = $(this).val().slice(ScoutGlobals.readOnlyLength);
+                        let pointerLocationToSet = $selector.val().length;
+                        deleteInputRow(parseInt($(this).attr('id').split("_")[6], 10));
+                        $selector.val($selector.val() + valueOfDeletable);
+                        $selector.focus();
+                        document.getElementById($selector.attr('id')).selectionStart = pointerLocationToSet;
+                        document.getElementById($selector.attr('id')).selectionEnd = pointerLocationToSet;
+                        return false;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+        } else if (event.which === 13) {
+            let valueOfEnterable = $(this).val().slice(this.selectionStart);
+            $(this).val($(this).val().slice(0, this.selectionStart))
+            insertInputRow(parseInt($(this).attr('id').split("_")[6], 10));
+            let $selector = $("#input_direct_components_python_command_input_" + (parseInt($(this).attr('id').split("_")[6], 10) + 1).toString());
+            $selector.val(">>> " + valueOfEnterable)
+            $selector.focus();
+            document.getElementById($selector.attr('id')).selectionStart = ScoutGlobals.readOnlyLength;
+            document.getElementById($selector.attr('id')).selectionEnd = ScoutGlobals.readOnlyLength;
+            return false;
+        } else if (event.which === 40) {
+            if (parseInt($(this).attr('id').split("_")[6], 10) < $("#div_direct_components_python_command_input").children().length - 1) {
+                let pos = this.selectionStart
+                let $selector = $("#input_direct_components_python_command_input_" + (parseInt($(this).attr('id').split("_")[6], 10) + 1).toString())
+                $selector.focus();
+                document.getElementById($selector.attr('id')).selectionStart = pos;
+                document.getElementById($selector.attr('id')).selectionEnd = pos;
+            }
+            return false;
+        } else if (event.which === 38) {
+            if (parseInt($(this).attr('id').split("_")[6], 10) > 0) {
+                let pos = this.selectionStart;
+                let $selector = $("#input_direct_components_python_command_input_" + (parseInt($(this).attr('id').split("_")[6], 10) - 1).toString())
+                $selector.focus();
+                document.getElementById($selector.attr('id')).selectionStart = pos;
+                document.getElementById($selector.attr('id')).selectionEnd = pos;
+            }
+            return false;
+        } else {
+            if (this.selectionStart < ScoutGlobals.readOnlyLength) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    });
+    $(document).on('mousedown mouseup', '.multiline', function(event) {
+        if (this.selectionStart < ScoutGlobals.readOnlyLength) {
+            document.getElementById($(this).attr('id')).selectionStart = ScoutGlobals.readOnlyLength;
+            document.getElementById($(this).attr('id')).selectionEnd = ScoutGlobals.readOnlyLength;
+            return false;
+        }
+    })
+    function deleteInputRow(rowId) {
+        $("#input_direct_components_python_command_input_" + rowId.toString()).remove();
+        for (let i = rowId + 1; i <= $("#div_direct_components_python_command_input").children().length; i++) {
+            $("#input_direct_components_python_command_input_" + i.toString()).attr('id', "input_direct_components_python_command_input_" + (i - 1).toString());
+        }
+    }
+    function insertInputRow(rowId) {
+        for (let i = $("#div_direct_components_python_command_input").children().length - 1; i > rowId; i--) {
+            $("#input_direct_components_python_command_input_" + i.toString()).attr('id', "input_direct_components_python_command_input_" + (i + 1).toString());
+        }
+        $("#div_direct_components_python_command_input").insertAt(rowId + 1, "<input type='text' id='input_direct_components_python_command_input_" + (rowId + 1).toString() + "' class='multiline command_input' name='Python' value='>>> ' style='width: 100% !important; height: 25px !important; background-color: #252629 !important; border-radius: 0px !important; margin: 0px !important;'>");
+    }
+    jQuery.fn.insertAt = function(index, element) {
+        var lastIndex = this.children().length;
+        if (index < 0) {
+            index = Math.max(0, lastIndex + 1 + index);
+        }
+        this.append(element);
+        if (index < lastIndex) {
+            this.children().eq(index).before(this.children().last());
+        }
+        return this;
+    }
+
+    $("#button_direct_classify_execute_CMD").click(function () {
+        displaySelectedFunctions("execute", "CMD");
+        displayComponents("CMD");
+        $("#button_direct_components_back").show();
+        $("#div_direct_classify").hide();
+    });
+    $("#button_direct_components_CMD").click(function () {
+        if ($("#input_direct_components_CMD").val() !== "") {
+            logToConsole("[>]exec_c " + $("#input_direct_components_CMD").val().slice(ScoutGlobals.readOnlyLength), true);
+            triggerAjaxDirectInterface("exec_c " + $("#input_direct_components_CMD").val().slice(ScoutGlobals.readOnlyLength), true, CMDCB, undefined);
+            $("#input_direct_components_CMD").val(">>> ");
+        } else {
+            ScoutGlobals.error = true;
+            showMessage("Please enter a command");
+            scrollToTop();
+        }
+    });
+    function CMDCB(data) {
+        if (data.output === "Success") {
+            logToConsole(data.data, true);
+        } else if (data.output === "Fail") {
+            ScoutGlobals.error = true;
+            showMessage(data.output_message);
+            scrollToTop();
+        }
+    }
+
+    $("#button_direct_classify_execute_powershell").click(function () {
+        displaySelectedFunctions("execute", "powershell");
+        displayComponents("powershell");
+        $("#button_direct_components_back").show();
+        $("#div_direct_classify").hide();
+    });
+    $("#button_direct_components_powershell").click(function () {
+        if ($("#input_direct_components_powershell").val().slice(ScoutGlobals.readOnlyLength) !== "") {
+            logToConsole("[>]exec_p " + $("#input_direct_components_powershell").val().slice(ScoutGlobals.readOnlyLength), true);
+            triggerAjaxDirectInterface("exec_p " + $("#input_direct_components_powershell").val().slice(ScoutGlobals.readOnlyLength), true, powershellCB, undefined);
+            $("#input_direct_components_powershell").val(">>> ");
+        } else {
+            ScoutGlobals.error = true;
+            showMessage("Please enter a command");
+            scrollToTop();
+        }
+    });
+    function powershellCB(data) {
+        if (data.output === "Success") {
+            logToConsole(data.data, true);
+        } else if (data.output === "Fail") {
+            ScoutGlobals.error = true;
+            showMessage(data.output_message);
+            scrollToTop();
+        }
+    }
+
+    $("#button_direct_classify_execute_file").click(function () {
+        displaySelectedFunctions("execute", "file");
+        displayComponents("file");
+        $("#button_direct_components_back").show();
+        $("#div_direct_classify").hide();
+    });
+    $("#button_direct_components_file").click(function () {
+        if ($("#input_direct_components_file").val() !== "") {
+            logToConsole("[>]exec_f " + $("#input_direct_components_file").val(), true);
+            triggerAjaxDirectInterface("exec_f " + $("#input_direct_components_file").val(), true, fileCB, undefined);
+            $("#input_direct_components_file").val("");
+        } else {
+            ScoutGlobals.error = true;
+            showMessage("Please enter a valid directory");
+            scrollToTop();
+        }
+    });
+    function fileCB(data) {
+        if (data.output === "Success") {
+            logToConsole(data.data, true);
+        } else if (data.output === "Fail") {
+            ScoutGlobals.error = true;
+            showMessage(data.output_message);
+            scrollToTop();
+        }
+    }
+
+    $("#button_direct_classify_execute_python").click(function () {
+        displaySelectedFunctions("execute", "python");
+        displayComponents("python");
+        $("#button_direct_components_back").show();
+        $("#div_direct_classify").hide();
+        $("#div_direct_components_python_command_input").html("You are currently in the python executor scripter, script a chain of python instructions to run, press execute to run (only works if python execute component is loaded)<input type='text' id='input_direct_components_python_command_input_0' class='multiline command_input' name='Python' value='>>> ' style='width: 100% !important; height: 25px !important; background-color: #252629 !important; border-radius: 0px !important; margin: 0px !important;'>");
+        $("#input_direct_components_python_command_input_0").focus();
+        document.getElementById("input_direct_components_python_command_input_0").selectionStart = ScoutGlobals.readOnlyLength;
+        document.getElementById("input_direct_components_python_command_input_0").selectionEnd = ScoutGlobals.readOnlyLength;
+    });
+    $("#button_direct_components_python_file").click(function () {
+        if ($("#input_direct_components_python_file").val() !== "") {
+            logToConsole("[>]exec_py_file " + $("#input_direct_components_python_file").val(), true);
+            triggerAjaxDirectInterface("exec_py_file " + $("#input_direct_components_python_file").val(), true, pythonCB, undefined);
+            $("#input_direct_components_python_file").val("");
+        } else {
+            ScoutGlobals.error = true;
+            showMessage("Please enter a valid directory");
+            scrollToTop();
+        }
+    });
+    $("#button_direct_components_python_command").click(function () {
+        let pythonProgram = "";
+        $(".multiline").each(function () {
+            pythonProgram = pythonProgram + $(this).val().slice(ScoutGlobals.readOnlyLength) + "\n";
+        })
+        logToConsole("[>]exec_py " + pythonProgram, true);
+        triggerAjaxDirectInterface("exec_py " + pythonProgram, true, pythonCB, undefined);
+    });
+    function pythonCB(data) {
+        if (data.output === "Success") {
+            logToConsole(data.data, true);
+        } else if (data.output === "Fail") {
+            ScoutGlobals.error = true;
+            showMessage(data.output_message);
+            scrollToTop();
+        }
+    }
+
+    $("#button_direct_classify_persist_registryPersistence").click(function () {
+        displaySelectedFunctions("persist", "registryPersistence");
+        displayComponents("registryPersistence");
+        $("#button_direct_components_back").show();
+        $("#div_direct_classify").hide();
+    });
+    $("#button_direct_components_registryPersistence").click(function () {
+        logToConsole("[>]reg_persist", true);
+        triggerAjaxDirectInterface("reg_persist", true, registryPersistenceCB, undefined);
+    });
+    function registryPersistenceCB(data) {
+        if (data.output === "Success") {
+            logToConsole(data.data, true);
+        } else if (data.output === "Fail") {
+            ScoutGlobals.error = true;
+            showMessage(data.output_message);
+            scrollToTop();
+        }
+    }
+
+    $("#button_direct_classify_persist_sdcltUACBypass").click(function () {
+        displaySelectedFunctions("persist", "sdcltUACBypass");
+        displayComponents("sdcltUACBypass");
+        $("#button_direct_components_back").show();
+        $("#div_direct_classify").hide();
+    });
+    $("#button_direct_components_sdcltUACBypass").click(function () {
+        if ($("#input_direct_components_sdcltUACBypass").val() !== "") {
+            logToConsole("[>]sdclt_uac " + $("#input_direct_components_sdcltUACBypass").val(), true);
+            triggerAjaxDirectInterface("sdclt_uac " + $("#input_direct_components_sdcltUACBypass").val(), true, sdcltUACBypassCB, undefined);
+            $("#input_direct_components_sdcltUACBypass").val("");
+        } else {
+            ScoutGlobals.error = true;
+            showMessage("Please enter a valid directory");
+            scrollToTop();
+        }
+    });
+    function sdcltUACBypassCB(data) {
+        if (data.output === "Success") {
+            logToConsole(data.data, true);
+        } else if (data.output === "Fail") {
+            ScoutGlobals.error = true;
+            showMessage(data.output_message);
+            scrollToTop();
+        }
+    }
+
+    $("#button_direct_classify_persist_startupFolderPersistence").click(function () {
+        displaySelectedFunctions("persist", "startupFolderPersistence");
+        displayComponents("startupFolderPersistence");
+        $("#button_direct_components_back").show();
+        $("#div_direct_classify").hide();
+    });
+    $("#button_direct_components_startupFolderPersistence").click(function () {
+        logToConsole("[>]startup_persist", true);
+        triggerAjaxDirectInterface("startup_persist", true, startupFolderPersistenceCB, undefined);
+    });
+    function startupFolderPersistenceCB(data) {
+        if (data.output === "Success") {
+            logToConsole(data.data, true);
+        } else if (data.output === "Fail") {
+            ScoutGlobals.error = true;
+            showMessage(data.output_message);
+            scrollToTop();
+        }
+    }
 
     // SCOUT FUNCTIONS !!
     function loader(toLoad) {
@@ -803,198 +1095,162 @@ $(document).ready(function () {
         }
     }
 
-    function activeWindowsDumpVisible(mode) {
-        if (mode === "0") {
-            $("#div_active_windows_dump").hide();
-        } else if (mode === "1") {
-            $("#div_active_windows_dump").show();
-            $("#div_active_windows_dump_heading").show();
-            $("#div_active_windows_dump_content").hide();
-            $("#table_active_windows_dump").hide();
-            $("#i_active_windows_dump_spinner").hide();
-        } else if (mode === "2") {
-            $("#div_active_windows_dump").show();
-            $("#div_active_windows_dump_heading").show();
-            $("#div_active_windows_dump_content").show();
-            $("#table_active_windows_dump").show();
-            $("#i_active_windows_dump_spinner").hide();
-        } else if (mode === "3") {
-            $("#div_active_windows_dump").show();
-            $("#div_active_windows_dump_heading").show();
-            $("#div_active_windows_dump_content").show();
-            $("#table_active_windows_dump").hide();
-            $("#i_active_windows_dump_spinner").hide();
-        }
-    }
-
-    function browserVisible(mode) {
-        if (mode === "0") {
-            $("#div_browser").hide()
-        } else if (mode === "1") {
-            $("#div_browser").show();
-            $("#div_browser_content").hide();
-        } else if (mode === "2") {
-            $("#div_browser").show();
-            $("#div_browser_content").show();
-        }
-    }
-
     function highlightAvailableFunctions(l) {
         let c = "#e74856";
         if (jQuery.inArray("windows/control/active_windows_dump", l) > -1) {
             $("#button_direct_classify_read_activeWindowsDump").prop('disabled', false).css("background-color", "#2f3136");
         } else {
-            $("#button_direct_classify_read_activeWindowsDump").prop('disabled', true).css("background-color", c);
+            $("#button_direct_classify_read_activeWindowsDump").prop('disabled', true).attr("style", "background-color: " + c + " !important; width: 23% !important;")
         }
 
         if (jQuery.inArray("windows/control/check_admin", l) > -1) {
             $("#button_direct_classify_read_checkAdmin").prop('disabled', false).css("background-color", "#2f3136");
         } else {
-            $("#button_direct_classify_read_checkAdmin").prop('disabled', true).css("background-color", c);
+            $("#button_direct_classify_read_checkAdmin").prop('disabled', true).attr("style", "background-color: " + c + " !important; width: 23% !important;")
         }
 
         if (jQuery.inArray("windows/control/chrome_password_dump", l) > -1) {
             $("#button_direct_classify_read_chromePasswordDump").prop('disabled', false).css("background-color", "#2f3136");
         } else {
-            $("#button_direct_classify_read_chromePasswordDump").prop('disabled', true).css("background-color", c);
+            $("#button_direct_classify_read_chromePasswordDump").prop('disabled', true).attr("style", "background-color: " + c + " !important; width: 23% !important;")
         }
 
         if (jQuery.inArray("windows/control/clip_logger", l) > -1) {
             $("#button_direct_classify_read_clipLogger").prop('disabled', false).css("background-color", "#2f3136");
         } else {
-            $("#button_direct_classify_read_clipLogger").prop('disabled', true).css("background-color", c);
+            $("#button_direct_classify_read_clipLogger").prop('disabled', true).attr("style", "background-color: " + c + " !important; width: 23% !important;")
         }
 
         if (jQuery.inArray("windows/control/download_file", l) > -1) {
             $("#button_direct_classify_read_downloadFile").prop('disabled', false).css("background-color", "#2f3136");
         } else {
-            $("#button_direct_classify_read_downloadFile").prop('disabled', true).css("background-color", c);
+            $("#button_direct_classify_read_downloadFile").prop('disabled', true).attr("style", "background-color: " + c + " !important; width: 23% !important;")
         }
 
         if (jQuery.inArray("windows/control/download_web", l) > -1) {
             $("#button_direct_classify_read_downloadWeb").prop('disabled', false).css("background-color", "#2f3136");
         } else {
-            $("#button_direct_classify_read_downloadWeb").prop('disabled', true).css("background-color", c);
+            $("#button_direct_classify_read_downloadWeb").prop('disabled', true).attr("style", "background-color: " + c + " !important; width: 23% !important;")
         }
 
         if (jQuery.inArray("windows/control/get_idle", l) > -1) {
             $("#button_direct_classify_read_getIdle").prop('disabled', false).css("background-color", "#2f3136");
         } else {
-            $("#button_direct_classify_read_getIdle").prop('disabled', true).css("background-color", c);
+            $("#button_direct_classify_read_getIdle").prop('disabled', true).attr("style", "background-color: " + c + " !important; width: 23% !important;")
         }
 
         if (jQuery.inArray("windows/control/in_memory_screenshot", l) > -1) {
             $("#button_direct_classify_read_screenshot").prop('disabled', false).css("background-color", "#2f3136");
         } else {
-            $("#button_direct_classify_read_screenshot").prop('disabled', true).css("background-color", c);
+            $("#button_direct_classify_read_screenshot").prop('disabled', true).attr("style", "background-color: " + c + " !important; width: 23% !important;")
         }
 
         if (jQuery.inArray("windows/control/in_memory_webcam", l) > -1) {
             $("#button_direct_classify_read_webcam").prop('disabled', false).css("background-color", "#2f3136");
         } else {
-            $("#button_direct_classify_read_webcam").prop('disabled', true).css("background-color", c);
+            $("#button_direct_classify_read_webcam").prop('disabled', true).attr("style", "background-color: " + c + " !important; width: 31.3% !important;")
         }
 
         if (jQuery.inArray("windows/control/key_and_window_logger", l) > -1) {
             $("#button_direct_classify_read_logger").prop('disabled', false).css("background-color", "#2f3136");
         } else {
-            $("#button_direct_classify_read_logger").prop('disabled', true).css("background-color", c);
+            $("#button_direct_classify_read_logger").prop('disabled', true).attr("style", "background-color: " + c + " !important; width: 31.3% !important;")
         }
 
         if (jQuery.inArray("windows/control/system_info_grabber", l) > -1) {
             $("#button_direct_classify_read_systemInfo").prop('disabled', false).css("background-color", "#2f3136");
         } else {
-            $("#button_direct_classify_read_systemInfo").prop('disabled', true).css("background-color", c);
+            $("#button_direct_classify_read_systemInfo").prop('disabled', true).attr("style", "background-color: " + c + " !important; width: 31.3% !important;")
         }
 
         if (jQuery.inArray("windows/control/browser", l) > -1) {
             $("#button_direct_classify_write_browser").prop('disabled', false).css("background-color", "#2f3136");
         } else {
-            $("#button_direct_classify_write_browser").prop('disabled', true).css("background-color", c);
+            $("#button_direct_classify_write_browser").prop('disabled', true).attr("style", "background-color: " + c + " !important; width: 23% !important;")
         }
 
         if (jQuery.inArray("windows/control/inject_keystrokes", l) > -1) {
             $("#button_direct_classify_write_injectKeystrokes").prop('disabled', false).css("background-color", "#2f3136");
         } else {
-            $("#button_direct_classify_write_injectKeystrokes").prop('disabled', true).css("background-color", c);
+            $("#button_direct_classify_write_injectKeystrokes").prop('disabled', true).attr("style", "background-color: " + c + " !important; width: 23% !important;")
         }
 
         if (jQuery.inArray("windows/control/interface_lock", l) > -1) {
             $("#button_direct_classify_write_interfaceLock").prop('disabled', false).css("background-color", "#2f3136");
         } else {
-            $("#button_direct_classify_write_interfaceLock").prop('disabled', true).css("background-color", c);
+            $("#button_direct_classify_write_interfaceLock").prop('disabled', true).attr("style", "background-color: " + c + " !important; width: 23% !important;")
         }
 
         if (jQuery.inArray("windows/control/set_audio", l) > -1) {
             $("#button_direct_classify_write_setAudio").prop('disabled', false).css("background-color", "#2f3136");
         } else {
-            $("#button_direct_classify_write_setAudio").prop('disabled', true).css("background-color", c);
+            $("#button_direct_classify_write_setAudio").prop('disabled', true).attr("style", "background-color: " + c + " !important; width: 23% !important;")
         }
 
         if (jQuery.inArray("windows/control/system_status_change", l) > -1) {
             $("#button_direct_classify_write_systemStatusChange").prop('disabled', false).css("background-color", "#2f3136");
         } else {
-            $("#button_direct_classify_write_systemStatusChange").prop('disabled', true).css("background-color", c);
+            $("#button_direct_classify_write_systemStatusChange").prop('disabled', true).attr("style", "background-color: " + c + " !important; width: 31.3% !important;")
         }
 
         if (jQuery.inArray("windows/control/upload_file", l) > -1) {
             $("#button_direct_classify_write_uploadFile").prop('disabled', false).css("background-color", "#2f3136");
         } else {
-            $("#button_direct_classify_write_uploadFile").prop('disabled', true).css("background-color", c);
+            $("#button_direct_classify_write_uploadFile").prop('disabled', true).attr("style", "background-color: " + c + " !important; width: 31.3% !important;")
         }
 
         if (jQuery.inArray("windows/control/wallpaper_changer", l) > -1) {
             $("#button_direct_classify_write_wallpaperChanger").prop('disabled', false).css("background-color", "#2f3136");
         } else {
-            $("#button_direct_classify_write_wallpaperChanger").prop('disabled', true).css("background-color", c);
+            $("#button_direct_classify_write_wallpaperChanger").prop('disabled', true).attr("style", "background-color: " + c + " !important; width: 31.3% !important;")
         }
 
         if (jQuery.inArray("windows/control/execute_command_cmd", l) > -1) {
             $("#button_direct_classify_execute_CMD").prop('disabled', false).css("background-color", "#2f3136");
         } else {
-            $("#button_direct_classify_execute_CMD").prop('disabled', true).css("background-color", c);
+            $("#button_direct_classify_execute_CMD").prop('disabled', true).attr("style", "background-color: " + c + " !important; width: 23% !important;")
         }
 
         if (jQuery.inArray("windows/control/execute_command_powershell", l) > -1) {
             $("#button_direct_classify_execute_powershell").prop('disabled', false).css("background-color", "#2f3136");
         } else {
-            $("#button_direct_classify_execute_powershell").prop('disabled', true).css("background-color", c);
+            $("#button_direct_classify_execute_powershell").prop('disabled', true).attr("style", "background-color: " + c + " !important; width: 23% !important;")
         }
 
         if (jQuery.inArray("windows/control/execute_command_file", l) > -1) {
             $("#button_direct_classify_execute_file").prop('disabled', false).css("background-color", "#2f3136");
         } else {
-            $("#button_direct_classify_execute_file").prop('disabled', true).css("background-color", c);
+            $("#button_direct_classify_execute_file").prop('disabled', true).attr("style", "background-color: " + c + " !important; width: 23% !important;")
         }
 
         if (jQuery.inArray("windows/control/execute_file", l) > -1) {
             $("#button_direct_classify_execute_file").prop('disabled', false).css("background-color", "#2f3136");
         } else {
-            $("#button_direct_classify_execute_file").prop('disabled', true).css("background-color", c);
+            $("#button_direct_classify_execute_file").prop('disabled', true).attr("style", "background-color: " + c + " !important; width: 23% !important;")
         }
 
         if (jQuery.inArray("windows/control/execute_python", l) > -1) {
             $("#button_direct_classify_execute_python").prop('disabled', false).css("background-color", "#2f3136");
         } else {
-            $("#button_direct_classify_execute_python").prop('disabled', true).css("background-color", c);
+            $("#button_direct_classify_execute_python").prop('disabled', true).attr("style", "background-color: " + c + " !important; width: 23% !important;")
         }
 
         if (jQuery.inArray("windows/control/registry_persistence", l) > -1) {
             $("#button_direct_classify_persist_registryPersistence").prop('disabled', false).css("background-color", "#2f3136");
         } else {
-            $("#button_direct_classify_persist_registryPersistence").prop('disabled', true).css("background-color", c);
+            $("#button_direct_classify_persist_registryPersistence").prop('disabled', true).attr("style", "background-color: " + c + " !important; width: 31.3% !important;")
         }
 
         if (jQuery.inArray("windows/control/sdclt_uac_bypass", l) > -1) {
             $("#button_direct_classify_persist_sdcltUACBypass").prop('disabled', false).css("background-color", "#2f3136");
         } else {
-            $("#button_direct_classify_persist_sdcltUACBypass").prop('disabled', true).css("background-color", c);
+            $("#button_direct_classify_persist_sdcltUACBypass").prop('disabled', true).attr("style", "background-color: " + c + " !important; width: 31.3% !important;")
         }
 
         if (jQuery.inArray("windows/control/startup_folder_persistence", l) > -1) {
             $("#button_direct_classify_persist_startupFolderPersistence").prop('disabled', false).css("background-color", "#2f3136");
         } else {
-            $("#button_direct_classify_persist_startupFolderPersistence").prop('disabled', true).css("background-color", c);
+            $("#button_direct_classify_persist_startupFolderPersistence").prop('disabled', true).attr("style", "background-color: " + c + " !important; width: 31.3% !important;")
         }
     }
 
