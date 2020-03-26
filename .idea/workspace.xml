@@ -22,12 +22,7 @@
     <option name="HIDDEN_KINDS">
       <set />
     </option>
-    <expand>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="Login Data" type="feb32156:DbDataSourceImpl" />
-      </path>
-    </expand>
+    <expand />
     <select />
   </component>
   <component name="FavoritesManager">
@@ -66,7 +61,7 @@
       <recent name="C:\Users\Aniru\Desktop\web_interface\backup" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.web_interface">
     <configuration name="PyIris" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="PyIris-backdoor-master" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -77,6 +72,28 @@
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PyIris.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="web_interface" type="PythonConfigurationType" factoryName="Python">
+      <module name="web_interface" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
@@ -139,7 +156,9 @@
       <workItem from="1584865975563" duration="8853000" />
       <workItem from="1584893547981" duration="5372000" />
       <workItem from="1584899076567" duration="997000" />
-      <workItem from="1584935034413" duration="53967000" />
+      <workItem from="1584935034413" duration="55493000" />
+      <workItem from="1585193662619" duration="6065000" />
+      <workItem from="1585203220508" duration="12519000" />
     </task>
     <servers />
   </component>
@@ -155,6 +174,10 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="233" y="0" key="#Inspections/0.0.1280.680@0.0.1280.680" timestamp="1582288957642" />
+    <state x="233" y="0" key="#JSON" timestamp="1585205304134">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="233" y="0" key="#JSON/0.0.1280.680@0.0.1280.680" timestamp="1585205304134" />
     <state x="398" y="145" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1580728199466">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
@@ -183,10 +206,10 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state width="198" height="457" key="HiddenNamespacesPopup/0.0.1280.680@0.0.1280.680" timestamp="1584700141501" />
-    <state x="342" y="166" key="com.intellij.ide.util.TipDialog" timestamp="1584935043081">
+    <state x="342" y="166" key="com.intellij.ide.util.TipDialog" timestamp="1585203242867">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="342" y="166" key="com.intellij.ide.util.TipDialog/0.0.1280.680@0.0.1280.680" timestamp="1584935043081" />
+    <state x="342" y="166" key="com.intellij.ide.util.TipDialog/0.0.1280.680@0.0.1280.680" timestamp="1585203242867" />
     <state x="0" y="0" width="609" height="680" key="find.popup" timestamp="1582026233676">
       <screen x="0" y="0" width="1280" height="680" />
     </state>

@@ -92,7 +92,7 @@ $(document).ready(function () {
                             ScoutGlobals.nameSentToServer = false;
                             $("#table_scouts").find("tr:gt(0)").remove();
                             for (const value of Object.values(data[1])) {
-                                $("#table_scouts").append("<tr id='tr_scouts_table_" + String(value[0]) + "'><td>" + String(value[0]) + "</td><td>" + String(value[1]) + "</td><td>" + String(value[2]) + "</td><td>" + String(value[3]) + "</td><td contenteditable='true' class='td_scouts_table_name' id='td_scouts_table_name_" + String(value[0]) + "'>" + String(value[4]) + "</td><td>" + String(value[5]) + "</td><td>" + String(value[6]) + "</td><td><i class='fa fa-circle-o-notch fa-spin' class='i_scouts_table_spinner' id='i_scouts_table_spinner_" + String(value[0]) + "'></i></td></tr>");
+                                $("#table_scouts").append("<tr id='tr_scouts_table_" + String(value[0]) + "'><td>" + String(value[0]) + "</td><td>" + String(value[1]) + "</td><td>" + String(value[2]) + "</td><td>" + String(value[3]) + "</td><td contenteditable='true' class='td_scouts_table_name' id='td_scouts_table_name_" + String(value[0]) + "'>" + String(value[4]) + "</td><td>" + String(value[5]) + "</td><td>" + String(value[6]) + "</td><td><i class='fa fa-circle-o-notch fa-spin i_scouts_table_spinner' id='i_scouts_table_spinner_" + String(value[0]) + "'></i></td></tr>");
                                 if (!ScoutGlobals.scoutButtonInFocus) {
                                     $("#i_scouts_table_spinner_" + String(value[0])).hide();
                                 } else {

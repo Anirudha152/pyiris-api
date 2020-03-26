@@ -112,6 +112,7 @@ def main(scout_id, prompt=None):
         except (socket.error, socket.timeout):
             config.app.logger.error('[library/interfaces/direct_interface] - Scout has unexpectedly died, removing from database...')
             del (config.scout_database[scout_id])
+            config.change = True
             return jsonify({"output": "Fail", "output_message": "Scout is dead, removing from database...", "data": ""})
     elif interface == "CUI":
         readline.parse_and_bind('tab: self-insert')

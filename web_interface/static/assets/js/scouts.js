@@ -128,37 +128,63 @@ $(document).ready(function () {
         if (data.output === "Success") {
             ScoutGlobals.scoutButtonInFocus = false;
             ScoutGlobals.idOfSelectedButton = "-1";
-            $("#h1_scouts_heading").text("Scout >> " + data.data[1]);
             ScoutGlobals.bridgedId = data.data[0];
             ScoutGlobals.ifc = "Direct";
-            $("#div_scouts_table").hide();
-            $("#div_scouts_table_heading").hide();
+
+            $(".i_scouts_table_spinner").hide();
+            tableRowClickable(false);
+
+            $("#h1_scouts_heading").text("Scout >> " + data.data[1]);
+            $("#div_scouts").hide();
             $("#div_direct").show();
+
             loaderDirect("-1");
             loader("-1");
-            $(".i_scouts_table_spinner").hide();
+
             $("#p_direct_components_console_output").html("");
             logToConsole("[*]Loading available functions...", true);
+
             highlightAvailableFunctions([]);
             displaySelectedFunctions("", "")
             displayComponents("");
+
             $("#button_direct_components_back").hide();
             triggerAjaxDirectInterface("help", true, loadScoutFunctionsCB, undefined)
         } else {
             ScoutGlobals.error = true;
             showMessage(data.output_message);
             scrollToTop();
-            ScoutGlobals.ifc = "Scouts";
         }
     }
     function loadScoutFunctionsCB(data) {
-        logToConsole("[+]Available functions loaded", true);
-        $("body").off("click", "#table_scouts tr");
-        highlightAvailableFunctions(data.data);
-        displaySelectedFunctions("base", "")
+        if (data.output === "Success") {
+            logToConsole("[+]Available functions loaded", true);
+            $("body").off("click", "#table_scouts tr");
+            highlightAvailableFunctions(data.data);
+            displaySelectedFunctions("base", "")
+        } else {
+            ScoutGlobals.error = true;
+            showMessage(data.output_message);
+            scrollToTop();
+            switchToScoutIFC();
+        }
     }
 
     // DIRECT FUNCTIONS !!
+    function switchToScoutIFC() {
+        ScoutGlobals.scoutButtonInFocus = false;
+        ScoutGlobals.idOfSelectedButton = "-1";
+        ScoutGlobals.bridgedId = "-1";
+        ScoutGlobals.ifc = "Scouts";
+        tableRowClickable(false);
+        $("#h1_scouts_heading").text("Scouts");
+        $("#div_scouts").show();
+        $("#div_direct").hide();
+        loaderDirect("-1");
+        loader("-1");
+        $(".i_scouts_table_spinner").hide();
+    }
+
     $(".button_direct_classify_base").click(function () {
         let command = $(this).attr('id').split('_')[4];
         let id = $(this).attr('id').split('_')[5];
@@ -238,6 +264,17 @@ $(document).ready(function () {
        $("#div_direct_classify").show();
     });
 
+    function logOutputCB(data) {
+        if (data.output === "Success") {
+            logToConsole(data.data, true);
+        } else if (data.output === "Fail") {
+            ScoutGlobals.error = true;
+            showMessage(data.output_message);
+            scrollToTop();
+            switchToScoutIFC();
+        }
+    }
+
     $("#button_direct_classify_read_activeWindowsDump").click(function () {
         displaySelectedFunctions("read", "activeWindowsDump");
         displayComponents("activeWindowsDump");
@@ -246,17 +283,8 @@ $(document).ready(function () {
     });
     $("#button_direct_components_activeWindowsDump").click(function () {
         logToConsole("[>]active", true);
-        triggerAjaxDirectInterface("active", true, activeWindowsDumpCB, undefined);
+        triggerAjaxDirectInterface("active", true, logOutputCB, undefined);
     });
-    function activeWindowsDumpCB(data) {
-        if (data.output === "Success") {
-            logToConsole(data.data, true);
-        } else if (data.output === "Fail") {
-            ScoutGlobals.error = true;
-            showMessage(data.output_message);
-            scrollToTop();
-        }
-    }
 
     $("#button_direct_classify_read_checkAdmin").click(function () {
         displaySelectedFunctions("read", "checkAdmin");
@@ -266,17 +294,8 @@ $(document).ready(function () {
     });
     $("#button_direct_components_checkAdmin").click(function () {
         logToConsole("[>]admin", true);
-        triggerAjaxDirectInterface("admin", true, checkAdminCB, undefined);
+        triggerAjaxDirectInterface("admin", true, logOutputCB, undefined);
     });
-    function checkAdminCB(data) {
-        if (data.output === "Success") {
-            logToConsole(data.data, true);
-        } else if (data.output === "Fail") {
-            ScoutGlobals.error = true;
-            showMessage(data.output_message);
-            scrollToTop();
-        }
-    }
 
     $("#button_direct_classify_read_chromePasswordDump").click(function () {
         displaySelectedFunctions("read", "chromePasswordDump");
@@ -286,21 +305,12 @@ $(document).ready(function () {
     });
     $("#button_direct_components_chromePasswordDump_active").click(function () {
         logToConsole("[>]chromedump active", true);
-        triggerAjaxDirectInterface("chromedump active", true, chromePasswordDumpCB, undefined);
+        triggerAjaxDirectInterface("chromedump active", true, logOutputCB, undefined);
     });
     $("#button_direct_components_chromePasswordDump_passive").click(function () {
         logToConsole("[>]chromedump passive", true);
-        triggerAjaxDirectInterface("chromedump passive", true, chromePasswordDumpCB, undefined);
+        triggerAjaxDirectInterface("chromedump passive", true, logOutputCB, undefined);
     });
-    function chromePasswordDumpCB(data) {
-        if (data.output === "Success") {
-            logToConsole(data.data, true);
-        } else if (data.output === "Fail") {
-            ScoutGlobals.error = true;
-            showMessage(data.output_message);
-            scrollToTop();
-        }
-    }
 
     $("#button_direct_classify_read_clipLogger").click(function () {
         displaySelectedFunctions("read", "clipLogger");
@@ -310,16 +320,16 @@ $(document).ready(function () {
     });
     $("#button_direct_components_clipLogger_clear").click(function () {
         logToConsole("[>]clip_clear", true);
-        triggerAjaxDirectInterface("clip_clear", true, clipLoggerCB, undefined);
+        triggerAjaxDirectInterface("clip_clear", true, logOutputCB, undefined);
     });
     $("#button_direct_components_clipLogger_dump").click(function () {
         logToConsole("[>]clip_dump", true);
-        triggerAjaxDirectInterface("clip_dump", true, clipLoggerCB, undefined);
+        triggerAjaxDirectInterface("clip_dump", true, logOutputCB, undefined);
     });
     $("#button_direct_components_clipLogger_set").click(function () {
         if ($("#input_direct_components_clipLogger_set").val() !== "") {
             logToConsole("[>]clip_set " + $("#input_direct_components_clipLogger_set").val(), true);
-            triggerAjaxDirectInterface("clip_set " + $("#input_direct_components_clipLogger_set").val(), true, clipLoggerCB, undefined);
+            triggerAjaxDirectInterface("clip_set " + $("#input_direct_components_clipLogger_set").val(), true, logOutputCB, undefined);
             $("#input_direct_components_clipLogger_set").val("");
         } else {
             ScoutGlobals.error = true;
@@ -327,15 +337,6 @@ $(document).ready(function () {
             scrollToTop();
         }
     });
-    function clipLoggerCB(data) {
-        if (data.output === "Success") {
-            logToConsole(data.data, true);
-        } else if (data.output === "Fail") {
-            ScoutGlobals.error = true;
-            showMessage(data.output_message);
-            scrollToTop();
-        }
-    }
 
     $("#button_direct_classify_read_downloadFile").click(function () {
         displaySelectedFunctions("read", "downloadFile");
@@ -346,7 +347,7 @@ $(document).ready(function () {
     $("#button_direct_components_downloadFile").click(function () {
         if ($("#input_direct_components_downloadFile").val() !== "") {
             logToConsole("[>]download " + $("#input_direct_components_downloadFile").val(), true);
-            triggerAjaxDirectInterface("download " + $("#input_direct_components_downloadFile").val(), true, downloadFileCB, undefined);
+            triggerAjaxDirectInterface("download " + $("#input_direct_components_downloadFile").val(), true, logOutputCB, undefined);
             $("#input_direct_components_downloadFile").val("");
         } else {
             ScoutGlobals.error = true;
@@ -354,15 +355,6 @@ $(document).ready(function () {
             scrollToTop();
         }
     });
-    function downloadFileCB(data) {
-        if (data.output === "Success") {
-            logToConsole(data.data, true);
-        } else if (data.output === "Fail") {
-            ScoutGlobals.error = true;
-            showMessage(data.output_message);
-            scrollToTop();
-        }
-    }
 
     $("#button_direct_classify_read_downloadWeb").click(function () {
         displaySelectedFunctions("read", "downloadWeb");
@@ -373,7 +365,7 @@ $(document).ready(function () {
     $("#button_direct_components_downloadWeb").click(function () {
         if ($("#input_direct_components_downloadWeb_directory").val() !== "" && $("#input_direct_components_downloadWeb_url").val() !== "") {
             logToConsole("[>]download_web " + $("#input_direct_components_downloadWeb_url").val() + " " + $("#input_direct_components_downloadWeb_directory").val(), true);
-            triggerAjaxDirectInterface("download_web " + $("#input_direct_components_downloadWeb_url").val() + " " + $("#input_direct_components_downloadWeb_directory").val(), true, downloadWebCB, undefined);
+            triggerAjaxDirectInterface("download_web " + $("#input_direct_components_downloadWeb_url").val() + " " + $("#input_direct_components_downloadWeb_directory").val(), true, logOutputCB, undefined);
             $("#input_direct_components_downloadWeb_directory").val("");
             $("#input_direct_components_downloadWeb_url").val("");
         } else {
@@ -382,15 +374,6 @@ $(document).ready(function () {
             scrollToTop();
         }
     });
-    function downloadWebCB(data) {
-        if (data.output === "Success") {
-            logToConsole(data.data, true);
-        } else if (data.output === "Fail") {
-            ScoutGlobals.error = true;
-            showMessage(data.output_message);
-            scrollToTop();
-        }
-    }
 
     $("#button_direct_classify_read_getIdle").click(function () {
         displaySelectedFunctions("read", "getIdle");
@@ -400,17 +383,8 @@ $(document).ready(function () {
     });
     $("#button_direct_components_getIdle").click(function () {
         logToConsole("[>]idle", true);
-        triggerAjaxDirectInterface("idle", true, getIdleCB, undefined);
+        triggerAjaxDirectInterface("idle", true, logOutputCB, undefined);
     });
-    function getIdleCB(data) {
-        if (data.output === "Success") {
-            logToConsole(data.data, true);
-        } else if (data.output === "Fail") {
-            ScoutGlobals.error = true;
-            showMessage(data.output_message);
-            scrollToTop();
-        }
-    }
 
     $("#button_direct_classify_read_screenshot").click(function () {
         displaySelectedFunctions("read", "screenshot");
@@ -420,17 +394,8 @@ $(document).ready(function () {
     });
     $("#button_direct_components_screenshot").click(function () {
         logToConsole("[>]screen", true);
-        triggerAjaxDirectInterface("screen", true, screenshotCB, undefined);
+        triggerAjaxDirectInterface("screen", true, logOutputCB, undefined);
     });
-    function screenshotCB(data) {
-        if (data.output === "Success") {
-            logToConsole(data.data, true);
-        } else if (data.output === "Fail") {
-            ScoutGlobals.error = true;
-            showMessage(data.output_message);
-            scrollToTop();
-        }
-    }
 
     $("#button_direct_classify_read_webcam").click(function () {
         displaySelectedFunctions("read", "webcam");
@@ -440,17 +405,8 @@ $(document).ready(function () {
     });
     $("#button_direct_components_webcam").click(function () {
         logToConsole("[>]webcam", true);
-        triggerAjaxDirectInterface("webcam", true, webcamCB, undefined);
+        triggerAjaxDirectInterface("webcam", true, logOutputCB, undefined);
     });
-    function webcamCB(data) {
-        if (data.output === "Success") {
-            logToConsole(data.data, true);
-        } else if (data.output === "Fail") {
-            ScoutGlobals.error = true;
-            showMessage(data.output_message);
-            scrollToTop();
-        }
-    }
 
     $("#button_direct_classify_read_logger").click(function () {
         displaySelectedFunctions("read", "logger");
@@ -460,25 +416,16 @@ $(document).ready(function () {
     });
     $("#button_direct_components_logger_start").click(function () {
         logToConsole("[>]key_start", true);
-        triggerAjaxDirectInterface("key_start", true, loggerCB, undefined);
+        triggerAjaxDirectInterface("key_start", true, logOutputCB, undefined);
     });
     $("#button_direct_components_logger_stop").click(function () {
         logToConsole("[>]key_stop", true);
-        triggerAjaxDirectInterface("key_stop", true, loggerCB, undefined);
+        triggerAjaxDirectInterface("key_stop", true, logOutputCB, undefined);
     });
     $("#button_direct_components_logger_dump").click(function () {
         logToConsole("[>]key_dump", true);
-        triggerAjaxDirectInterface("key_dump", true, loggerCB, undefined);
+        triggerAjaxDirectInterface("key_dump", true, logOutputCB, undefined);
     });
-    function loggerCB(data) {
-        if (data.output === "Success") {
-            logToConsole(data.data, true);
-        } else if (data.output === "Fail") {
-            ScoutGlobals.error = true;
-            showMessage(data.output_message);
-            scrollToTop();
-        }
-    }
 
     $("#button_direct_classify_read_systemInfo").click(function () {
         displaySelectedFunctions("read", "systemInfo");
@@ -488,17 +435,8 @@ $(document).ready(function () {
     });
     $("#button_direct_components_systemInfo").click(function () {
         logToConsole("[>]sysinfo", true);
-        triggerAjaxDirectInterface("sysinfo", true, systemInfoCB, undefined);
+        triggerAjaxDirectInterface("sysinfo", true, logOutputCB, undefined);
     });
-    function systemInfoCB(data) {
-        if (data.output === "Success") {
-            logToConsole(data.data, true);
-        } else if (data.output === "Fail") {
-            ScoutGlobals.error = true;
-            showMessage(data.output_message);
-            scrollToTop();
-        }
-    }
 
     $("#button_direct_classify_write_browser").click(function () {
         displaySelectedFunctions("write", "browser");
@@ -509,7 +447,7 @@ $(document).ready(function () {
     $("#button_direct_components_browser").click(function () {
         if ($("#input_direct_components_browser").val() !== "") {
             logToConsole("[>]browse " + $("#input_direct_components_browser").val(), true);
-            triggerAjaxDirectInterface("browse " + $("#input_direct_components_browser").val(), true, browserCB, undefined);
+            triggerAjaxDirectInterface("browse " + $("#input_direct_components_browser").val(), true, logOutputCB, undefined);
             $("#input_direct_components_browser").val("");
         } else {
             ScoutGlobals.error = true;
@@ -517,15 +455,6 @@ $(document).ready(function () {
             scrollToTop();
         }
     });
-    function browserCB(data) {
-        if (data.output === "Success") {
-            logToConsole(data.data, true);
-        } else if (data.output === "Fail") {
-            ScoutGlobals.error = true;
-            showMessage(data.output_message);
-            scrollToTop();
-        }
-    }
 
     $("#button_direct_classify_write_injectKeystrokes").click(function () {
         displaySelectedFunctions("write", "injectKeystrokes");
@@ -540,7 +469,7 @@ $(document).ready(function () {
     $("#button_direct_components_injectKeystrokes_text").click(function () {
         if ($("#input_direct_components_injectKeystrokes_text").val() !== "") {
             logToConsole("[>]inj_t " + $("#input_direct_components_injectKeystrokes_text").val(), true);
-            triggerAjaxDirectInterface("inj_t " + $("#input_direct_components_injectKeystrokes_text").val(), true, injectKeystrokesCB, undefined);
+            triggerAjaxDirectInterface("inj_t " + $("#input_direct_components_injectKeystrokes_text").val(), true, logOutputCB, undefined);
             $("#input_direct_components_injectKeystrokes_text").val("");
         } else {
             ScoutGlobals.error = true;
@@ -551,7 +480,7 @@ $(document).ready(function () {
     $("#button_direct_components_injectKeystrokes_button").click(function () {
         if ($("#input_direct_components_injectKeystrokes_button").val() !== "") {
             logToConsole("[>]inj_p " + $("#input_direct_components_injectKeystrokes_button").val(), true);
-            triggerAjaxDirectInterface("inj_p " + $("#input_direct_components_injectKeystrokes_button").val(), true, injectKeystrokesCB, undefined);
+            triggerAjaxDirectInterface("inj_p " + $("#input_direct_components_injectKeystrokes_button").val(), true, logOutputCB, undefined);
             $("#input_direct_components_injectKeystrokes_button").val("");
         } else {
             ScoutGlobals.error = true;
@@ -562,7 +491,7 @@ $(document).ready(function () {
     $("#button_direct_components_injectKeystrokes_combination").click(function () {
         if ($("#input_direct_components_injectKeystrokes_combination").val() !== "") {
             logToConsole("[>]inj_h " + $("#input_direct_components_injectKeystrokes_combination").val(), true);
-            triggerAjaxDirectInterface("inj_h " + $("#input_direct_components_injectKeystrokes_combination").val(), true, injectKeystrokesCB, undefined);
+            triggerAjaxDirectInterface("inj_h " + $("#input_direct_components_injectKeystrokes_combination").val(), true, logOutputCB, undefined);
             $("#input_direct_components_injectKeystrokes_combination").val("");
         } else {
             ScoutGlobals.error = true;
@@ -570,15 +499,6 @@ $(document).ready(function () {
             scrollToTop();
         }
     });
-    function injectKeystrokesCB(data) {
-        if (data.output === "Success") {
-            logToConsole(data.data, true);
-        } else if (data.output === "Fail") {
-            ScoutGlobals.error = true;
-            showMessage(data.output_message);
-            scrollToTop();
-        }
-    }
     function injectKeystrokesGetCB(data) {
         let $selector = $("#p_direct_components_console_output");
         let appendString = "";
@@ -598,29 +518,20 @@ $(document).ready(function () {
     });
     $("#button_direct_components_interfaceLock_lock_keyboard").click(function () {
         logToConsole("[>]inter_lock key", true);
-        triggerAjaxDirectInterface("inter_lock key", true, interfaceLockCB, undefined);
+        triggerAjaxDirectInterface("inter_lock key", true, logOutputCB, undefined);
     });
     $("#button_direct_components_interfaceLock_lock_mouse").click(function () {
         logToConsole("[>]inter_lock mouse", true);
-        triggerAjaxDirectInterface("inter_lock mouse", true, interfaceLockCB, undefined);
+        triggerAjaxDirectInterface("inter_lock mouse", true, logOutputCB, undefined);
     });
     $("#button_direct_components_interfaceLock_unlock_keyboard").click(function () {
         logToConsole("[>]inter_unlock key", true);
-        triggerAjaxDirectInterface("inter_unlock key", true, interfaceLockCB, undefined);
+        triggerAjaxDirectInterface("inter_unlock key", true, logOutputCB, undefined);
     });
     $("#button_direct_components_interfaceLock_unlock_mouse").click(function () {
         logToConsole("[>]inter_unlock mouse", true);
-        triggerAjaxDirectInterface("inter_unlock mouse", true, interfaceLockCB, undefined);
+        triggerAjaxDirectInterface("inter_unlock mouse", true, logOutputCB, undefined);
     });
-    function interfaceLockCB(data) {
-        if (data.output === "Success") {
-            logToConsole(data.data, true);
-        } else if (data.output === "Fail") {
-            ScoutGlobals.error = true;
-            showMessage(data.output_message);
-            scrollToTop();
-        }
-    }
 
     $("#button_direct_classify_write_setAudio").click(function () {
         displaySelectedFunctions("write", "setAudio");
@@ -630,12 +541,12 @@ $(document).ready(function () {
     });
     $("#button_direct_components_setAudio_get").click(function () {
         logToConsole("[>]set_audio_range", true);
-        triggerAjaxDirectInterface("set_audio_range", true, setAudioCB, undefined);
+        triggerAjaxDirectInterface("set_audio_range", true, logOutputCB, undefined);
     });
     $("#button_direct_components_setAudio_set").click(function () {
         if ($("#input_direct_components_setAudio_set").val() !== "") {
             logToConsole("[>]set_audio " + $("#input_direct_components_setAudio_set").val(), true);
-            triggerAjaxDirectInterface("set_audio " + $("#input_direct_components_setAudio_set").val(), true, setAudioCB, undefined);
+            triggerAjaxDirectInterface("set_audio " + $("#input_direct_components_setAudio_set").val(), true, logOutputCB, undefined);
             $("#input_direct_components_setAudio_set").val("");
         } else {
             ScoutGlobals.error = true;
@@ -643,15 +554,6 @@ $(document).ready(function () {
             scrollToTop();
         }
     });
-    function setAudioCB(data) {
-        if (data.output === "Success") {
-            logToConsole(data.data, true);
-        } else if (data.output === "Fail") {
-            ScoutGlobals.error = true;
-            showMessage(data.output_message);
-            scrollToTop();
-        }
-    }
 
     $("#button_direct_classify_write_systemStatusChange").click(function () {
         displaySelectedFunctions("write", "systemStatusChange");
@@ -661,29 +563,20 @@ $(document).ready(function () {
     });
     $("#button_direct_components_systemStatusChange_lock").click(function () {
         logToConsole("[>]lock", true);
-        triggerAjaxDirectInterface("lock", true, systemStatusChangeCB, undefined);
+        triggerAjaxDirectInterface("lock", true, logOutputCB, undefined);
     });
     $("#button_direct_components_systemStatusChange_logout").click(function () {
         logToConsole("[>]logout", true);
-        triggerAjaxDirectInterface("logout", true, systemStatusChangeCB, undefined);
+        triggerAjaxDirectInterface("logout", true, logOutputCB, undefined);
     });
     $("#button_direct_components_systemStatusChange_restart").click(function () {
         logToConsole("[>]restart", true);
-        triggerAjaxDirectInterface("restart", true, systemStatusChangeCB, undefined);
+        triggerAjaxDirectInterface("restart", true, logOutputCB, undefined);
     });
     $("#button_direct_components_systemStatusChange_shutdown").click(function () {
         logToConsole("[>]shutdown", true);
-        triggerAjaxDirectInterface("shutdown", true, systemStatusChangeCB, undefined);
+        triggerAjaxDirectInterface("shutdown", true, logOutputCB, undefined);
     });
-    function systemStatusChangeCB(data) {
-        if (data.output === "Success") {
-            logToConsole(data.data, true);
-        } else if (data.output === "Fail") {
-            ScoutGlobals.error = true;
-            showMessage(data.output_message);
-            scrollToTop();
-        }
-    }
 
     $("#button_direct_classify_write_uploadFile").click(function () {
         displaySelectedFunctions("write", "uploadFile");
@@ -694,7 +587,7 @@ $(document).ready(function () {
     $("#button_direct_components_uploadFile").click(function () {
         if ($("#input_direct_components_uploadFile").val() !== "") {
             logToConsole("[>]upload " + $("#input_direct_components_uploadFile").val(), true);
-            triggerAjaxDirectInterface("upload " + $("#input_direct_components_uploadFile").val(), true, uploadFileCB, undefined);
+            triggerAjaxDirectInterface("upload " + $("#input_direct_components_uploadFile").val(), true, logOutputCB, undefined);
             $("#input_direct_components_uploadFile").val("");
         } else {
             ScoutGlobals.error = true;
@@ -702,15 +595,6 @@ $(document).ready(function () {
             scrollToTop();
         }
     });
-    function uploadFileCB(data) {
-        if (data.output === "Success") {
-            logToConsole(data.data, true);
-        } else if (data.output === "Fail") {
-            ScoutGlobals.error = true;
-            showMessage(data.output_message);
-            scrollToTop();
-        }
-    }
 
     $("#button_direct_classify_write_wallpaperChanger").click(function () {
         displaySelectedFunctions("write", "wallpaperChanger");
@@ -721,7 +605,7 @@ $(document).ready(function () {
     $("#button_direct_components_wallpaperChanger").click(function () {
         if ($("#input_direct_components_wallpaperChanger").val() !== "") {
             logToConsole("[>]wallpaper " + $("#input_direct_components_wallpaperChanger").val(), true);
-            triggerAjaxDirectInterface("wallpaper " + $("#input_direct_components_wallpaperChanger").val(), true, wallpaperChangerCB, undefined);
+            triggerAjaxDirectInterface("wallpaper " + $("#input_direct_components_wallpaperChanger").val(), true, logOutputCB, undefined);
             $("#input_direct_components_wallpaperChanger").val("");
         } else {
             ScoutGlobals.error = true;
@@ -729,21 +613,36 @@ $(document).ready(function () {
             scrollToTop();
         }
     });
-    function wallpaperChangerCB(data) {
-        if (data.output === "Success") {
-            logToConsole(data.data, true);
-        } else if (data.output === "Fail") {
-            ScoutGlobals.error = true;
-            showMessage(data.output_message);
-            scrollToTop();
-        }
-    }
 
-    $('.singleline').on('keypress, keydown', function(event) {
-        if ((event.which != 37 && (event.which != 39))
-            && ((this.selectionStart < ScoutGlobals.readOnlyLength)
-            || ((this.selectionStart == ScoutGlobals.readOnlyLength) && (event.which == 8)))) {
+    $(document).on('keypress, keydown', '.singleline', function(event) {
+        if (this.selectionStart < ScoutGlobals.readOnlyLength) {
+            document.getElementById($(this).attr('id')).selectionStart = $(this).val().length;
+            document.getElementById($(this).attr('id')).selectionEnd = $(this).val().length;
+        }
+        if (event.which === 37) {
+            if (this.selectionStart === ScoutGlobals.readOnlyLength) {
+                return false;
+            }
+        } else if (event.which === 8) {
+            if (this.selectionStart !== this.selectionEnd) {
+                if (this.selectionStart < ScoutGlobals.readOnlyLength - 1) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
+                if (this.selectionStart === ScoutGlobals.readOnlyLength) {
+                    return false;
+                }
+            }
+        } else if (event.which === 13 || event.which === 40 || event.which === 38) {
             return false;
+        } else {
+            if (this.selectionStart < ScoutGlobals.readOnlyLength) {
+                return false;
+            } else {
+                return true;
+            }
         }
     });
     $(document).on('keypress, keydown', '.multiline', function(event) {
@@ -751,10 +650,11 @@ $(document).ready(function () {
             document.getElementById($(this).attr('id')).selectionStart = $(this).val().length;
             document.getElementById($(this).attr('id')).selectionEnd = $(this).val().length;
         }
-        if (event.which === 37 && this.selectionStart === ScoutGlobals.readOnlyLength) {
-            return false;
-        }
-        if (event.which === 8) {
+        if (event.which === 37) {
+            if (this.selectionStart === ScoutGlobals.readOnlyLength) {
+                return false;
+            }
+        } else if (event.which === 8) {
             if (this.selectionStart !== this.selectionEnd) {
                 if (this.selectionStart < ScoutGlobals.readOnlyLength - 1) {
                     return false;
@@ -814,11 +714,16 @@ $(document).ready(function () {
             }
         }
     });
-    $(document).on('mousedown mouseup', '.multiline', function(event) {
+    $(document).on('mousedown', '.multiline', function() {
         if (this.selectionStart < ScoutGlobals.readOnlyLength) {
             document.getElementById($(this).attr('id')).selectionStart = ScoutGlobals.readOnlyLength;
             document.getElementById($(this).attr('id')).selectionEnd = ScoutGlobals.readOnlyLength;
-            return false;
+        }
+    })
+    $(document).on('mousedown', '.singleline', function() {
+        if (this.selectionStart < ScoutGlobals.readOnlyLength) {
+            document.getElementById($(this).attr('id')).selectionStart = ScoutGlobals.readOnlyLength;
+            document.getElementById($(this).attr('id')).selectionEnd = ScoutGlobals.readOnlyLength;
         }
     })
     function deleteInputRow(rowId) {
@@ -854,7 +759,7 @@ $(document).ready(function () {
     $("#button_direct_components_CMD").click(function () {
         if ($("#input_direct_components_CMD").val() !== "") {
             logToConsole("[>]exec_c " + $("#input_direct_components_CMD").val().slice(ScoutGlobals.readOnlyLength), true);
-            triggerAjaxDirectInterface("exec_c " + $("#input_direct_components_CMD").val().slice(ScoutGlobals.readOnlyLength), true, CMDCB, undefined);
+            triggerAjaxDirectInterface("exec_c " + $("#input_direct_components_CMD").val().slice(ScoutGlobals.readOnlyLength), true, logOutputCB, undefined);
             $("#input_direct_components_CMD").val(">>> ");
         } else {
             ScoutGlobals.error = true;
@@ -862,15 +767,6 @@ $(document).ready(function () {
             scrollToTop();
         }
     });
-    function CMDCB(data) {
-        if (data.output === "Success") {
-            logToConsole(data.data, true);
-        } else if (data.output === "Fail") {
-            ScoutGlobals.error = true;
-            showMessage(data.output_message);
-            scrollToTop();
-        }
-    }
 
     $("#button_direct_classify_execute_powershell").click(function () {
         displaySelectedFunctions("execute", "powershell");
@@ -881,7 +777,7 @@ $(document).ready(function () {
     $("#button_direct_components_powershell").click(function () {
         if ($("#input_direct_components_powershell").val().slice(ScoutGlobals.readOnlyLength) !== "") {
             logToConsole("[>]exec_p " + $("#input_direct_components_powershell").val().slice(ScoutGlobals.readOnlyLength), true);
-            triggerAjaxDirectInterface("exec_p " + $("#input_direct_components_powershell").val().slice(ScoutGlobals.readOnlyLength), true, powershellCB, undefined);
+            triggerAjaxDirectInterface("exec_p " + $("#input_direct_components_powershell").val().slice(ScoutGlobals.readOnlyLength), true, logOutputCB, undefined);
             $("#input_direct_components_powershell").val(">>> ");
         } else {
             ScoutGlobals.error = true;
@@ -889,15 +785,6 @@ $(document).ready(function () {
             scrollToTop();
         }
     });
-    function powershellCB(data) {
-        if (data.output === "Success") {
-            logToConsole(data.data, true);
-        } else if (data.output === "Fail") {
-            ScoutGlobals.error = true;
-            showMessage(data.output_message);
-            scrollToTop();
-        }
-    }
 
     $("#button_direct_classify_execute_file").click(function () {
         displaySelectedFunctions("execute", "file");
@@ -908,7 +795,7 @@ $(document).ready(function () {
     $("#button_direct_components_file").click(function () {
         if ($("#input_direct_components_file").val() !== "") {
             logToConsole("[>]exec_f " + $("#input_direct_components_file").val(), true);
-            triggerAjaxDirectInterface("exec_f " + $("#input_direct_components_file").val(), true, fileCB, undefined);
+            triggerAjaxDirectInterface("exec_f " + $("#input_direct_components_file").val(), true, logOutputCB, undefined);
             $("#input_direct_components_file").val("");
         } else {
             ScoutGlobals.error = true;
@@ -916,15 +803,6 @@ $(document).ready(function () {
             scrollToTop();
         }
     });
-    function fileCB(data) {
-        if (data.output === "Success") {
-            logToConsole(data.data, true);
-        } else if (data.output === "Fail") {
-            ScoutGlobals.error = true;
-            showMessage(data.output_message);
-            scrollToTop();
-        }
-    }
 
     $("#button_direct_classify_execute_python").click(function () {
         displaySelectedFunctions("execute", "python");
@@ -932,14 +810,11 @@ $(document).ready(function () {
         $("#button_direct_components_back").show();
         $("#div_direct_classify").hide();
         $("#div_direct_components_python_command_input").html("You are currently in the python executor scripter, script a chain of python instructions to run, press execute to run (only works if python execute component is loaded)<input type='text' id='input_direct_components_python_command_input_0' class='multiline command_input' name='Python' value='>>> ' style='width: 100% !important; height: 25px !important; background-color: #252629 !important; border-radius: 0px !important; margin: 0px !important;'>");
-        $("#input_direct_components_python_command_input_0").focus();
-        document.getElementById("input_direct_components_python_command_input_0").selectionStart = ScoutGlobals.readOnlyLength;
-        document.getElementById("input_direct_components_python_command_input_0").selectionEnd = ScoutGlobals.readOnlyLength;
     });
     $("#button_direct_components_python_file").click(function () {
         if ($("#input_direct_components_python_file").val() !== "") {
             logToConsole("[>]exec_py_file " + $("#input_direct_components_python_file").val(), true);
-            triggerAjaxDirectInterface("exec_py_file " + $("#input_direct_components_python_file").val(), true, pythonCB, undefined);
+            triggerAjaxDirectInterface("exec_py_file " + $("#input_direct_components_python_file").val(), true, logOutputCB, undefined);
             $("#input_direct_components_python_file").val("");
         } else {
             ScoutGlobals.error = true;
@@ -953,17 +828,8 @@ $(document).ready(function () {
             pythonProgram = pythonProgram + $(this).val().slice(ScoutGlobals.readOnlyLength) + "\n";
         })
         logToConsole("[>]exec_py " + pythonProgram, true);
-        triggerAjaxDirectInterface("exec_py " + pythonProgram, true, pythonCB, undefined);
+        triggerAjaxDirectInterface("exec_py " + pythonProgram, true, logOutputCB, undefined);
     });
-    function pythonCB(data) {
-        if (data.output === "Success") {
-            logToConsole(data.data, true);
-        } else if (data.output === "Fail") {
-            ScoutGlobals.error = true;
-            showMessage(data.output_message);
-            scrollToTop();
-        }
-    }
 
     $("#button_direct_classify_persist_registryPersistence").click(function () {
         displaySelectedFunctions("persist", "registryPersistence");
@@ -973,17 +839,8 @@ $(document).ready(function () {
     });
     $("#button_direct_components_registryPersistence").click(function () {
         logToConsole("[>]reg_persist", true);
-        triggerAjaxDirectInterface("reg_persist", true, registryPersistenceCB, undefined);
+        triggerAjaxDirectInterface("reg_persist", true, logOutputCB, undefined);
     });
-    function registryPersistenceCB(data) {
-        if (data.output === "Success") {
-            logToConsole(data.data, true);
-        } else if (data.output === "Fail") {
-            ScoutGlobals.error = true;
-            showMessage(data.output_message);
-            scrollToTop();
-        }
-    }
 
     $("#button_direct_classify_persist_sdcltUACBypass").click(function () {
         displaySelectedFunctions("persist", "sdcltUACBypass");
@@ -994,7 +851,7 @@ $(document).ready(function () {
     $("#button_direct_components_sdcltUACBypass").click(function () {
         if ($("#input_direct_components_sdcltUACBypass").val() !== "") {
             logToConsole("[>]sdclt_uac " + $("#input_direct_components_sdcltUACBypass").val(), true);
-            triggerAjaxDirectInterface("sdclt_uac " + $("#input_direct_components_sdcltUACBypass").val(), true, sdcltUACBypassCB, undefined);
+            triggerAjaxDirectInterface("sdclt_uac " + $("#input_direct_components_sdcltUACBypass").val(), true, logOutputCB, undefined);
             $("#input_direct_components_sdcltUACBypass").val("");
         } else {
             ScoutGlobals.error = true;
@@ -1002,15 +859,6 @@ $(document).ready(function () {
             scrollToTop();
         }
     });
-    function sdcltUACBypassCB(data) {
-        if (data.output === "Success") {
-            logToConsole(data.data, true);
-        } else if (data.output === "Fail") {
-            ScoutGlobals.error = true;
-            showMessage(data.output_message);
-            scrollToTop();
-        }
-    }
 
     $("#button_direct_classify_persist_startupFolderPersistence").click(function () {
         displaySelectedFunctions("persist", "startupFolderPersistence");
@@ -1020,19 +868,13 @@ $(document).ready(function () {
     });
     $("#button_direct_components_startupFolderPersistence").click(function () {
         logToConsole("[>]startup_persist", true);
-        triggerAjaxDirectInterface("startup_persist", true, startupFolderPersistenceCB, undefined);
+        triggerAjaxDirectInterface("startup_persist", true, logOutputCB, undefined);
     });
-    function startupFolderPersistenceCB(data) {
-        if (data.output === "Success") {
-            logToConsole(data.data, true);
-        } else if (data.output === "Fail") {
-            ScoutGlobals.error = true;
-            showMessage(data.output_message);
-            scrollToTop();
-        }
-    }
+
 
     // SCOUT FUNCTIONS !!
+
+    // Spinner handler for scout mode
     function loader(toLoad) {
         if (toLoad === "0") {
             $("#i_scouts_table_bridge_0_spinner").show();
@@ -1068,6 +910,8 @@ $(document).ready(function () {
 
 
     // DIRECT FUNCTIONS !!
+
+    // Spinner handler for direct mode
     function loaderDirect(toLoad) {
         if (toLoad === "0") {
             $("#i_direct_classify_base_disconnect_0_spinner").show();
@@ -1095,6 +939,7 @@ $(document).ready(function () {
         }
     }
 
+    // Appropriately color all available and unavailable functions
     function highlightAvailableFunctions(l) {
         let c = "#e74856";
         if (jQuery.inArray("windows/control/active_windows_dump", l) > -1) {
@@ -1254,6 +1099,7 @@ $(document).ready(function () {
         }
     }
 
+    // Color background of chosen tab
     function displaySelectedFunctions(mainSelection, secondarySelection) {
         if (mainSelection !== "") {
             if (mainSelection === "read") {
@@ -1268,19 +1114,16 @@ $(document).ready(function () {
             }
             $("#div_direct_classify").show();
             $("#div_direct_classify_main_buttons").show();
+            $(".button_direct_classify_main").css("background-color", "#2f3136");
             $("#button_direct_classify_main_" + mainSelection).css("background-color", "#42444a");
-            $(".button_direct_classify_main").not($("#button_direct_classify_main_" + mainSelection)).css("background-color", "#2f3136");
+            $(".classify_buttons").hide();
             $(".div_direct_classify_" + mainSelection + "_buttons").show();
-            $(".classify_buttons").not($(".div_direct_classify_" + mainSelection + "_buttons")).hide();
-            //if (secondarySelection != "") {
-                //$(".button_direct_classify_" + mainSelection).css("background-color", "#2f3136");
-                //$("#button_direct_classify_" + mainSelection + "_" + secondarySelection).css("background-color", "#42444a");
-            //}
         } else {
             $("#div_direct_classify").hide();
         }
     }
 
+    // Main function to log to console
     function logToConsole(t, newline) {
         let $selector = $("#p_direct_components_console_output");
         let appendString = "";
@@ -1299,6 +1142,7 @@ $(document).ready(function () {
         $selector.scrollTop($selector.prop("scrollHeight"));
     }
 
+    // Show chosen function's content
     function displayComponents(component) {
         $(".div_component").hide();
         $("#div_direct_components_" + component).show();
@@ -1306,6 +1150,8 @@ $(document).ready(function () {
 
 
     // GLOBAL FUNCTIONS !!
+
+    // Error message stuff
     function showMessage(msg){
         let elmt;
         if (ScoutGlobals.error) {
@@ -1317,7 +1163,6 @@ $(document).ready(function () {
         elmt.classList.remove('hide');
         elmt.classList.add('show');
     }
-
     function esc(str) {
         if(str){
             return str.toString()
@@ -1330,12 +1175,12 @@ $(document).ready(function () {
         }
         return "";
     }
-
     function scrollToTop() {
         document.body.scrollTop = 0; // For Safari
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
     }
 
+    // AJAX Triggers
     function triggerAjax (data, async, url, callback, extra_input){
         $.ajax({
             data: {
@@ -1354,7 +1199,6 @@ $(document).ready(function () {
             }
         });
     }
-
     function triggerAjaxDirectInterface(data, async, callback, extra_input) {
         $.ajax({
             data: {
@@ -1377,6 +1221,7 @@ $(document).ready(function () {
 
 });
 
+// Make Scout Table Selectable
 function tableRowClickable(clickable){
         if(clickable) {
             $("#table_scouts tr").not(":first").each(function() {
@@ -1390,6 +1235,7 @@ function tableRowClickable(clickable){
         }
     }
 
+// Close message
 function closeMessage(){
     let elmt;
     if (ScoutGlobals.error) {

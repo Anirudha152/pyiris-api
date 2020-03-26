@@ -34,42 +34,43 @@
 						To connect to a scout, go to the listeners page
 					</p>
 
-					<div class="div_heading" id="div_scouts_table_heading">
-						<h2 class="custom_label" id="h2_scouts_table_heading">Scouts List</h2>
-					</div>
-					<div id="div_scouts_table">
-						<div id="div_scouts_table_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
-							<button id="button_scouts_table_bridge_0" class="select button_scouts_table" style = "width: 18% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_scouts_table_bridge_0_spinner"></i> Bridge</button>
-							<button id="button_scouts_table_disconnect_1" class="select button_scouts_table" style = "width: 18% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_scouts_table_disconnect_1_spinner"></i> Disconnect</button>
-							<button id="button_scouts_table_kill_2" class="select button_scouts_table" style = "width: 18% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_scouts_table_kill_2_spinner"></i> Kill</button>
-							<button id="button_scouts_table_ping_3" class="select button_scouts_table" style = "width: 18% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_scouts_table_ping_3_spinner"></i> Ping</button>
-							<button id="button_scouts_table_sleep_4" class="select button_scouts_table" style = "width: 18% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_scouts_table_sleep_4_spinner"></i> Sleep</button>
+					<div id="div_scouts">
+						<div class="div_heading" id="div_scouts_table_heading">
+							<h2 class="custom_label" id="h2_scouts_table_heading">Scouts List</h2>
 						</div>
+						<div id="div_scouts_table">
+							<div id="div_scouts_table_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
+								<button id="button_scouts_table_bridge_0" class="select button_scouts_table" style = "width: 18% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_scouts_table_bridge_0_spinner"></i> Bridge</button>
+								<button id="button_scouts_table_disconnect_1" class="select button_scouts_table" style = "width: 18% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_scouts_table_disconnect_1_spinner"></i> Disconnect</button>
+								<button id="button_scouts_table_kill_2" class="select button_scouts_table" style = "width: 18% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_scouts_table_kill_2_spinner"></i> Kill</button>
+								<button id="button_scouts_table_ping_3" class="select button_scouts_table" style = "width: 18% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_scouts_table_ping_3_spinner"></i> Ping</button>
+								<button id="button_scouts_table_sleep_4" class="select button_scouts_table" style = "width: 18% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_scouts_table_sleep_4_spinner"></i> Sleep</button>
+							</div>
 
-						<br>
-						<br>
+							<br>
+							<br>
 
-						<table id="table_scouts">
-							<tr>
-								<th>ID</th>
-								<th>Remote Scout Host</th>
-								<th>Remote Scout Port</th>
-								<th>Connection thru</th>
-								<th>Name</th>
-								<th>Connection at</th>
-								<th>Connection type</th>
-								<th></th>
-							</tr>
-						</table>
+							<table id="table_scouts">
+								<tr>
+									<th>ID</th>
+									<th>Remote Scout Host</th>
+									<th>Remote Scout Port</th>
+									<th>Connection thru</th>
+									<th>Name</th>
+									<th>Connection at</th>
+									<th>Connection type</th>
+									<th></th>
+								</tr>
+							</table>
 
-						<div id="div_scouts_table_sleep" class="hide">
-							<input type="number" id="input_scouts_table_scout_sleep_time" name="Sleep time" placeholder="Enter time to sleep (default is 10s)" style="width: 20em !important;" maxlength="100">
-							<button id="button_scouts_table_scout_sleep_time" class="select">Update</button>
+							<div id="div_scouts_table_sleep" class="hide">
+								<input type="number" id="input_scouts_table_scout_sleep_time" name="Sleep time" placeholder="Enter time to sleep (default is 10s)" style="width: 20em !important;" maxlength="100">
+								<button id="button_scouts_table_scout_sleep_time" class="select">Update</button>
+							</div>
+
+							<br>
 						</div>
-
-						<br>
 					</div>
-
 					<div id="div_direct">
 						<div id="div_direct_classify">
 							<br>
@@ -186,16 +187,19 @@
 								<div class="div_heading" id="div_direct_components_clipLogger_heading">
 									<h2 class="label" id="h2_direct_components_clipLogger_heading">Clip Logger</h2>
 								</div>
+
 								<p id="p_direct_components_clipLogger_clear_info">> Clear the clipboard data on the target system</p>
 								<br>
 								<button id="button_direct_components_clipLogger_clear" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Clear</button>
 								<br>
 								<br>
+
 								<p id="p_direct_components_clipLogger_dump_info">> Display contents of clipboard on the target system</p>
 								<br>
 								<button id="button_direct_components_clipLogger_dump" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Show</button>
 								<br>
 								<br>
+
 								<p id="p_direct_components_clipLogger_set_info">> Set the value of the clipboard on the target system</p>
 								<br>
 								<span id="span_direct_components_clipLogger_set_content">
@@ -204,6 +208,7 @@
 								</span>
 								<br>
 								<br>
+
 								<br>
 							</div>
 							<div id="div_direct_components_downloadFile" class="div_component">
