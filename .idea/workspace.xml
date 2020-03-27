@@ -47,6 +47,7 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="full.screen.before.presentation.mode" value="false" />
     <property name="jsx.switch.disabled" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../web_interface (2)" />
     <property name="node.js.detected.package.eslint" value="true" />
@@ -158,7 +159,8 @@
       <workItem from="1584899076567" duration="997000" />
       <workItem from="1584935034413" duration="55493000" />
       <workItem from="1585193662619" duration="6065000" />
-      <workItem from="1585203220508" duration="12519000" />
+      <workItem from="1585203220508" duration="18692000" />
+      <workItem from="1585287760264" duration="20256000" />
     </task>
     <servers />
   </component>
@@ -206,10 +208,10 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state width="198" height="457" key="HiddenNamespacesPopup/0.0.1280.680@0.0.1280.680" timestamp="1584700141501" />
-    <state x="342" y="166" key="com.intellij.ide.util.TipDialog" timestamp="1585203242867">
+    <state x="342" y="166" key="com.intellij.ide.util.TipDialog" timestamp="1585287882108">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="342" y="166" key="com.intellij.ide.util.TipDialog/0.0.1280.680@0.0.1280.680" timestamp="1585203242867" />
+    <state x="342" y="166" key="com.intellij.ide.util.TipDialog/0.0.1280.680@0.0.1280.680" timestamp="1585287882108" />
     <state x="0" y="0" width="609" height="680" key="find.popup" timestamp="1582026233676">
       <screen x="0" y="0" width="1280" height="680" />
     </state>

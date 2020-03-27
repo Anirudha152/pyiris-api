@@ -1,15 +1,16 @@
 import socket
 import library.modules.config as config
+import library.modules.recv_all as recv_all
 config.main()
 interface = config.interface
 
 def main(scout_id):
     try:
         if interface == "GUI":
-            config.scout_database[scout_id][0].sendall('g ping'.encode())
+            recv_all.main_send("g ping", config.scout_database[scout_id][0])
         elif interface == "CUI":
-            config.scout_database[scout_id][0].sendall('c ping'.encode())
-        data = config.scout_database[scout_id][0].recv(999999).decode()
+            recv_all.main_send("c ping", config.scout_database[scout_id][0])
+        data = recv_all.main_recv(config.scout_database[scout_id][0])
         if interface == "GUI":
             config.app.logger.info("[library/commands/direct_interface/ping] - Message from scout: " + str(data))
         elif interface == "CUI":

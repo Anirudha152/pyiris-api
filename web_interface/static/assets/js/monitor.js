@@ -83,11 +83,13 @@ $(document).ready(function () {
                     }
                 } else if (MonitorGlobals.currentLocation === "scouts") {
                     if (ScoutGlobals.ifc === "Scouts") {
+                        console.log("....")
                         $("#h1_scouts_heading").text("Scouts");
                         $("#div_direct").hide();
                         $("#p_fail_text").hide();
                         $("#div_scouts_table_heading").show();
                         $("#div_scouts_table").show();
+                        $("#div_scouts").show();
                         if (!ScoutGlobals.scoutButtonInFocus && $("#table_scouts :focus").attr('id') === undefined && data[1] !== "") {
                             ScoutGlobals.nameSentToServer = false;
                             $("#table_scouts").find("tr:gt(0)").remove();
@@ -100,6 +102,7 @@ $(document).ready(function () {
                                 }
                             }
                         }
+                        console.log($("#div_scouts_table").html())
                     }
                 }
             }
@@ -207,6 +210,7 @@ $(document).ready(function () {
             async: async,
             url: url,
             success: function (recvData) {
+                console.log(recvData);
                 if (callback !== undefined) {
                     if (extra_input !== undefined) {
                         callback(recvData, extra_input);

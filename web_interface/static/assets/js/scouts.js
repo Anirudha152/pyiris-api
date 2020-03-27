@@ -172,6 +172,7 @@ $(document).ready(function () {
 
     // DIRECT FUNCTIONS !!
     function switchToScoutIFC() {
+        /*
         ScoutGlobals.scoutButtonInFocus = false;
         ScoutGlobals.idOfSelectedButton = "-1";
         ScoutGlobals.bridgedId = "-1";
@@ -179,10 +180,14 @@ $(document).ready(function () {
         tableRowClickable(false);
         $("#h1_scouts_heading").text("Scouts");
         $("#div_scouts").show();
+        $("#div_scouts_table").show();
         $("#div_direct").hide();
         loaderDirect("-1");
         loader("-1");
         $(".i_scouts_table_spinner").hide();
+         */
+        ScoutGlobals.ifc = "Scouts";
+        //location.reload(true);
     }
 
     $(".button_direct_classify_base").click(function () {
@@ -736,7 +741,7 @@ $(document).ready(function () {
         for (let i = $("#div_direct_components_python_command_input").children().length - 1; i > rowId; i--) {
             $("#input_direct_components_python_command_input_" + i.toString()).attr('id', "input_direct_components_python_command_input_" + (i + 1).toString());
         }
-        $("#div_direct_components_python_command_input").insertAt(rowId + 1, "<input type='text' id='input_direct_components_python_command_input_" + (rowId + 1).toString() + "' class='multiline command_input' name='Python' value='>>> ' style='width: 100% !important; height: 25px !important; background-color: #252629 !important; border-radius: 0px !important; margin: 0px !important;'>");
+        $("#div_direct_components_python_command_input").insertAt(rowId + 1, "<input type='text' id='input_direct_components_python_command_input_" + (rowId + 1).toString() + "' class='multiline command_input' name='Python' value='>>> ' style='width: 100% !important; height: 25px !important; background-color: #252629 !important; border-radius: 0px !important; margin: 0px !important;' autocomplete='off'>");
     }
     jQuery.fn.insertAt = function(index, element) {
         var lastIndex = this.children().length;
@@ -809,7 +814,7 @@ $(document).ready(function () {
         displayComponents("python");
         $("#button_direct_components_back").show();
         $("#div_direct_classify").hide();
-        $("#div_direct_components_python_command_input").html("You are currently in the python executor scripter, script a chain of python instructions to run, press execute to run (only works if python execute component is loaded)<input type='text' id='input_direct_components_python_command_input_0' class='multiline command_input' name='Python' value='>>> ' style='width: 100% !important; height: 25px !important; background-color: #252629 !important; border-radius: 0px !important; margin: 0px !important;'>");
+        $("#div_direct_components_python_command_input").html("You are currently in the python executor scripter, script a chain of python instructions to run, press execute to run (only works if python execute component is loaded)<input type='text' id='input_direct_components_python_command_input_0' class='multiline command_input' name='Python' value='>>> ' style='width: 100% !important; height: 25px !important; background-color: #252629 !important; border-radius: 0px !important; margin: 0px !important;' autocomplete='off'>");
     });
     $("#button_direct_components_python_file").click(function () {
         if ($("#input_direct_components_python_file").val() !== "") {

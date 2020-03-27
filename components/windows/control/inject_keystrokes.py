@@ -16,17 +16,17 @@ def inject_keystokes(args):
     injecting = args.split(' ',1)[1]
     if command == "inj_t":
         pyautogui.typewrite(injecting)
-        s.sendall(('[+]Injected keystrokes : ' + injecting).encode())
+        main_send('[+]Injected keystrokes : ' + injecting, s)
     elif command == "inj_h":
         injecting = injecting.split(' ')
         for i in injecting:
             pyautogui.keyDown(i)
         for i in reversed(injecting):
             pyautogui.keyUp(i)
-        s.sendall(('[+]Injected hotkeys : ' + ' '.join(injecting)).encode())
+        main_send('[+]Injected hotkeys : ' + ' '.join(injecting), s)
     elif command == "inj_p":
         pyautogui.press(injecting)
-        s.sendall(('[+]Injected button press : ' + injecting).encode())
+        main_send('[+]Injected button press : ' + injecting, s)
 ''')
         config.logics.append('''
             elif command in ("inj_t","inj_h","inj_p"):

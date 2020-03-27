@@ -33,7 +33,7 @@ def sysinfo():
     data += '   System time    : ' + str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')) + '\\n'
     data += '   Timezone       : ' + str(strftime("%z", gmtime())) + '\\n'
     data += '   Language       : ' + str(' '.join(getdefaultlocale())) + '\\n'
-    s.sendall(data.encode())''')
+    main_send(data, s)''')
         config.logics.append('''
             elif command == "sysinfo":
                 sysinfo()''')

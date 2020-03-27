@@ -75,7 +75,7 @@ def redirect_from_root():
 
 @app.route('/favicon.ico')
 def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
+    return send_from_directory(os.path.join(app.root_path, 'web_interface/static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
 @app.route('/home', methods=['GET', 'POST'])

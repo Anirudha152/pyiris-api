@@ -1,5 +1,6 @@
 import socket
 import library.modules.config as config
+import library.modules.send_and_recv as send_and_recv
 config.main()
 interface = config.interface
 if interface == "GUI":
@@ -16,8 +17,7 @@ def main(scout_id):
                         config.app.logger.info("[library/commands/scout_interface/ping] - Pinging scout of ID : " + str(i))
                     elif interface == "CUI":
                         print(config.inf + 'Pinging scout of ID : ' + i)
-                    config.scout_database[i][0].sendall('ping'.encode())
-                    data = config.scout_database[i][0].recv(999999).decode()
+                    data = send_and_recv.main("g ping", i)
                     if not data:
                         raise socket.error
                     if interface == "GUI":
@@ -40,8 +40,7 @@ def main(scout_id):
                 config.app.logger.info("[library/commands/scout_interface/ping] - Pinging scout of ID : " + str(scout_id))
             elif interface == "CUI":
                 print(config.inf + 'Pinging scout of ID : ' + str(scout_id))
-            config.scout_database[scout_id][0].sendall('g ping'.encode())
-            data = config.scout_database[scout_id][0].recv(999999).decode()
+            data = send_and_recv.main("g ping", scout_id)
             if interface == "GUI":
                 config.app.logger.info("[library/commands/scout_interface/ping] - Message from scout: " + str(data))
             elif interface == "CUI":

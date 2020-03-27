@@ -5,6 +5,6 @@ interface = config.interface
 
 
 def main(data, scout_id):
-    config.scout_database[scout_id][0].sendall(data.encode())
-    data = recv_all.main(config.scout_database[scout_id][0])
+    recv_all.main_send(data, config.scout_database[scout_id][0])
+    data = recv_all.main_recv(config.scout_database[scout_id][0])
     return data

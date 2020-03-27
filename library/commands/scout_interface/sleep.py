@@ -1,5 +1,6 @@
 import socket
 import library.modules.config as config
+import library.modules.send_and_recv as send_and_recv
 config.main()
 interface = config.interface
 if interface == "GUI":
@@ -16,8 +17,7 @@ def main(scout_id):
                         config.app.logger.info("[library/commands/scout_interface/sleep] - Sleeping scout of ID : " + str(i))
                     elif interface == "CUI":
                         print(config.inf + 'Sleeping scout of ID : ' + i)
-                    config.scout_database[i][0].sendall(('g sleep ' + sleep_dur).encode())
-                    data = config.scout_database[i][0].recv(999999).decode()
+                    data = send_and_recv.main('g sleep ' + sleep_dur, i)
                     if interface == "GUI":
                         config.app.logger.info("[library/commands/scout_interface/sleep] - Message from scout: " + str(data))
                     elif interface == "CUI":
@@ -37,11 +37,10 @@ def main(scout_id):
                         return jsonify({"output": "Fail", "output_message": "Scout is dead, removing from database...", "data": ""})
         else:
             if interface == "GUI":
-                config.app.logger.info("[library/commands/scout_interface/sleep] - Sleeping scout of ID : " + str(scout_id))
+                config.app.logger.info("[library/commands/scout_interface/sleep] - Sleeping scout of ID : " + str(slp_scout_id))
             elif interface == "CUI":
-                print(config.inf + 'Sleeping scout of ID : ' + str(scout_id))
-            config.scout_database[slp_scout_id][0].sendall(('g sleep ' + sleep_dur).encode())
-            data = config.scout_database[slp_scout_id][0].recv(999999).decode()
+                print(config.inf + 'Sleeping scout of ID : ' + str(slp_scout_id))
+            data = send_and_recv.main('g sleep ' + sleep_dur, slp_scout_id)
             if interface == "GUI":
                 config.app.logger.info("[library/commands/scout_interface/sleep] - Message from scout: " + str(data))
             elif interface == "CUI":
@@ -63,7 +62,7 @@ def main(scout_id):
             config.app.logger.error("[library/commands/scout_interface/sleep] - Scout is dead, removing from database...")
         elif interface == "CUI":
             print(config.neg + 'Scout is dead, removing from database...')
-        del (config.scout_database[scout_id])
+        del (config.scout_database[slp_scout_id])
         config.change = True
         if interface == "GUI":
             return jsonify({"output": "Fail", "output_message": "Scout is dead... Removed from database", "data": ""})

