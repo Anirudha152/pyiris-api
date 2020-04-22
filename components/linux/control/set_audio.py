@@ -16,7 +16,7 @@ def set_audio(data):
     vol = alsaaudio.Mixer(alsaaudio.mixers()[0])
     vol.setvolume(int(vol_level))
     volume_range = vol.getrange()
-    s.sendall(('[+]Set volume to : ' + str(vol_level)).encode())''')
+    main_send('[+]Set volume to : ' + str(vol_level), s)''')
         config.logics.append('''
             elif command == "set_audio":
                 set_audio(data)''')

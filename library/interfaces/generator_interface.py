@@ -21,7 +21,6 @@ if interface == "CUI":
     import library.commands.global_interface.local as local
     import library.commands.global_interface.help as help
     import library.commands.generator_interface.reset as reset
-
 try:
     import readline
 except ImportError:

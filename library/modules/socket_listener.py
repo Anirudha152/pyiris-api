@@ -2,6 +2,7 @@ import socket
 import library.modules.config as config
 import library.modules.should_listener_die as should_listener_die
 import library.modules.return_random_string as return_random_string
+import library.modules.recv_all as recv_all
 from datetime import datetime
 config.main()
 interface = config.interface
@@ -39,17 +40,17 @@ def main(host, port, name, reply):
                         continue
                     if config.white_list:
                         if addr[0] not in config.white_list:
-                            conn.send(reply.encode())
+                            recv_all.main_send(reply, conn)
                             conn.close()
                             continue
                     elif config.black_list:
                         if addr[0] in config.black_list:
-                            conn.send(reply.encode())
+                            recv_all.main_send(reply, conn)
                             conn.close()
                             continue
                     if conn:
                         conn.settimeout(5)
-                        await_key = conn.recv(9999999).decode()
+                        await_key = recv_all.main_recv(conn)
                         conn.settimeout(None)
                         if await_key == config.key:
                             if interface == "GUI":
@@ -69,7 +70,7 @@ def main(host, port, name, reply):
                             config.incremented_scout_id += 1
                             config.change = True
                         else:
-                            conn.send(reply.encode())
+                            recv_all.main_send(reply, conn)
                             conn.close()
                     else:
                         conn.close()

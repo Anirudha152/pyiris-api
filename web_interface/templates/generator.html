@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<script src="static/assets/js/jquery.min.js"></script>
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="static/assets/css/font-awesome-4.7.0/css/font-awesome.min.css">
 		<link rel="stylesheet" href="static/assets/css/style.css">
 		<script src="static/assets/js/generator.js"></script>
 		<meta charset="utf-8">
@@ -30,12 +30,10 @@
 						<button id="button_reload_all" class="select" style="width: 110px !important;">Reload all</button>
 					</div>
 					<div class="div_heading" id="div_main_settings_heading">
-						<span>
-							<a href="#!">
-								<img src="static/images/img.png" border="0" id="img_main_settings_arrow" class="img_arrow" style="width: 30px; height: 30px; margin-top: 12px"/>
-							</a>
-							<h2 class="custom_label" id="h2_main_settings_heading" style="margin-left: 10px">Settings</h2>
-						</span>
+						<a href="#!">
+							<img src="static/images/img.png" border="0" id="img_main_settings_arrow" class="img_arrow" style="width: 30px; height: 30px;"/>
+						</a>
+						<h2 class="custom_label" id="h2_main_settings_heading" style="margin-left: 10px">Settings</h2>
 					</div>
 					<div id="div_main_settings">
 						<table id="table_host">
@@ -155,12 +153,10 @@
 					<div class="div_heading" id="div_components_heading">
 						<br>
 						<br>
-						<span>
-							<a href="#!">
-								<img src="static/images/img.png" border="0" id="img_components_arrow" class="img_arrow" style="width: 30px; height: 30px; margin-top: 12px"/>
-							</a>
-							<h2 class="custom_label" id="h2_components_heading" style="margin-left: 10px">Components</h2>
-						</span>
+						<a href="#!">
+							<img src="static/images/img.png" border="0" id="img_components_arrow" class="img_arrow" style="width: 30px; height: 30px;"/>
+						</a>
+						<h2 class="custom_label" id="h2_components_heading" style="margin-left: 10px">Components</h2>
 					</div>
 					<table id="table_components">
 						<tr>
@@ -179,12 +175,10 @@
 					<div class="div_heading" id="div_available_encoders_heading">
 						<br>
 						<br>
-						<span>
-							<a href="#!">
-								<img src="static/images/img.png" border="0" id="img_available_encoders_arrow" class="img_arrow" style="width: 30px; height: 30px; margin-top: 12px"/>
-							</a>
-							<h2 class="custom_label" id="h2_available_encoders_heading" style="margin-left: 10px">Encoders</h2>
-						</span>
+						<a href="#!">
+							<img src="static/images/img.png" border="0" id="img_available_encoders_arrow" class="img_arrow" style="width: 30px; height: 30px; margin-top: 12px"/>
+						</a>
+						<h2 class="custom_label" id="h2_available_encoders_heading" style="margin-left: 10px">Encoders</h2>
 					</div>
 					<table id="table_available_encoders">
 						<tr>
@@ -198,12 +192,10 @@
 					<div class="div_heading" id="div_loaded_encoders_heading">
 						<br>
 						<br>
-						<span>
-							<a href="#!">
-								<img src="static/images/img.png" border="0" id="img_loaded_encoders_arrow" class="img_arrow" style="width: 30px; height: 30px; margin-top: 12px"/>
-							</a>
-							<h2 class="custom_label" id="h2_loaded_encoders_heading" style="margin-left: 10px">Loaded Encoders</h2>
-						</span>
+						<a href="#!">
+							<img src="static/images/img.png" border="0" id="img_loaded_encoders_arrow" class="img_arrow" style="width: 30px; height: 30px;"/>
+						</a>
+						<h2 class="custom_label" id="h2_loaded_encoders_heading" style="margin-left: 10px">Loaded Encoders</h2>
 					</div>
 					<table id="table_loaded_encoders">
 						<tr>
@@ -217,12 +209,10 @@
 					<div class="div_heading" id="div_miscellaneous_settings_heading">
 						<br>
 						<br>
-						<span>
-							<a href="#!">
-								<img src="static/images/img.png" border="0" id="img_miscellaneous_settings_arrow" class="img_arrow" style="width: 30px; height: 30px; margin-top: 12px"/>
-							</a>
-							<h2 class="custom_label" id="h2_miscellaneous_settings_heading" style="margin-left: 10px">Misc. Settings</h2>
-						</span>
+						<a href="#!">
+							<img src="static/images/img.png" border="0" id="img_miscellaneous_settings_arrow" class="img_arrow" style="width: 30px; height: 30px;"/>
+						</a>
+						<h2 class="custom_label" id="h2_miscellaneous_settings_heading" style="margin-left: 10px">Misc. Settings</h2>
 					</div>
 					<div id="div_miscellaneous_settings">
 						<table id="table_modules">
@@ -242,7 +232,17 @@
 							</tr>
 							<tr>
 								<td>
-									<input type="number" id="input_scout_sleep" name="scout_sleep" placeholder="Enter time to sleep (default is 60s)" maxlength="100" style="width: 300px !important;">
+									<input type="number" id="input_scout_sleep" name="scout_sleep" placeholder="Enter time to sleep (default is 60s)" maxlength="100" style="width: 20em !important;">
+								</td>
+							</tr>
+						</table>
+						<table id="table_root_message">
+							<tr>
+								<th>Message to display while requesting root on startup</th>
+							</tr>
+							<tr>
+								<td>
+									<input type="text" id="input_root_message" name="root message" placeholder="Enter message (leave blank for default)" style="width: 35em !important;">
 								</td>
 							</tr>
 						</table>

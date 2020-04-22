@@ -12,7 +12,7 @@ def main(option):
         config.import_statements.append('from os import getuid')
         config.functions.append('''
 def admin():
-    s.sendall(('[*]Scout is running as root process : ' + str(getuid() == 0)).encode())''')
+    main_send('[*]Scout is running as root process : ' + str(getuid() == 0), s)''')
         config.logics.append('''
             elif command == "admin":
                 admin()''')

@@ -83,13 +83,14 @@ $(document).ready(function () {
                     }
                 } else if (MonitorGlobals.currentLocation === "scouts") {
                     if (ScoutGlobals.ifc === "Scouts") {
-                        console.log("....")
                         $("#h1_scouts_heading").text("Scouts");
-                        $("#div_direct").hide();
+                        $("#div_direct_win").hide();
+                        $("#div_direct_lin").hide();
                         $("#p_fail_text").hide();
                         $("#div_scouts_table_heading").show();
                         $("#div_scouts_table").show();
                         $("#div_scouts").show();
+                        $("#div_console").hide();
                         if (!ScoutGlobals.scoutButtonInFocus && $("#table_scouts :focus").attr('id') === undefined && data[1] !== "") {
                             ScoutGlobals.nameSentToServer = false;
                             $("#table_scouts").find("tr:gt(0)").remove();
@@ -102,7 +103,6 @@ $(document).ready(function () {
                                 }
                             }
                         }
-                        console.log($("#div_scouts_table").html())
                     }
                 }
             }
@@ -110,10 +110,12 @@ $(document).ready(function () {
             if (MonitorGlobals.currentLocation === "scouts") {
                 if (ScoutGlobals.ifc === "Scouts") {
                     $("#h1_scouts_heading").text("Scouts");
-                    $("#div_direct").hide();
+                    $("#div_direct_win").hide();
+                    $("#div_direct_lin").hide();
                     $("#div_scouts_table_heading").hide();
                     $("#div_scouts_table").hide();
                     $("#p_fail_text").show();
+                    $("#div_console").hide();
                 }
             }
             if (output === "Success") {
@@ -164,10 +166,12 @@ $(document).ready(function () {
                 if (MonitorGlobals.currentLocation === "scouts") {
                     if (ScoutGlobals.ifc === "Scouts") {
                         $("#h1_scouts_heading").text("Scouts");
-                        $("#div_direct").hide();
+                        $("#div_direct_win").hide();
+                        $("#div_direct_lin").hide();
                         $("#p_fail_text").hide();
                         $("#div_scouts_table_heading").show();
                         $("#div_scouts_table").show();
+                        $("#div_console").hide();
                         if (!ScoutGlobals.scoutButtonInFocus && $("#table_scouts :focus").attr('id') === undefined && data !== "") {
                             ScoutGlobals.nameSentToServer = false;
                             $("#table_scouts").find("tr:gt(0)").remove();
@@ -190,10 +194,12 @@ $(document).ready(function () {
             } else if (MonitorGlobals.currentLocation === "scouts") {
                 if (ScoutGlobals.ifc === "Scouts") {
                     $("#h1_scouts_heading").text("Scouts");
-                    $("#div_direct").hide();
+                    $("#div_direct_win").hide();
+                    $("#div_direct_lin").hide();
                     $("#div_scouts_table_heading").hide();
                     $("#div_scouts_table").hide();
                     $("#p_fail_text").show();
+                    $("#div_console").hide();
                 }
             }
         }
@@ -210,7 +216,6 @@ $(document).ready(function () {
             async: async,
             url: url,
             success: function (recvData) {
-                console.log(recvData);
                 if (callback !== undefined) {
                     if (extra_input !== undefined) {
                         callback(recvData, extra_input);

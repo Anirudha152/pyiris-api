@@ -1,4 +1,4 @@
-GeneratorGlobals = {
+let GeneratorGlobals = {
     "encoderArray": [],
     "mainSettingsShown": false,
     "componentsShown": true,
@@ -13,6 +13,17 @@ $(document).ready(function () {
 
     //load all available encoders and components into tables & update all values from server memory
     function reloadAll() {
+        GeneratorGlobals = {
+            "encoderArray": [],
+            "mainSettingsShown": false,
+            "componentsShown": true,
+            "availableEncodersShown": true,
+            "miscellaneousSettingsShown": false,
+            "loadedEncodersShown": true,
+            "modulesArray": [],
+            "globalEncoders": undefined,
+            "error": true
+        };
         $("#table_components").find("tr:gt(0)").remove();
         $("#table_available_encoders").find("tr:gt(0)").remove();
         triggerAjax("more_com all", false, '/generator_process', reloadCompCB, undefined);
@@ -44,17 +55,17 @@ $(document).ready(function () {
             for (let i = 0; i < loaded_encoders.length; i++) {
                 $("#table_loaded_encoders").append("<tr id='tr_loaded_encoders_" + String(i) + "'><td>" + String(i) + "</td><td>" + getKeyByValue(available_encoders, loaded_encoders[i]) + "</td><td>" + loaded_encoders[i] + "</td><td class='td_remove_loaded_encoder' id='td_remove_loaded_encoder_" + String(i) + "'><button class='red'>X</button></td></tr>");
             }
-            if (data.data[1]["base"] === "windows/bases/reverse_tcp_base") {
+            if (data.data[1]["base"] === "windows/bases/reverse_tcp_base" || data.data[1]["base"] === "linux/bases/reverse_tcp_base") {
                 $("#input_checkbox_components_1").prop('checked', true);
                 $("#tr_components_1").css("background-color", "#4974a9");
-            } else {
+            } else if (data.data[1]["base"] === "windows/bases/bind_tcp_base" || data.data[1]["base"] === "linux/bases/bind_tcp_base"){
                 $("#input_checkbox_components_0").prop('checked', true);
                 $("#tr_components_0").css("background-color", "#4974a9");
             }
 
-            for (let key in data.data[1]) {
-                $("#input_checkbox_components_" + String(key)).prop('checked', true);
-                $("#tr_components_" + String(key)).css("background-color", "#4974a9");
+            for (let i = 0; i < data.data[1]; i++) {
+                $("#input_checkbox_components_" + String(data.data[1][i])).prop('checked', true);
+                $("#tr_components_" + String(data.data[1][i])).css("background-color", "#4974a9");
             }
             LoadedEncodersSettings();
         }
@@ -190,8 +201,9 @@ $(document).ready(function () {
 
     //hostname_button click event
     $("#button_host").click(function () {
-        if ($("#input_host").val() !== "") {
-            let command = "set Host " + getColumn("String") + ", " + $("#input_host").val();
+        let $input_host = $("#input_host");
+        if ($input_host.val() !== "") {
+            let command = "set Host " + getColumn("String") + ", " + $input_host.val();
             triggerAjax(command, true, '/generator_process', addHostCB, undefined);
         }
     });
@@ -212,8 +224,9 @@ $(document).ready(function () {
 
     //port_button click event
     $("#button_port").click(function () {
-        if($("#input_port").val() !== "") {
-            triggerAjax("set Port " + $("#input_port").val(), true, '/generator_process', setPortCB, undefined);
+        let $input_port = $("#input_port");
+        if($input_port.val() !== "") {
+            triggerAjax("set Port " + $input_port.val(), true, '/generator_process', setPortCB, undefined);
         }
     });
     function setPortCB(data) {
@@ -230,8 +243,9 @@ $(document).ready(function () {
 
     //timeout_button click event
     $("#button_timeout").click(function () {
-        if($("#input_timeout").val() !== "") {
-            triggerAjax("set Timeout " + $("#input_timeout").val(), true, '/generator_process', setTimeoutCB, undefined);
+        let $input_timeout = $("#input_timeout");
+        if($input_timeout.val() !== "") {
+            triggerAjax("set Timeout " + $input_timeout.val(), true, '/generator_process', setTimeoutCB, undefined);
         }
     });
     function setTimeoutCB(data) {
@@ -265,8 +279,7 @@ $(document).ready(function () {
         } else {
             triggerAjax("set Windows False", true, '/generator_process', undefined, undefined);
         }
-        scrollToTop();
-        location.reload(true);
+        reloadAll();
     });
 
     //customFileIconPath
@@ -364,7 +377,7 @@ $(document).ready(function () {
 
     //on click of reload all button
     $("#button_reload_all").click(function () {
-        location.reload(true);
+        reloadAll();
     });
 
     //module adder
@@ -410,59 +423,43 @@ $(document).ready(function () {
     $("#button_generate").click(function () {
         $("#i_generate_spinner").show();
         let command = "generate ";
+        let conditions = {'compile': false, 'onefile': false, 'windowed': false, 'custom_icon': false, 'custom_icon_filepath': '', 'execute_python_modules_present': false, 'execute_python_modules': [], 'scout_sleep_time': 0, 'request_root_message': ''};
         if ($("#input_checkbox_compile").is(":checked")) {
-            if ($("#input_checkbox_compile_onefile").is(":checked")) {
-                command = command + "1 ";
-            } else {
-                command = command + "0 ";
-            }
-            if ($("#input_checkbox_compile_windowed").is(":checked")) {
-                command = command + "1 ";
-            } else {
-                command = command + "0 ";
-            }
+            conditions.compile = true;
+            conditions.onefile = !!$("#input_checkbox_compile_onefile").is(":checked");
+            conditions.windowed = !!$("#input_checkbox_compile_windowed").is(":checked");
             if ($("#input_checkbox_compile_custom_icon").is(":checked") && $("#input_compile_custom_icon_path").val() !== "") {
-                command = command + "1 " + $("#input_compile_custom_icon_path").val() + " ";
+                conditions.custom_icon = true;
+                conditions.custom_icon_filepath = $("#input_compile_custom_icon_path").val()
             } else {
-                command = command + "0 ";
+                conditions.custom_icon = false;
             }
         } else {
-            command = command + "0 0 0 ";
+            conditions.compile = false;
         }
         if (GeneratorGlobals.modulesArray.length > 0) {
-            command = command + "1 ";
+            conditions.execute_python_modules_present = true;
+            conditions.execute_python_modules = GeneratorGlobals.modulesArray;
         } else {
-            command = command + "0 ";
-        }
-        for (let i = 0; i < GeneratorGlobals.modulesArray.length; i++) {
-            if (i !== GeneratorGlobals.modulesArray.length - 1){
-                command = command + GeneratorGlobals.modulesArray[i] + ",";
-            } else {
-                command = command + GeneratorGlobals.modulesArray[i] + " ";
-            }
+            conditions.execute_python_modules_present = false;
         }
         if ($("#input_scout_sleep").val() !== "") {
             let time = parseInt(String($("#input_scout_sleep").val()), 10);
             if (time >= 0) {
-                command = command + String(time);
+                conditions.scout_sleep_time = time
             }
         } else {
-            command = command + "60";
+            conditions.scout_sleep_time = 60;
         }
-        command = command.trim();
+        conditions.request_root_message = $("#input_root_message").val();
+        command = command + JSON.stringify(conditions);
         triggerAjax(command, true, '/generator_process', generateCB, undefined);
     });
     function generateCB(data) {
         $("#i_generate_spinner").hide();
-        if (data.output === "Fail") {
-            GeneratorGlobals.error = true;
-            showMessage(data.output_message);
-            scrollToTop();
-        } else {
-            GeneratorGlobals.error = false;
-            showMessage(data.output_message);
-            scrollToTop();
-        }
+        GeneratorGlobals.error = data.output === "Fail";
+        showMessage(data.output_message);
+        scrollToTop();
     }
 
     // extra functions
@@ -561,10 +558,49 @@ $(document).ready(function () {
     function MiscSettings() {
         let row_for_modules_id = rowByModuleName("Execute python component").split("_")[2];
         let row_for_sleep_scout_id = rowByModuleName("Sleep startup component").split("_")[2];
+        let row_for_root_startup = rowByModuleName("Request root startup component");
+        let row_for_root_startup_id;
+        if (row_for_root_startup !== undefined) {
+            row_for_root_startup_id = row_for_root_startup.split("_")[2];
+        }
+
         if (!$("#input_checkbox_components_" + String(row_for_sleep_scout_id)).is(":checked") && !$("#input_checkbox_components_" + String(row_for_modules_id)).is(":checked")) {
-            $("#div_miscellaneous_settings_heading").hide();
-            $("#table_modules").hide();
-            $("#table_scout_sleep").hide();
+            if (row_for_root_startup === undefined) {
+                $("#div_miscellaneous_settings_heading").hide();
+                $("#table_modules").hide();
+                $("#table_scout_sleep").hide();
+                $("#table_root_message").hide();
+            } else {
+                if(!$("#input_checkbox_components_" + String(row_for_root_startup_id)).is(":checked")) {
+                    $("#div_miscellaneous_settings_heading").hide();
+                    $("#table_modules").hide();
+                    $("#table_scout_sleep").hide();
+                    $("#table_root_message").hide();
+                } else {
+                    $("#div_miscellaneous_settings_heading").show();
+                    if (GeneratorGlobals.miscellaneousSettingsShown) {
+                        if ($("#input_checkbox_components_" + String(row_for_modules_id)).is(":checked")) {
+                            $("#table_modules").show();
+                        } else {
+                            $("#table_modules").hide();
+                        }
+                        if ($("#input_checkbox_components_" + String(row_for_sleep_scout_id)).is(":checked")) {
+                            $("#table_scout_sleep").show();
+                        } else {
+                            $("#table_scout_sleep").hide();
+                        }
+                        if ($("#input_checkbox_components_" + String(row_for_root_startup_id)).is(":checked")) {
+                            $("#table_root_message").show();
+                        } else {
+                            $("#table_root_message").hide();
+                        }
+                    } else {
+                        $("#table_modules").hide();
+                        $("#table_scout_sleep").hide();
+                        $("#table_root_message").hide();
+                    }
+                }
+            }
         } else {
             $("#div_miscellaneous_settings_heading").show();
             if (GeneratorGlobals.miscellaneousSettingsShown) {
@@ -578,9 +614,19 @@ $(document).ready(function () {
                 } else {
                     $("#table_scout_sleep").hide();
                 }
+                if (row_for_root_startup !== undefined) {
+                    if ($("#input_checkbox_components_" + String(row_for_root_startup_id)).is(":checked")) {
+                        $("#table_root_message").show();
+                    } else {
+                        $("#table_root_message").hide();
+                    }
+                } else {
+                    $("#table_root_message").hide();
+                }
             } else {
                 $("#table_modules").hide();
                 $("#table_scout_sleep").hide();
+                $("#table_root_message").hide();
             }
         }
     }

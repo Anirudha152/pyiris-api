@@ -5,6 +5,7 @@ config.main()
 interface = config.interface
 if interface == "GUI":
     from flask import jsonify
+    from json import loads
 elif interface == "CUI":
     import time
 
@@ -14,26 +15,18 @@ def main(option, prompt = None):
         config.import_statements.append('import sys')
         config.import_statements.append('from io import StringIO')
         if interface == "GUI":
-            prompt = prompt.split(" ")
-            if prompt[3] == "1":
-                if prompt[5] == "1":
-                    modules = prompt[6]
-                else:
-                    modules = ""
-            else:
-                if prompt[4] == "1":
-                    modules = prompt[5]
-                else:
-                    modules = ""
-            list_of_modules = modules.split(",")
+            conditions = loads(prompt)
+            list_of_modules = []
+            if conditions['execute_python_modules_present']:
+                list_of_modules = conditions['execute_python_modules']
             for module_to_load in list_of_modules:
                 try:
                     if module_to_load != "":
                         exec('import ' + module_to_load)
-                        print(config.pos + 'Valid module, loaded on')
+                        config.app.logger.info("[components/linux/control/execute_python] - Valid module, loaded on")
                         config.import_statements.append('import ' + module_to_load)
-                except ImportError:
-                    print(config.neg + 'Invalid module, not loaded on')
+                except (ImportError, SyntaxError):
+                    config.app.logger.error("[components/linux/control/execute_python] - Invalid module, not loaded on")
         elif interface == "CUI":
             print(config.war + 'Manual intervention required for python_execute component')
             while True:
@@ -48,7 +41,7 @@ def main(option, prompt = None):
                         exec('import ' + module_to_load)
                         print(config.pos + 'Valid module, loaded on')
                         config.import_statements.append('import ' + module_to_load)
-                    except ImportError:
+                    except (ImportError, SyntaxError):
                         print(config.neg + 'Invalid module, not loaded on')
                 except EOFError:
                     try:
@@ -71,7 +64,8 @@ def exec_py(command):
         result.write(str(e) + '\\n')
     sys.stdout = old_stdout
     result_string = result.getvalue()
-    s.sendall(('[*]Result of code : \\n\\n' + result_string).encode())
+    s.sendall(().encode())
+    main_send('[*]Result of code : \\n\\n' + result_string, s)
 ''')
         config.logics.append('''
             elif command == "exec_py":

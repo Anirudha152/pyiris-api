@@ -6,23 +6,16 @@ config.main()
 interface = config.interface
 if interface == "GUI":
     from flask import jsonify
+    from json import loads
 
 
 def main(option, prompt = None):
     if option == 'generate':
         config.import_statements.append('from time import sleep')
         if interface == "GUI":
-            if prompt[3] == "1":
-                if prompt[5] == "1":
-                    sleep_duration = int(prompt[7])
-                else:
-                    sleep_duration = int(prompt[6])
-            else:
-                if prompt[4] == "1":
-                    sleep_duration = int(prompt[6])
-                else:
-                    sleep_duration = int(prompt[5])
-            print("Sleep duration set to", str(sleep_duration))
+            conditions = loads(prompt)
+            sleep_duration = conditions['scout_sleep_time']
+            config.app.logger.info("[components/linux/startup/sleep] - Sleep duration set to " + str(sleep_duration))
         elif interface == "CUI":
             print(config.war + 'Manual intervention required for python_execute component')
             while True:

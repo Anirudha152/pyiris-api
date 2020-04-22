@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<script src="static/assets/js/jquery.min.js"></script>
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="static/assets/css/font-awesome-4.7.0/css/font-awesome.min.css">
 		<link rel="stylesheet" href="static/assets/css/style.css">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 		<script src="static/assets/js/scouts.js"></script>
@@ -51,7 +51,7 @@
 							<br>
 
 							<table id="table_scouts">
-								<tr>
+								<tr id="tr_scouts_heading">
 									<th>ID</th>
 									<th>Remote Scout Host</th>
 									<th>Remote Scout Port</th>
@@ -71,528 +71,863 @@
 							<br>
 						</div>
 					</div>
-					<div id="div_direct">
-						<div id="div_direct_classify">
+
+					<div id="div_direct_win">
+						<div id="div_direct_classify_win">
 							<br>
-							<div id="div_direct_classify_main_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
-								<button id="button_direct_classify_main_base" class="select button_direct_classify_main" style = "width: 18% !important; height: 50px !important; font-size: large !important;">Base</button>
-								<button id="button_direct_classify_main_read" class="select button_direct_classify_main" style = "width: 18% !important; height: 50px !important; font-size: large !important;">Read</button>
-								<button id="button_direct_classify_main_write" class="select button_direct_classify_main" style = "width: 18% !important; height: 50px !important; font-size: large !important;">Write</button>
-								<button id="button_direct_classify_main_execute" class="select button_direct_classify_main" style = "width: 18% !important; height: 50px !important; font-size: large !important;">Execute</button>
-								<button id="button_direct_classify_main_persist" class="select button_direct_classify_main" style = "width: 18% !important; height: 50px !important; font-size: large !important;">Persist</button>
+							<div id="div_direct_classify_win_main_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
+								<button id="button_direct_classify_win_main_base" class="select button_direct_classify_win_main" style = "width: 18% !important; height: 50px !important; font-size: large !important;">Base</button>
+								<button id="button_direct_classify_win_main_read" class="select button_direct_classify_win_main" style = "width: 18% !important; height: 50px !important; font-size: large !important;">Read</button>
+								<button id="button_direct_classify_win_main_write" class="select button_direct_classify_win_main" style = "width: 18% !important; height: 50px !important; font-size: large !important;">Write</button>
+								<button id="button_direct_classify_win_main_execute" class="select button_direct_classify_win_main" style = "width: 18% !important; height: 50px !important; font-size: large !important;">Execute</button>
+								<button id="button_direct_classify_win_main_persist" class="select button_direct_classify_win_main" style = "width: 18% !important; height: 50px !important; font-size: large !important;">Persist</button>
 							</div>
 							<br>
 							<br>
-							<div id="div_direct_classify_base_buttons" class="div_direct_classify_base_buttons classify_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
-								<button id="button_direct_classify_base_disconnect_0" class="select button_direct_classify_base" style = "width: 23% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_direct_classify_base_disconnect_0_spinner"></i> Disconnect</button>
-								<button id="button_direct_classify_base_kill_1" class="select button_direct_classify_base" style = "width: 23% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_direct_classify_base_kill_1_spinner"></i> Kill</button>
-								<button id="button_direct_classify_base_ping_2" class="select button_direct_classify_base" style = "width: 23% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_direct_classify_base_ping_2_spinner"></i> Ping</button>
-								<button id="button_direct_classify_base_sleep_3" class="select button_direct_classify_base" style = "width: 23% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_direct_classify_base_sleep_3_spinner"></i> Sleep</button>
+							<div id="div_direct_classify_win_base_buttons" class="div_direct_classify_win_base_buttons classify_win_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
+								<button id="button_direct_classify_win_base_disconnect_0" class="select button_direct_classify_win_base" style = "width: 23% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_direct_classify_win_base_disconnect_0_spinner"></i> Disconnect</button>
+								<button id="button_direct_classify_win_base_kill_1" class="select button_direct_classify_win_base" style = "width: 23% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_direct_classify_win_base_kill_1_spinner"></i> Kill</button>
+								<button id="button_direct_classify_win_base_ping_2" class="select button_direct_classify_win_base" style = "width: 23% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_direct_classify_win_base_ping_2_spinner"></i> Ping</button>
+								<button id="button_direct_classify_win_base_sleep_3" class="select button_direct_classify_win_base" style = "width: 23% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_direct_classify_win_base_sleep_3_spinner"></i> Sleep</button>
 							</div>
 							<div id="div_direct_sleep" class="hide">
 								<br>
 								<input type="number" id="input_direct_scout_sleep_time" name="Sleep time" placeholder="Enter time to sleep (default is 10s)" style="width: 20em !important;" maxlength="100">
 								<button id="button_direct_scout_sleep_time" class="select">Update</button>
 							</div>
-							<div id="div_direct_classify_read_buttons_0" class="div_direct_classify_read_buttons classify_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
-								<button id="button_direct_classify_read_activeWindowsDump" class="select button_direct_classify_read" style = "width: 23% !important;">Active Windows</button>
-								<button id="button_direct_classify_read_checkAdmin" class="select button_direct_classify_read" style = "width: 23% !important;">Admin Status</button>
-								<button id="button_direct_classify_read_chromePasswordDump" class="select button_direct_classify_read" style = "width: 23% !important;">Chrome Passwords</button>
-								<button id="button_direct_classify_read_clipLogger" class="select button_direct_classify_read" style = "width: 23% !important;">Cliplogger</button>
+							<div id="div_direct_classify_win_read_buttons_0" class="div_direct_classify_win_read_buttons classify_win_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
+								<button id="button_direct_classify_win_read_activeWindowsDump" class="select button_direct_classify_win_read" style = "width: 23% !important;">Active Windows</button>
+								<button id="button_direct_classify_win_read_checkAdmin" class="select button_direct_classify_win_read" style = "width: 23% !important;">Admin Status</button>
+								<button id="button_direct_classify_win_read_chromePasswordDump" class="select button_direct_classify_win_read" style = "width: 23% !important;">Chrome Passwords</button>
+								<button id="button_direct_classify_win_read_clipLogger" class="select button_direct_classify_win_read" style = "width: 23% !important;">Cliplogger</button>
 							</div>
-							<br class="br_direct_classify_read_break hide">
-							<div id="div_direct_classify_read_buttons_1" class="div_direct_classify_read_buttons classify_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
-								<button id="button_direct_classify_read_downloadFile" class="select button_direct_classify_read" style = "width: 23% !important;">Download File</button>
-								<button id="button_direct_classify_read_downloadWeb" class="select button_direct_classify_read" style = "width: 23% !important;">Download Web</button>
-								<button id="button_direct_classify_read_getIdle" class="select button_direct_classify_read" style = "width: 23% !important;">System Idle Time</button>
-								<button id="button_direct_classify_read_screenshot" class="select button_direct_classify_read" style = "width: 23% !important;">Screenshot</button>
+							<br class="br_direct_classify_win_read_break hide">
+							<div id="div_direct_classify_win_read_buttons_1" class="div_direct_classify_win_read_buttons classify_win_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
+								<button id="button_direct_classify_win_read_downloadFile" class="select button_direct_classify_win_read" style = "width: 23% !important;">Download File</button>
+								<button id="button_direct_classify_win_read_downloadWeb" class="select button_direct_classify_win_read" style = "width: 23% !important;">Download Web</button>
+								<button id="button_direct_classify_win_read_getIdle" class="select button_direct_classify_win_read" style = "width: 23% !important;">System Idle Time</button>
+								<button id="button_direct_classify_win_read_screenshot" class="select button_direct_classify_win_read" style = "width: 23% !important;">Screenshot</button>
 							</div>
-							<br class="br_direct_classify_read_break hide">
-							<div id="div_direct_classify_read_buttons_2" class="div_direct_classify_read_buttons classify_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
-								<button id="button_direct_classify_read_webcam" class="select button_direct_classify_read" style = "width: 31.3% !important;">Webcam Capture</button>
-								<button id="button_direct_classify_read_logger" class="select button_direct_classify_read" style = "width: 31.3% !important;">Key & Window Logger</button>
-								<button id="button_direct_classify_read_systemInfo" class="select button_direct_classify_read" style = "width: 31.3% !important;">System Information</button>
+							<br class="br_direct_classify_win_read_break hide">
+							<div id="div_direct_classify_win_read_buttons_2" class="div_direct_classify_win_read_buttons classify_win_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
+								<button id="button_direct_classify_win_read_webcam" class="select button_direct_classify_win_read" style = "width: 31.3% !important;">Webcam Capture</button>
+								<button id="button_direct_classify_win_read_logger" class="select button_direct_classify_win_read" style = "width: 31.3% !important;">Key & Window Logger</button>
+								<button id="button_direct_classify_win_read_systemInfo" class="select button_direct_classify_win_read" style = "width: 31.3% !important;">System Information</button>
 							</div>
-							<div id="div_direct_classify_write_buttons_0" class="div_direct_classify_write_buttons classify_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
-								<button id="button_direct_classify_write_browser" class="select button_direct_classify_write" style = "width: 23% !important;">Open Webpage</button>
-								<button id="button_direct_classify_write_injectKeystrokes" class="select button_direct_classify_write" style = "width: 23% !important;">Inject Keystroke</button>
-								<button id="button_direct_classify_write_interfaceLock" class="select button_direct_classify_write" style = "width: 23% !important;">Lock Interface</button>
-								<button id="button_direct_classify_write_setAudio" class="select button_direct_classify_write" style = "width: 23% !important;">Set Audio</button>
+							<div id="div_direct_classify_win_write_buttons_0" class="div_direct_classify_win_write_buttons classify_win_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
+								<button id="button_direct_classify_win_write_browser" class="select button_direct_classify_win_write" style = "width: 23% !important;">Open Webpage</button>
+								<button id="button_direct_classify_win_write_injectKeystrokes" class="select button_direct_classify_win_write" style = "width: 23% !important;">Inject Keystroke</button>
+								<button id="button_direct_classify_win_write_interfaceLock" class="select button_direct_classify_win_write" style = "width: 23% !important;">Lock Interface</button>
+								<button id="button_direct_classify_win_write_setAudio" class="select button_direct_classify_win_write" style = "width: 23% !important;">Set Audio</button>
 							</div>
-							<br class="br_direct_classify_write_break hide">
-							<div id="div_direct_classify_write_buttons_1" class="div_direct_classify_write_buttons classify_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
-								<button id="button_direct_classify_write_systemStatusChange" class="select button_direct_classify_write" style = "width: 31.3% !important;">Change System Status</button>
-								<button id="button_direct_classify_write_uploadFile" class="select button_direct_classify_write" style = "width: 31.3% !important;">Upload File</button>
-								<button id="button_direct_classify_write_wallpaperChanger" class="select button_direct_classify_write" style = "width: 31.3% !important;">Set Wallpaper</button>
+							<br class="br_direct_classify_win_write_break hide">
+							<div id="div_direct_classify_win_write_buttons_1" class="div_direct_classify_win_write_buttons classify_win_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
+								<button id="button_direct_classify_win_write_systemStatusChange" class="select button_direct_classify_win_write" style = "width: 31.3% !important;">Change System Status</button>
+								<button id="button_direct_classify_win_write_uploadFile" class="select button_direct_classify_win_write" style = "width: 31.3% !important;">Upload File</button>
+								<button id="button_direct_classify_win_write_wallpaperChanger" class="select button_direct_classify_win_write" style = "width: 31.3% !important;">Set Wallpaper</button>
 							</div>
-							<div id="div_direct_classify_execute_buttons_0" class="div_direct_classify_execute_buttons classify_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
-								<button id="button_direct_classify_execute_CMD" class="select button_direct_classify_execute" style = "width: 23% !important;">Execute CMD</button>
-								<button id="button_direct_classify_execute_powershell" class="select button_direct_classify_execute" style = "width: 23% !important;">Execute Powershell</button>
-								<button id="button_direct_classify_execute_file" class="select button_direct_classify_execute" style = "width: 23% !important;">Execute File</button>
-								<button id="button_direct_classify_execute_python" class="select button_direct_classify_execute" style = "width: 23% !important;">Execute Python</button>
+							<div id="div_direct_classify_win_execute_buttons_0" class="div_direct_classify_win_execute_buttons classify_win_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
+								<button id="button_direct_classify_win_execute_CMD" class="select button_direct_classify_win_execute" style = "width: 23% !important;">Execute CMD</button>
+								<button id="button_direct_classify_win_execute_powershell" class="select button_direct_classify_win_execute" style = "width: 23% !important;">Execute Powershell</button>
+								<button id="button_direct_classify_win_execute_file" class="select button_direct_classify_win_execute" style = "width: 23% !important;">Execute File</button>
+								<button id="button_direct_classify_win_execute_python" class="select button_direct_classify_win_execute" style = "width: 23% !important;">Execute Python</button>
 							</div>
-							<div id="div_direct_classify_persist_buttons_0" class="div_direct_classify_persist_buttons classify_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
-								<button id="button_direct_classify_persist_registryPersistence" class="select button_direct_classify_persist" style = "width: 31.3% !important;">Registry Persistence</button>
-								<button id="button_direct_classify_persist_sdcltUACBypass" class="select button_direct_classify_persist" style = "width: 31.3% !important;">UAC Bypass</button>
-								<button id="button_direct_classify_persist_startupFolderPersistence" class="select button_direct_classify_persist" style = "width: 31.3% !important;">Startup Persistence</button>
+							<div id="div_direct_classify_win_persist_buttons_0" class="div_direct_classify_win_persist_buttons classify_win_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
+								<button id="button_direct_classify_win_persist_registryPersistence" class="select button_direct_classify_win_persist" style = "width: 31.3% !important;">Registry Persistence</button>
+								<button id="button_direct_classify_win_persist_sdcltUACBypass" class="select button_direct_classify_win_persist" style = "width: 31.3% !important;">UAC Bypass</button>
+								<button id="button_direct_classify_win_persist_startupFolderPersistence" class="select button_direct_classify_win_persist" style = "width: 31.3% !important;">Startup Persistence</button>
 							</div>
 							<br>
 							<br>
 						</div>
-						<div id="div_direct_components">
-							<button id="button_direct_components_back" class="select">< Back <</button>
-							<div id="div_direct_components_activeWindowsDump" class="div_component">
+						<div id="div_direct_components_win">
+							<button id="button_direct_components_win_back" class="select">< Back <</button>
+							<div id="div_direct_components_win_activeWindowsDump" class="div_component_win">
 								<br>
-								<div class="div_heading" id="div_direct_components_activeWindowsDump_heading">
-									<h2 class="label" id="h2_direct_components_activeWindowsDump_heading">Active Windows Dump</h2>
+								<div class="div_heading" id="div_direct_components_win_activeWindowsDump_heading">
+									<h2 class="label" id="h2_direct_components_win_activeWindowsDump_heading">Active Windows Dump</h2>
 								</div>
-								<p id="p_direct_components_activeWindowsDump_info">> Shows all open windows on the target system</p>
+								<p id="p_direct_components_win_activeWindowsDump_info">> Shows all open windows on the target system</p>
 								<br>
-								<button id="button_direct_components_activeWindowsDump" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Show</button>
+								<button id="button_direct_components_win_activeWindowsDump" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Show</button>
 								<br>
 								<br>
 								<br>
 							</div>
-							<div id="div_direct_components_checkAdmin" class="div_component">
+							<div id="div_direct_components_win_checkAdmin" class="div_component_win">
 								<br>
-								<div class="div_heading" id="div_direct_components_checkAdmin_heading">
-									<h2 class="label" id="h2_direct_components_checkAdmin_heading">Check Admin</h2>
+								<div class="div_heading" id="div_direct_components_win_checkAdmin_heading">
+									<h2 class="label" id="h2_direct_components_win_checkAdmin_heading">Check Admin</h2>
 								</div>
-								<p id="p_direct_components_checkAdmin_info">> Checks to see if the scout is running as a process with admin privileges</p>
+								<p id="p_direct_components_win_checkAdmin_info">> Checks to see if the scout is running as a process with admin privileges</p>
 								<br>
-								<button id="button_direct_components_checkAdmin" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Check</button>
+								<button id="button_direct_components_win_checkAdmin" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Check</button>
 								<br>
 								<br>
 								<br>
 							</div>
-							<div id="div_direct_components_chromePasswordDump" class="div_component">
+							<div id="div_direct_components_win_chromePasswordDump" class="div_component_win">
 								<br>
-								<div class="div_heading" id="div_direct_components_chromePasswordDump_heading">
-									<h2 class="label" id="h2_direct_components_chromePasswordDump_heading">Chrome Password Dump</h2>
+								<div class="div_heading" id="div_direct_components_win_chromePasswordDump_heading">
+									<h2 class="label" id="h2_direct_components_win_chromePasswordDump_heading">Chrome Password Dump</h2>
 								</div>
-								<p id="p_direct_components_chromePasswordDump_active_info">> Kills chrome.exe and dumps chrome passwords</p>
+								<p id="p_direct_components_win_chromePasswordDump_active_info">> Kills chrome.exe and dumps chrome passwords</p>
 								<br>
-								<button id="button_direct_components_chromePasswordDump_active" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Active Dump</button>
+								<button id="button_direct_components_win_chromePasswordDump_active" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Active Dump</button>
 								<br>
 								<br>
-								<p id="p_direct_components_chromePasswordDump_passive_info">> Dumps chrome passwords only if chrome is not running</p>
+								<p id="p_direct_components_win_chromePasswordDump_passive_info">> Dumps chrome passwords only if chrome is not running</p>
 								<br>
-								<button id="button_direct_components_chromePasswordDump_passive" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Passive Dump</button>
+								<button id="button_direct_components_win_chromePasswordDump_passive" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Passive Dump</button>
 								<br>
 								<br>
 								<br>
 							</div>
-							<div id="div_direct_components_clipLogger" class="div_component">
+							<div id="div_direct_components_win_clipLogger" class="div_component_win">
 								<br>
-								<div class="div_heading" id="div_direct_components_clipLogger_heading">
-									<h2 class="label" id="h2_direct_components_clipLogger_heading">Clip Logger</h2>
+								<div class="div_heading" id="div_direct_components_win_clipLogger_heading">
+									<h2 class="label" id="h2_direct_components_win_clipLogger_heading">Clip Logger</h2>
 								</div>
 
-								<p id="p_direct_components_clipLogger_clear_info">> Clear the clipboard data on the target system</p>
+								<p id="p_direct_components_win_clipLogger_clear_info">> Clear the clipboard data on the target system</p>
 								<br>
-								<button id="button_direct_components_clipLogger_clear" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Clear</button>
-								<br>
-								<br>
-
-								<p id="p_direct_components_clipLogger_dump_info">> Display contents of clipboard on the target system</p>
-								<br>
-								<button id="button_direct_components_clipLogger_dump" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Show</button>
+								<button id="button_direct_components_win_clipLogger_clear" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Clear</button>
 								<br>
 								<br>
 
-								<p id="p_direct_components_clipLogger_set_info">> Set the value of the clipboard on the target system</p>
+								<p id="p_direct_components_win_clipLogger_dump_info">> Display contents of clipboard on the target system</p>
 								<br>
-								<span id="span_direct_components_clipLogger_set_content">
-									<input type="text" id="input_direct_components_clipLogger_set" name="Set clipboard" placeholder="Enter value for clipboard" style="width: 30em !important; height: 50px !important;">
-									<button id="button_direct_components_clipLogger_set" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Set</button>
+								<button id="button_direct_components_win_clipLogger_dump" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Show</button>
+								<br>
+								<br>
+
+								<p id="p_direct_components_win_clipLogger_set_info">> Set the value of the clipboard on the target system</p>
+								<br>
+								<span id="span_direct_components_win_clipLogger_set_content">
+									<input type="text" id="input_direct_components_win_clipLogger_set" name="Set clipboard" placeholder="Enter value for clipboard" style="width: 30em !important; height: 50px !important;">
+									<button id="button_direct_components_win_clipLogger_set" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Set</button>
 								</span>
 								<br>
 								<br>
 
 								<br>
 							</div>
-							<div id="div_direct_components_downloadFile" class="div_component">
+							<div id="div_direct_components_win_downloadFile" class="div_component_win">
 								<br>
-								<div class="div_heading" id="div_direct_components_downloadFile_heading">
-									<h2 class="label" id="h2_direct_components_downloadFile_heading">Download File</h2>
+								<div class="div_heading" id="div_direct_components_win_downloadFile_heading">
+									<h2 class="label" id="h2_direct_components_win_downloadFile_heading">Download File</h2>
 								</div>
-								<p id="p_direct_components_downloadFile_info">> Remotely download a file to local current working directory of PyIris</p>
+								<p id="p_direct_components_win_downloadFile_info">> Remotely download a file to local current working directory of PyIris</p>
 								<br>
-								<span id="span_direct_components_downloadFile_content">
-									<input type="text" id="input_direct_components_downloadFile" name="Download File" placeholder="Directory of file to download" style="width: 30em !important; height: 50px !important;">
-									<button id="button_direct_components_downloadFile" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Download</button>
+								<span id="span_direct_components_win_downloadFile_content">
+									<input type="text" id="input_direct_components_win_downloadFile" name="Download File" placeholder="Directory of file to download" style="width: 30em !important; height: 50px !important;">
+									<button id="button_direct_components_win_downloadFile" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Download</button>
 								</span>
 								<br>
 								<br>
 								<br>
 							</div>
-							<div id="div_direct_components_downloadWeb" class="div_component">
+							<div id="div_direct_components_win_downloadWeb" class="div_component_win">
 								<br>
-								<div class="div_heading" id="div_direct_components_downloadWeb_heading">
-									<h2 class="label" id="h2_direct_components_downloadWeb_heading">Download Web</h2>
+								<div class="div_heading" id="div_direct_components_win_downloadWeb_heading">
+									<h2 class="label" id="h2_direct_components_win_downloadWeb_heading">Download Web</h2>
 								</div>
-								<p id="p_direct_components_downloadWeb_info">> Allows you to download a file from a url supplied to a specified remote file path</p>
+								<p id="p_direct_components_win_downloadWeb_info">> Allows you to download a file from a url supplied to a specified remote file path</p>
 								<br>
-								<input type="text" id="input_direct_components_downloadWeb_directory" name="Download Web Directory" placeholder="Remote directory to download file to" style="width: 30em !important; height: 50px !important;">
-								<br>
-								<br>
-								<input type="text" id="input_direct_components_downloadWeb_url" name="Download Web URL" placeholder="URL of file to download" style="width: 30em !important; height: 50px !important;">
+								<input type="text" id="input_direct_components_win_downloadWeb_directory" name="Download Web Directory" placeholder="Remote directory to download file to" style="width: 30em !important; height: 50px !important;">
 								<br>
 								<br>
-								<button id="button_direct_components_downloadWeb" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Download</button>
+								<input type="text" id="input_direct_components_win_downloadWeb_url" name="Download Web URL" placeholder="URL of file to download" style="width: 30em !important; height: 50px !important;">
+								<br>
+								<br>
+								<button id="button_direct_components_win_downloadWeb" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Download</button>
 								<br>
 								<br>
 								<br>
 							</div>
-							<div id="div_direct_components_getIdle" class="div_component">
+							<div id="div_direct_components_win_getIdle" class="div_component_win">
 								<br>
-								<div class="div_heading" id="div_direct_components_getIdle_heading">
-									<h2 class="label" id="h2_direct_components_getIdle_heading">Idle Time</h2>
+								<div class="div_heading" id="div_direct_components_win_getIdle_heading">
+									<h2 class="label" id="h2_direct_components_win_getIdle_heading">Idle Time</h2>
 								</div>
-								<p id="p_direct_components_getIdle_info">> Get amount of time user has not pressed a key or moved mouse/ get the idle time of system</p>
+								<p id="p_direct_components_win_getIdle_info">> Get amount of time user has not pressed a key or moved mouse/ get the idle time of system</p>
 								<br>
-								<button id="button_direct_components_getIdle" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Show</button>
+								<button id="button_direct_components_win_getIdle" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Show</button>
 								<br>
 								<br>
 								<br>
 							</div>
-							<div id="div_direct_components_screenshot" class="div_component">
+							<div id="div_direct_components_win_screenshot" class="div_component_win">
 								<br>
-								<div class="div_heading" id="div_direct_components_screenshot_heading">
-									<h2 class="label" id="h2_direct_components_screenshot_heading">Screenshot</h2>
+								<div class="div_heading" id="div_direct_components_win_screenshot_heading">
+									<h2 class="label" id="h2_direct_components_win_screenshot_heading">Screenshot</h2>
 								</div>
-								<p id="p_direct_components_screenshot_info">> Takes a screenshot and saves it to in memory file before sending the in memory file to PyIris to download</p>
+								<p id="p_direct_components_win_screenshot_info">> Takes a screenshot and saves it to in memory file before sending the in memory file to PyIris to download</p>
 								<br>
-								<button id="button_direct_components_screenshot" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Take</button>
+								<button id="button_direct_components_win_screenshot" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Take</button>
 								<br>
 								<br>
 								<br>
 							</div>
-							<div id="div_direct_components_webcam" class="div_component">
+							<div id="div_direct_components_win_webcam" class="div_component_win">
 								<br>
-								<div class="div_heading" id="div_direct_components_webcam_heading">
-									<h2 class="label" id="h2_direct_components_webcam_heading">Webcam</h2>
+								<div class="div_heading" id="div_direct_components_win_webcam_heading">
+									<h2 class="label" id="h2_direct_components_win_webcam_heading">Webcam</h2>
 								</div>
-								<p id="p_direct_components_webcam_info">> Snaps a picture from the webcam and saves it as an in memory pickle before sending it to PyIris to decode and download</p>
+								<p id="p_direct_components_win_webcam_info">> Snaps a picture from the webcam and saves it as an in memory pickle before sending it to PyIris to decode and download</p>
 								<br>
-								<button id="button_direct_components_webcam" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Take</button>
+								<button id="button_direct_components_win_webcam" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Take</button>
 								<br>
 								<br>
 								<br>
 							</div>
-							<div id="div_direct_components_logger" class="div_component">
+							<div id="div_direct_components_win_logger" class="div_component_win">
 								<br>
-								<div class="div_heading" id="div_direct_components_logger_heading">
-									<h2 class="label" id="h2_direct_components_logger_heading">Key and Window Logger</h2>
+								<div class="div_heading" id="div_direct_components_win_logger_heading">
+									<h2 class="label" id="h2_direct_components_win_logger_heading">Key and Window Logger</h2>
 								</div>
-								<p id="p_direct_components_logger_start_info">> Start the keylogger</p>
+								<p id="p_direct_components_win_logger_start_info">> Start the keylogger</p>
 								<br>
-								<button id="button_direct_components_logger_start" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Start</button>
-								<br>
-								<br>
-								<p id="p_direct_components_logger_stop_info">> Stop the keylogger</p>
-								<br>
-								<button id="button_direct_components_logger_stop" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Stop</button>
+								<button id="button_direct_components_win_logger_start" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Start</button>
 								<br>
 								<br>
-								<p id="p_direct_components_logger_dump_info">> Dump the captured in-memory keystrokes</p>
+								<p id="p_direct_components_win_logger_stop_info">> Stop the keylogger</p>
 								<br>
-								<button id="button_direct_components_logger_dump" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Dump</button>
+								<button id="button_direct_components_win_logger_stop" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Stop</button>
+								<br>
+								<br>
+								<p id="p_direct_components_win_logger_dump_info">> Dump the captured in-memory keystrokes</p>
+								<br>
+								<button id="button_direct_components_win_logger_dump" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Dump</button>
 								<br>
 								<br>
 								<br>
 							</div>
-							<div id="div_direct_components_systemInfo" class="div_component">
+							<div id="div_direct_components_win_systemInfo" class="div_component_win">
 								<br>
-								<div class="div_heading" id="div_direct_components_systemInfo_heading">
-									<h2 class="label" id="h2_direct_components_systemInfo_heading">System Information</h2>
+								<div class="div_heading" id="div_direct_components_win_systemInfo_heading">
+									<h2 class="label" id="h2_direct_components_win_systemInfo_heading">System Information</h2>
 								</div>
-								<p id="p_direct_components_systemInfo_info">> Grabs system info and displays it</p>
+								<p id="p_direct_components_win_systemInfo_info">> Grabs system info and displays it</p>
 								<br>
-								<button id="button_direct_components_systemInfo" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Grab</button>
-								<br>
-								<br>
-								<br>
-							</div>
-
-							<div id="div_direct_components_browser" class="div_component">
-								<br>
-								<div class="div_heading" id="div_direct_components_browser_heading">
-									<h2 class="label" id="h2_direct_components_browser_heading">Open Webpage</h2>
-								</div>
-								<p id="p_direct_components_browser_info">> Opens a new browser to the specified site</p>
-								<br>
-								<span id="span_direct_components_browser_content">
-									<input type="text" id="input_direct_components_browser" name="URL" placeholder="URL of page to open" style="width: 30em !important; height: 50px !important;">
-									<button id="button_direct_components_browser" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Open</button>
-								</span>
-								<br>
-								<br>
-								<br>
-							</div>
-							<div id="div_direct_components_injectKeystrokes" class="div_component">
-								<br>
-								<div class="div_heading" id="div_direct_components_injectKeystrokes_heading">
-									<h2 class="label" id="h2_direct_components_injectKeystrokes_heading">Inject Keystrokes</h2>
-								</div>
-								<p id="p_direct_components_injectKeystrokes_get_info">> List all the valid keys the user can inject into the victim</p>
-								<br>
-								<button id="button_direct_components_injectKeystrokes_get" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Grab</button>
-								<br>
-								<br>
-								<p id="p_direct_components_injectKeystrokes_text_info">> Inject a string through keystrokes that mimic typing</p>
-								<br>
-								<span id="span_direct_components_injectKeystrokes_text_content">
-									<input type="text" id="input_direct_components_injectKeystrokes_text" name="URL" placeholder="String to inject" style="width: 30em !important; height: 50px !important;">
-									<button id="button_direct_components_injectKeystrokes_text" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Inject</button>
-								</span>
-								<br>
-								<br>
-								<p id="p_direct_components_injectKeystrokes_button_info">> Inject a single key press through keystrokes that mimic button presses</p>
-								<br>
-								<span id="span_direct_components_injectKeystrokes_button_content">
-									<input type="text" id="input_direct_components_injectKeystrokes_button" name="URL" placeholder="Button press to inject" style="width: 30em !important; height: 50px !important;">
-									<button id="button_direct_components_injectKeystrokes_button" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Inject</button>
-								</span>
-								<br>
-								<br>
-								<p id="p_direct_components_injectKeystrokes_combination_info">> Inject a hotkey combination through keystrokes that mimic button pressesy</p>
-								<br>
-								<span id="span_direct_components_injectKeystrokes_combination_content">
-									<input type="text" id="input_direct_components_injectKeystrokes_combination" name="URL" placeholder="Hotkey combination to inject" style="width: 30em !important; height: 50px !important;">
-									<button id="button_direct_components_injectKeystrokes_combination" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Inject</button>
-								</span>
-								<br>
-								<br>
-								<br>
-							</div>
-							<div id="div_direct_components_interfaceLock" class="div_component">
-								<br>
-								<div class="div_heading" id="div_direct_components_interfaceLock_heading">
-									<h2 class="label" id="h2_direct_components_interfaceLock_heading">Interface Lock</h2>
-								</div>
-								<p id="p_direct_components_interfaceLock_lock_info">> Disable the keyboard or mouse interface</p>
-								<br>
-								<span id="span_direct_components_interfaceLock_lock_content">
-									<button id="button_direct_components_interfaceLock_lock_keyboard" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Lock Keyboard</button>
-									<button id="button_direct_components_interfaceLock_lock_mouse" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Lock Mouse</button>
-								</span>
-								<br>
-								<br>
-								<p id="p_direct_components_interfaceLock_unlock_info">> Enable the keyboard or mouse interface</p>
-								<br>
-								<span id="span_direct_components_interfaceLock_unlock_content">
-									<button id="button_direct_components_interfaceLock_unlock_keyboard" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Unlock Keyboard</button>
-									<button id="button_direct_components_interfaceLock_unlock_mouse" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Unlock Mouse</button>
-								</span>
-								<br>
-								<br>
-								<br>
-							</div>
-							<div id="div_direct_components_setAudio" class="div_component">
-								<br>
-								<div class="div_heading" id="div_direct_components_setAudio_heading">
-									<h2 class="label" id="h2_direct_components_setAudio_heading">Audio Controls</h2>
-								</div>
-								<p id="p_direct_components_setAudio_get_info">> Get range of valid system wide audio level by decibel</p>
-								<br>
-								<button id="button_direct_components_setAudio_get" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Grab</button>
-								<br>
-								<br>
-								<p id="p_direct_components_setAudio_set_info">> Set system wide audio level by decibel</p>
-								<br>
-								<span id="span_direct_components_setAudio_set_content">
-									<input type="number" id="input_direct_components_setAudio_set" name="Sound Level" placeholder="Sound Level (dB)" style="width: 30em !important; height: 50px !important;">
-									<button id="button_direct_components_setAudio_set" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Set</button>
-								</span>
-								<br>
-								<br>
-								<br>
-							</div>
-							<div id="div_direct_components_systemStatusChange" class="div_component">
-								<br>
-								<div class="div_heading" id="div_direct_components_systemStatusChange_heading">
-									<h2 class="label" id="h2_direct_components_systemStatusChange_heading">Change System Status</h2>
-								</div>
-								<p id="p_direct_components_systemStatusChange_lock_info">> Allows you to gracefully lock the target system</p>
-								<br>
-								<button id="button_direct_components_systemStatusChange_lock" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Lock</button>
-								<br>
-								<br>
-								<p id="p_direct_components_systemStatusChange_logout_info">> Allows you to gracefully log the user out of the target system</p>
-								<br>
-								<button id="button_direct_components_systemStatusChange_logout" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Logout</button>
-								<br>
-								<br>
-								<p id="p_direct_components_systemStatusChange_restart_info">> Allows you to gracefully restart the target system</p>
-								<br>
-								<button id="button_direct_components_systemStatusChange_restart" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Restart</button>
-								<br>
-								<br>
-								<p id="p_direct_components_systemStatusChange_shutdown_info">> Allows you to gracefully shutdown the target system</p>
-								<br>
-								<button id="button_direct_components_systemStatusChange_shutdown" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Shutdown</button>
-								<br>
-								<br>
-								<br>
-							</div>
-							<div id="div_direct_components_uploadFile" class="div_component">
-								<br>
-								<div class="div_heading" id="div_direct_components_uploadFile_heading">
-									<h2 class="label" id="h2_direct_components_uploadFile_heading">Upload File</h2>
-								</div>
-								<p id="p_direct_components_uploadFile_info">> Remotely upload a file to remote current working directory of scout</p>
-								<br>
-								<span id="span_direct_components_uploadFile_content">
-									<input type="text" id="input_direct_components_uploadFile" name="Upload File" placeholder="Directory of file to upload" style="width: 30em !important; height: 50px !important;">
-									<button id="button_direct_components_uploadFile" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Upload</button>
-								</span>
-								<br>
-								<br>
-								<br>
-							</div>
-							<div id="div_direct_components_wallpaperChanger" class="div_component">
-								<br>
-								<div class="div_heading" id="div_direct_components_wallpaperChanger_heading">
-									<h2 class="label" id="h2_direct_components_wallpaperChanger_heading">Change Wallpaper</h2>
-								</div>
-								<p id="p_direct_components_wallpaperChanger_info">> Set the targets wallpaper to a specified image file on the remote system</p>
-								<br>
-								<span id="span_direct_components_wallpaperChanger_content">
-									<input type="text" id="input_direct_components_wallpaperChanger" name="Wallpaper Changer" placeholder="Directory of image to upload" style="width: 30em !important; height: 50px !important;">
-									<button id="button_direct_components_wallpaperChanger" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Set</button>
-								</span>
+								<button id="button_direct_components_win_systemInfo" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Grab</button>
 								<br>
 								<br>
 								<br>
 							</div>
 
-							<div id="div_direct_components_CMD" class="div_component">
+							<div id="div_direct_components_win_browser" class="div_component_win">
 								<br>
-								<div class="div_heading" id="div_direct_components_CMD_heading">
-									<h2 class="label" id="h2_direct_components_CMD_heading">Execute CMD Command</h2>
+								<div class="div_heading" id="div_direct_components_win_browser_heading">
+									<h2 class="label" id="h2_direct_components_win_browser_heading">Open Webpage</h2>
 								</div>
-								<p id="p_direct_components_CMD_info">> A remote shell command execution component of the scout, it allows the scout to remotely execute commands using cmd.exe</p>
+								<p id="p_direct_components_win_browser_info">> Opens a new browser to the specified site</p>
 								<br>
-								<span id="span_direct_components_CMD_content">
-									<input type="text" id="input_direct_components_CMD" class="singleline command_input" name="CMD" value=">>> " style="width: 100% !important; height: 25px !important; background-color: #252629 !important; border-radius: 0px">
+								<span id="span_direct_components_win_browser_content">
+									<input type="text" id="input_direct_components_win_browser" name="URL" placeholder="URL of page to open" style="width: 30em !important; height: 50px !important;">
+									<button id="button_direct_components_win_browser" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Open</button>
+								</span>
+								<br>
+								<br>
+								<br>
+							</div>
+							<div id="div_direct_components_win_injectKeystrokes" class="div_component_win">
+								<br>
+								<div class="div_heading" id="div_direct_components_win_injectKeystrokes_heading">
+									<h2 class="label" id="h2_direct_components_win_injectKeystrokes_heading">Inject Keystrokes</h2>
+								</div>
+								<p id="p_direct_components_win_injectKeystrokes_get_info">> List all the valid keys the user can inject into the victim</p>
+								<br>
+								<button id="button_direct_components_win_injectKeystrokes_get" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Grab</button>
+								<br>
+								<br>
+								<p id="p_direct_components_win_injectKeystrokes_text_info">> Inject a string through keystrokes that mimic typing</p>
+								<br>
+								<span id="span_direct_components_win_injectKeystrokes_text_content">
+									<input type="text" id="input_direct_components_win_injectKeystrokes_text" name="URL" placeholder="String to inject" style="width: 30em !important; height: 50px !important;">
+									<button id="button_direct_components_win_injectKeystrokes_text" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Inject</button>
+								</span>
+								<br>
+								<br>
+								<p id="p_direct_components_win_injectKeystrokes_button_info">> Inject a single key press through keystrokes that mimic button presses</p>
+								<br>
+								<span id="span_direct_components_win_injectKeystrokes_button_content">
+									<input type="text" id="input_direct_components_win_injectKeystrokes_button" name="URL" placeholder="Button press to inject" style="width: 30em !important; height: 50px !important;">
+									<button id="button_direct_components_win_injectKeystrokes_button" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Inject</button>
+								</span>
+								<br>
+								<br>
+								<p id="p_direct_components_win_injectKeystrokes_combination_info">> Inject a hotkey combination through keystrokes that mimic button pressesy</p>
+								<br>
+								<span id="span_direct_components_win_injectKeystrokes_combination_content">
+									<input type="text" id="input_direct_components_win_injectKeystrokes_combination" name="URL" placeholder="Hotkey combination to inject" style="width: 30em !important; height: 50px !important;">
+									<button id="button_direct_components_win_injectKeystrokes_combination" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Inject</button>
+								</span>
+								<br>
+								<br>
+								<br>
+							</div>
+							<div id="div_direct_components_win_interfaceLock" class="div_component_win">
+								<br>
+								<div class="div_heading" id="div_direct_components_win_interfaceLock_heading">
+									<h2 class="label" id="h2_direct_components_win_interfaceLock_heading">Interface Lock</h2>
+								</div>
+								<p id="p_direct_components_win_interfaceLock_lock_info">> Disable the keyboard or mouse interface</p>
+								<br>
+								<span id="span_direct_components_win_interfaceLock_lock_content">
+									<button id="button_direct_components_win_interfaceLock_lock_keyboard" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Lock Keyboard</button>
+									<button id="button_direct_components_win_interfaceLock_lock_mouse" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Lock Mouse</button>
+								</span>
+								<br>
+								<br>
+								<p id="p_direct_components_win_interfaceLock_unlock_info">> Enable the keyboard or mouse interface</p>
+								<br>
+								<span id="span_direct_components_win_interfaceLock_unlock_content">
+									<button id="button_direct_components_win_interfaceLock_unlock_keyboard" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Unlock Keyboard</button>
+									<button id="button_direct_components_win_interfaceLock_unlock_mouse" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Unlock Mouse</button>
+								</span>
+								<br>
+								<br>
+								<br>
+							</div>
+							<div id="div_direct_components_win_setAudio" class="div_component_win">
+								<br>
+								<div class="div_heading" id="div_direct_components_win_setAudio_heading">
+									<h2 class="label" id="h2_direct_components_win_setAudio_heading">Audio Controls</h2>
+								</div>
+								<p id="p_direct_components_win_setAudio_get_info">> Get range of valid system wide audio level by decibel</p>
+								<br>
+								<button id="button_direct_components_win_setAudio_get" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Grab</button>
+								<br>
+								<br>
+								<p id="p_direct_components_win_setAudio_set_info">> Set system wide audio level by decibel</p>
+								<br>
+								<span id="span_direct_components_win_setAudio_set_content">
+									<input type="number" id="input_direct_components_win_setAudio_set" name="Sound Level" placeholder="Sound Level (dB)" style="width: 30em !important; height: 50px !important;">
+									<button id="button_direct_components_win_setAudio_set" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Set</button>
+								</span>
+								<br>
+								<br>
+								<br>
+							</div>
+							<div id="div_direct_components_win_systemStatusChange" class="div_component_win">
+								<br>
+								<div class="div_heading" id="div_direct_components_win_systemStatusChange_heading">
+									<h2 class="label" id="h2_direct_components_win_systemStatusChange_heading">Change System Status</h2>
+								</div>
+								<p id="p_direct_components_win_systemStatusChange_lock_info">> Allows you to gracefully lock the target system</p>
+								<br>
+								<button id="button_direct_components_win_systemStatusChange_lock" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Lock</button>
+								<br>
+								<br>
+								<p id="p_direct_components_win_systemStatusChange_logout_info">> Allows you to gracefully log the user out of the target system</p>
+								<br>
+								<button id="button_direct_components_win_systemStatusChange_logout" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Logout</button>
+								<br>
+								<br>
+								<p id="p_direct_components_win_systemStatusChange_restart_info">> Allows you to gracefully restart the target system</p>
+								<br>
+								<button id="button_direct_components_win_systemStatusChange_restart" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Restart</button>
+								<br>
+								<br>
+								<p id="p_direct_components_win_systemStatusChange_shutdown_info">> Allows you to gracefully shutdown the target system</p>
+								<br>
+								<button id="button_direct_components_win_systemStatusChange_shutdown" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Shutdown</button>
+								<br>
+								<br>
+								<br>
+							</div>
+							<div id="div_direct_components_win_uploadFile" class="div_component_win">
+								<br>
+								<div class="div_heading" id="div_direct_components_win_uploadFile_heading">
+									<h2 class="label" id="h2_direct_components_win_uploadFile_heading">Upload File</h2>
+								</div>
+								<p id="p_direct_components_win_uploadFile_info">> Remotely upload a file to remote current working directory of scout</p>
+								<br>
+								<span id="span_direct_components_win_uploadFile_content">
+									<input type="text" id="input_direct_components_win_uploadFile" name="Upload File" placeholder="Directory of file to upload" style="width: 30em !important; height: 50px !important;">
+									<button id="button_direct_components_win_uploadFile" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Upload</button>
+								</span>
+								<br>
+								<br>
+								<br>
+							</div>
+							<div id="div_direct_components_win_wallpaperChanger" class="div_component_win">
+								<br>
+								<div class="div_heading" id="div_direct_components_win_wallpaperChanger_heading">
+									<h2 class="label" id="h2_direct_components_win_wallpaperChanger_heading">Change Wallpaper</h2>
+								</div>
+								<p id="p_direct_components_win_wallpaperChanger_info">> Set the targets wallpaper to a specified image file on the remote system</p>
+								<br>
+								<span id="span_direct_components_win_wallpaperChanger_content">
+									<input type="text" id="input_direct_components_win_wallpaperChanger" name="Wallpaper Changer" placeholder="Directory of image to upload" style="width: 30em !important; height: 50px !important;">
+									<button id="button_direct_components_win_wallpaperChanger" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Set</button>
+								</span>
+								<br>
+								<br>
+								<br>
+							</div>
+
+							<div id="div_direct_components_win_CMD" class="div_component_win">
+								<br>
+								<div class="div_heading" id="div_direct_components_win_CMD_heading">
+									<h2 class="label" id="h2_direct_components_win_CMD_heading">Execute CMD Command</h2>
+								</div>
+								<p id="p_direct_components_win_CMD_info">> A remote shell command execution component of the scout, it allows the scout to remotely execute commands using cmd.exe</p>
+								<br>
+								<span id="span_direct_components_win_CMD_content">
+									<input type="text" id="input_direct_components_win_CMD" class="singleline command_input" name="CMD" value=">>> " style="width: 100% !important; height: 25px !important; background-color: #252629 !important; border-radius: 0px">
 									<br>
 									<br>
-									<button id="button_direct_components_CMD" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Execute</button>
+									<button id="button_direct_components_win_CMD" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Execute</button>
 								</span>
 								<br>
 								<br>
 								<br>
 							</div>
-							<div id="div_direct_components_powershell" class="div_component">
+							<div id="div_direct_components_win_powershell" class="div_component_win">
 								<br>
-								<div class="div_heading" id="div_direct_components_powershell_heading">
-									<h2 class="label" id="h2_direct_components_powershell_heading">Execute Powershell Command</h2>
+								<div class="div_heading" id="div_direct_components_win_powershell_heading">
+									<h2 class="label" id="h2_direct_components_win_powershell_heading">Execute Powershell Command</h2>
 								</div>
-								<p id="p_direct_components_powershell_info">> A remote shell command execution component of the scout, it allows the scout to remotely execute commands using powershell.exe</p>
+								<p id="p_direct_components_win_powershell_info">> A remote shell command execution component of the scout, it allows the scout to remotely execute commands using powershell.exe</p>
 								<br>
-								<span id="span_direct_components_powershell_content">
-									<input type="text" id="input_direct_components_powershell" class="singleline command_input" name="CMD" value=">>> " style="width: 100% !important; height: 25px !important; background-color: #252629 !important; border-radius: 0px;">
+								<span id="span_direct_components_win_powershell_content">
+									<input type="text" id="input_direct_components_win_powershell" class="singleline command_input" name="CMD" value=">>> " style="width: 100% !important; height: 25px !important; background-color: #252629 !important; border-radius: 0px;">
 									<br>
 									<br>
-									<button id="button_direct_components_powershell" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Execute</button>
+									<button id="button_direct_components_win_powershell" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Execute</button>
 								</span>
 								<br>
 								<br>
 								<br>
 							</div>
-							<div id="div_direct_components_file" class="div_component">
+							<div id="div_direct_components_win_file" class="div_component_win">
 								<br>
-								<div class="div_heading" id="div_direct_components_file_heading">
-									<h2 class="label" id="h2_direct_components_file_heading">Execute File</h2>
+								<div class="div_heading" id="div_direct_components_win_file_heading">
+									<h2 class="label" id="h2_direct_components_win_file_heading">Execute File</h2>
 								</div>
-								<p id="p_direct_components_file_info">> Will open and execute any file that is specified as the argument</p>
+								<p id="p_direct_components_win_file_info">> Will open and execute any file that is specified as the argument</p>
 								<br>
-								<span id="span_direct_components_file_content">
-									<input type="text" id="input_direct_components_file" name="Execute File" placeholder="Directory of file to execute" style="width: 30em !important; height: 50px !important;">
-									<button id="button_direct_components_file" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Execute</button>
+								<span id="span_direct_components_win_file_content">
+									<input type="text" id="input_direct_components_win_file" name="Execute File" placeholder="Directory of file to execute" style="width: 30em !important; height: 50px !important;">
+									<button id="button_direct_components_win_file" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Execute</button>
 								</span>
 								<br>
 								<br>
 								<br>
 							</div>
-							<div id="div_direct_components_python" class="div_component">
+							<div id="div_direct_components_win_python" class="div_component_win">
 								<br>
-								<div class="div_heading" id="div_direct_components_python_heading">
-									<h2 class="label" id="h2_direct_components_python_heading">Execute File</h2>
+								<div class="div_heading" id="div_direct_components_win_python_heading">
+									<h2 class="label" id="h2_direct_components_win_python_heading">Execute File</h2>
 								</div>
-								<p id="p_direct_components_python_file_info">> Execute arbitrary python code from a file to execute on the target system in-memory</p>
+								<p id="p_direct_components_win_python_file_info">> Execute arbitrary python code from a file to execute on the target system in-memory</p>
 								<br>
-								<span id="span_direct_components_python_file_content">
-									<input type="text" id="input_direct_components_python_file" name="Execute Python File" placeholder="Directory of file to execute with python" style="width: 30em !important; height: 50px !important;">
-									<button id="button_direct_components_python_file" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Execute</button>
+								<span id="span_direct_components_win_python_file_content">
+									<input type="text" id="input_direct_components_win_python_file" name="Execute Python File" placeholder="Directory of file to execute with python" style="width: 30em !important; height: 50px !important;">
+									<button id="button_direct_components_win_python_file" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Execute</button>
 								</span>
 								<br>
 								<br>
-								<p id="p_direct_components_python_command_info">> Execute in-memory arbitrary python code on the target system</p>
+								<p id="p_direct_components_win_python_command_info">> Execute in-memory arbitrary python code on the target system</p>
 								<br>
-								<span id="span_direct_components_python_command_content">
-									<div id="div_direct_components_python_command_input">
+								<span id="span_direct_components_win_python_command_content">
+									<div id="div_direct_components_win_python_command_input">
 									</div>
 									<br>
 									<br>
-									<button id="button_direct_components_python_command" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Execute</button>
+									<button id="button_direct_components_win_python_command" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Execute</button>
 								</span>
 								<br>
 								<br>
 								<br>
 							</div>
 
-							<div id="div_direct_components_registryPersistence" class="div_component">
+							<div id="div_direct_components_win_registryPersistence" class="div_component_win">
 								<br>
-								<div class="div_heading" id="div_direct_components_registryPersistence_heading">
-									<h2 class="label" id="h2_direct_components_registryPersistence_heading">Registry Persistence</h2>
+								<div class="div_heading" id="div_direct_components_win_registryPersistence_heading">
+									<h2 class="label" id="h2_direct_components_win_registryPersistence_heading">Registry Persistence</h2>
 								</div>
-								<p id="p_direct_components_registryPersistence_info">> This module creates a new key in the HKCU\Software\Microsoft\Windows\CurrentVersion\Run registry path</p>
+								<p id="p_direct_components_win_registryPersistence_info">> This module creates a new key in the HKCU\Software\Microsoft\Windows\CurrentVersion\Run registry path</p>
 								<br>
-								<button id="button_direct_components_registryPersistence" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Persist</button>
+								<button id="button_direct_components_win_registryPersistence" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Persist</button>
 								<br>
 								<br>
 								<br>
 							</div>
-							<div id="div_direct_components_sdcltUACBypass" class="div_component">
+							<div id="div_direct_components_win_sdcltUACBypass" class="div_component_win">
 								<br>
-								<div class="div_heading" id="div_direct_components_sdcltUACBypass_heading">
-									<h2 class="label" id="h2_direct_components_sdcltUACBypass_heading">UAC Bypass</h2>
+								<div class="div_heading" id="div_direct_components_win_sdcltUACBypass_heading">
+									<h2 class="label" id="h2_direct_components_win_sdcltUACBypass_heading">UAC Bypass</h2>
 								</div>
-								<p id="p_direct_components_sdcltUACBypass_info">> Bypasses UAC by using the sdclt.exe process</p>
+								<p id="p_direct_components_win_sdcltUACBypass_info">> Bypasses UAC by using the sdclt.exe process</p>
 								<br>
-								<span id="span_direct_components_sdcltUACBypass_content">
-									<input type="text" id="input_direct_components_sdcltUACBypass" name="UAC Bypass" placeholder="Directory of file to bypass UAC" style="width: 30em !important; height: 50px !important;">
-									<button id="button_direct_components_sdcltUACBypass" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Bypass</button>
+								<span id="span_direct_components_win_sdcltUACBypass_content">
+									<input type="text" id="input_direct_components_win_sdcltUACBypass" name="UAC Bypass" placeholder="Directory of file to bypass UAC" style="width: 30em !important; height: 50px !important;">
+									<button id="button_direct_components_win_sdcltUACBypass" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Bypass</button>
 								</span>
 								<br>
 								<br>
 								<br>
 							</div>
-							<div id="div_direct_components_startupFolderPersistence" class="div_component">
+							<div id="div_direct_components_win_startupFolderPersistence" class="div_component_win">
 								<br>
-								<div class="div_heading" id="div_direct_components_startupFolderPersistence_heading">
-									<h2 class="label" id="h2_direct_components_startupFolderPersistence_heading">Startup Persistence</h2>
+								<div class="div_heading" id="div_direct_components_win_startupFolderPersistence_heading">
+									<h2 class="label" id="h2_direct_components_win_startupFolderPersistence_heading">Startup Persistence</h2>
 								</div>
-								<p id="p_direct_components_startupFolderPersistence_info">> This module copies the scout to the windows startup folder</p>
+								<p id="p_direct_components_win_startupFolderPersistence_info">> This module copies the scout to the windows startup folder</p>
 								<br>
-								<button id="button_direct_components_startupFolderPersistence" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Persist</button>
+								<button id="button_direct_components_win_startupFolderPersistence" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Persist</button>
 								<br>
 								<br>
 								<br>
-							</div>
-
-							<div id="div_direct_components_console">
-								<div id="div_direct_components_console_header">
-									Output
-								</div>
-								<p id="p_direct_components_console_output">
-								</p>
 							</div>
 						</div>
 						<br>
 					</div>
+
+					<div id="div_direct_lin">
+						<div id="div_direct_classify_lin">
+							<br>
+							<div id="div_direct_classify_lin_main_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
+								<button id="button_direct_classify_lin_main_base" class="select button_direct_classify_lin_main" style = "width: 18% !important; height: 50px !important; font-size: large !important;">Base</button>
+								<button id="button_direct_classify_lin_main_read" class="select button_direct_classify_lin_main" style = "width: 18% !important; height: 50px !important; font-size: large !important;">Read</button>
+								<button id="button_direct_classify_lin_main_write" class="select button_direct_classify_lin_main" style = "width: 18% !important; height: 50px !important; font-size: large !important;">Write</button>
+								<button id="button_direct_classify_lin_main_execute" class="select button_direct_classify_lin_main" style = "width: 18% !important; height: 50px !important; font-size: large !important;">Execute</button>
+								<button id="button_direct_classify_lin_main_persist" class="select button_direct_classify_lin_main" style = "width: 18% !important; height: 50px !important; font-size: large !important;">Persist</button>
+							</div>
+
+							<br>
+							<br>
+							<div id="div_direct_classify_lin_base_buttons" class="div_direct_classify_lin_base_buttons classify_lin_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
+								<button id="button_direct_classify_lin_base_disconnect_0" class="select button_direct_classify_lin_base" style = "width: 23% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_direct_classify_lin_base_disconnect_0_spinner"></i> Disconnect</button>
+								<button id="button_direct_classify_lin_base_kill_1" class="select button_direct_classify_lin_base" style = "width: 23% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_direct_classify_lin_base_kill_1_spinner"></i> Kill</button>
+								<button id="button_direct_classify_lin_base_ping_2" class="select button_direct_classify_lin_base" style = "width: 23% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_direct_classify_lin_base_ping_2_spinner"></i> Ping</button>
+								<button id="button_direct_classify_lin_base_sleep_3" class="select button_direct_classify_lin_base" style = "width: 23% !important;"><i class="fa fa-circle-o-notch fa-spin" id="i_direct_classify_lin_base_sleep_3_spinner"></i> Sleep</button>
+							</div>
+							<div id="div_direct_sleep" class="hide">
+								<br>
+								<input type="number" id="input_direct_scout_sleep_time" name="Sleep time" placeholder="Enter time to sleep (default is 10s)" style="width: 20em !important;" maxlength="100">
+								<button id="button_direct_scout_sleep_time" class="select">Update</button>
+							</div>
+
+							<div id="div_direct_classify_lin_read_buttons_0" class="div_direct_classify_lin_read_buttons classify_lin_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
+								<button id="button_direct_classify_lin_read_activeWindowsDump" class="select button_direct_classify_lin_read" style = "width: 31.3% !important;">Active Windows</button>
+								<button id="button_direct_classify_lin_read_checkAdmin" class="select button_direct_classify_lin_read" style = "width: 31.3% !important;">Admin Status</button>
+								<button id="button_direct_classify_lin_read_clipLogger" class="select button_direct_classify_lin_read" style = "width: 31.3% !important;">Cliplogger</button>
+							</div>
+							<br class="br_direct_classify_lin_read_break hide">
+							<div id="div_direct_classify_lin_read_buttons_1" class="div_direct_classify_lin_read_buttons classify_lin_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
+								<button id="button_direct_classify_lin_read_downloadFile" class="select button_direct_classify_lin_read" style = "width: 31.3% !important;">Download File</button>
+								<button id="button_direct_classify_lin_read_downloadWeb" class="select button_direct_classify_lin_read" style = "width: 31.3% !important;">Download Web</button>
+								<button id="button_direct_classify_lin_read_screenshot" class="select button_direct_classify_lin_read" style = "width: 31.3% !important;">Screenshot</button>
+							</div>
+							<br class="br_direct_classify_lin_read_break hide">
+							<div id="div_direct_classify_lin_read_buttons_2" class="div_direct_classify_lin_read_buttons classify_lin_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
+								<button id="button_direct_classify_lin_read_webcam" class="select button_direct_classify_lin_read" style = "width: 31.3% !important;">Webcam Capture</button>
+								<button id="button_direct_classify_lin_read_logger" class="select button_direct_classify_lin_read" style = "width: 31.3% !important;">Key & Window Logger</button>
+								<button id="button_direct_classify_lin_read_systemInfo" class="select button_direct_classify_lin_read" style = "width: 31.3% !important;">System Information</button>
+							</div>
+
+							<div id="div_direct_classify_lin_write_buttons_0" class="div_direct_classify_lin_write_buttons classify_lin_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
+								<button id="button_direct_classify_lin_write_injectKeystrokes" class="select button_direct_classify_lin_write" style = "width: 31.3% !important;">Inject Keystroke</button>
+								<button id="button_direct_classify_lin_write_setAudio" class="select button_direct_classify_lin_write" style = "width: 31.3% !important;">Set Audio</button>
+								<button id="button_direct_classify_lin_write_uploadFile" class="select button_direct_classify_lin_write" style = "width: 31.3% !important;">Upload File</button>
+							</div>
+
+							<div id="div_direct_classify_lin_execute_buttons_0" class="div_direct_classify_lin_execute_buttons classify_lin_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
+								<button id="button_direct_classify_lin_execute_bash" class="select button_direct_classify_lin_execute" style = "width: 48% !important;">Execute Bash</button>
+								<button id="button_direct_classify_lin_execute_python" class="select button_direct_classify_lin_execute" style = "width: 48% !important;">Execute Python</button>
+							</div>
+
+							<div id="div_direct_classify_lin_persist_buttons_0" class="div_direct_classify_lin_persist_buttons classify_lin_buttons" style="display:flex; flex-direction:row; width:100%; justify-content: space-evenly">
+								<button id="button_direct_classify_lin_persist_cronJobPersistence" class="select button_direct_classify_lin_persist" style = "width: 55% !important;">Cron Job Persistence</button>
+							</div>
+							<br>
+							<br>
+						</div>
+						<div id="div_direct_components_lin">
+							<button id="button_direct_components_lin_back" class="select">< Back <</button>
+							<div id="div_direct_components_lin_activeWindowsDump" class="div_component_lin">
+								<br>
+								<div class="div_heading" id="div_direct_components_lin_activeWindowsDump_heading">
+									<h2 class="label" id="h2_direct_components_lin_activeWindowsDump_heading">Active Windows Dump</h2>
+								</div>
+								<p id="p_direct_components_lin_activeWindowsDump_info">> Shows all open windows on the target system</p>
+								<br>
+								<button id="button_direct_components_lin_activeWindowsDump" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Show</button>
+								<br>
+								<br>
+								<br>
+							</div>
+							<div id="div_direct_components_lin_checkAdmin" class="div_component_lin">
+								<br>
+								<div class="div_heading" id="div_direct_components_lin_checkAdmin_heading">
+									<h2 class="label" id="h2_direct_components_lin_checkAdmin_heading">Check Admin</h2>
+								</div>
+								<p id="p_direct_components_lin_checkAdmin_info">> Checks to see if the scout is running as a process with admin privileges</p>
+								<br>
+								<button id="button_direct_components_lin_checkAdmin" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Check</button>
+								<br>
+								<br>
+								<br>
+							</div>
+							<div id="div_direct_components_lin_clipLogger" class="div_component_lin">
+								<br>
+								<div class="div_heading" id="div_direct_components_lin_clipLogger_heading">
+									<h2 class="label" id="h2_direct_components_lin_clipLogger_heading">Clip Logger</h2>
+								</div>
+
+								<p id="p_direct_components_lin_clipLogger_clear_info">> Clear the clipboard data on the target system</p>
+								<br>
+								<button id="button_direct_components_lin_clipLogger_clear" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Clear</button>
+								<br>
+								<br>
+
+								<p id="p_direct_components_lin_clipLogger_dump_info">> Display contents of clipboard on the target system</p>
+								<br>
+								<button id="button_direct_components_lin_clipLogger_dump" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Show</button>
+								<br>
+								<br>
+
+								<p id="p_direct_components_lin_clipLogger_set_info">> Set the value of the clipboard on the target system</p>
+								<br>
+								<span id="span_direct_components_lin_clipLogger_set_content">
+									<input type="text" id="input_direct_components_lin_clipLogger_set" name="Set clipboard" placeholder="Enter value for clipboard" style="width: 30em !important; height: 50px !important;">
+									<button id="button_direct_components_lin_clipLogger_set" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Set</button>
+								</span>
+								<br>
+								<br>
+
+								<br>
+							</div>
+							<div id="div_direct_components_lin_downloadFile" class="div_component_lin">
+								<br>
+								<div class="div_heading" id="div_direct_components_lin_downloadFile_heading">
+									<h2 class="label" id="h2_direct_components_lin_downloadFile_heading">Download File</h2>
+								</div>
+								<p id="p_direct_components_lin_downloadFile_info">> Remotely download a file to local current working directory of PyIris</p>
+								<br>
+								<span id="span_direct_components_lin_downloadFile_content">
+									<input type="text" id="input_direct_components_lin_downloadFile" name="Download File" placeholder="Directory of file to download" style="width: 30em !important; height: 50px !important;">
+									<button id="button_direct_components_lin_downloadFile" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Download</button>
+								</span>
+								<br>
+								<br>
+								<br>
+							</div>
+							<div id="div_direct_components_lin_downloadWeb" class="div_component_lin">
+								<br>
+								<div class="div_heading" id="div_direct_components_lin_downloadWeb_heading">
+									<h2 class="label" id="h2_direct_components_lin_downloadWeb_heading">Download Web</h2>
+								</div>
+								<p id="p_direct_components_lin_downloadWeb_info">> Allows you to download a file from a url supplied to a specified remote file path</p>
+								<br>
+								<input type="text" id="input_direct_components_lin_downloadWeb_directory" name="Download Web Directory" placeholder="Remote directory to download file to" style="width: 30em !important; height: 50px !important;">
+								<br>
+								<br>
+								<input type="text" id="input_direct_components_lin_downloadWeb_url" name="Download Web URL" placeholder="URL of file to download" style="width: 30em !important; height: 50px !important;">
+								<br>
+								<br>
+								<button id="button_direct_components_lin_downloadWeb" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Download</button>
+								<br>
+								<br>
+								<br>
+							</div>
+							<div id="div_direct_components_lin_screenshot" class="div_component_lin">
+								<br>
+								<div class="div_heading" id="div_direct_components_lin_screenshot_heading">
+									<h2 class="label" id="h2_direct_components_lin_screenshot_heading">Screenshot</h2>
+								</div>
+								<p id="p_direct_components_lin_screenshot_info">> Takes a screenshot and saves it to in memory file before sending the in memory file to PyIris to download</p>
+								<br>
+								<button id="button_direct_components_lin_screenshot" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Take</button>
+								<br>
+								<br>
+								<br>
+							</div>
+							<div id="div_direct_components_lin_webcam" class="div_component_lin">
+								<br>
+								<div class="div_heading" id="div_direct_components_lin_webcam_heading">
+									<h2 class="label" id="h2_direct_components_lin_webcam_heading">Webcam</h2>
+								</div>
+								<p id="p_direct_components_lin_webcam_info">> Snaps a picture from the webcam and saves it as an in memory pickle before sending it to PyIris to decode and download</p>
+								<br>
+								<button id="button_direct_components_lin_webcam" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Take</button>
+								<br>
+								<br>
+								<br>
+							</div>
+							<div id="div_direct_components_lin_logger" class="div_component_lin">
+								<br>
+								<div class="div_heading" id="div_direct_components_lin_logger_heading">
+									<h2 class="label" id="h2_direct_components_lin_logger_heading">Key and Window Logger</h2>
+								</div>
+								<p id="p_direct_components_lin_logger_start_info">> Start the keylogger</p>
+								<br>
+								<button id="button_direct_components_lin_logger_start" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Start</button>
+								<br>
+								<br>
+								<p id="p_direct_components_lin_logger_stop_info">> Stop the keylogger</p>
+								<br>
+								<button id="button_direct_components_lin_logger_stop" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Stop</button>
+								<br>
+								<br>
+								<p id="p_direct_components_lin_logger_dump_info">> Dump the captured in-memory keystrokes</p>
+								<br>
+								<button id="button_direct_components_lin_logger_dump" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Dump</button>
+								<br>
+								<br>
+								<br>
+							</div>
+							<div id="div_direct_components_lin_systemInfo" class="div_component_lin">
+								<br>
+								<div class="div_heading" id="div_direct_components_lin_systemInfo_heading">
+									<h2 class="label" id="h2_direct_components_lin_systemInfo_heading">System Information</h2>
+								</div>
+								<p id="p_direct_components_lin_systemInfo_info">> Grabs system info and displays it</p>
+								<br>
+								<button id="button_direct_components_lin_systemInfo" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Grab</button>
+								<br>
+								<br>
+								<br>
+							</div>
+
+							<div id="div_direct_components_lin_injectKeystrokes" class="div_component_lin">
+								<br>
+								<div class="div_heading" id="div_direct_components_lin_injectKeystrokes_heading">
+									<h2 class="label" id="h2_direct_components_lin_injectKeystrokes_heading">Inject Keystrokes</h2>
+								</div>
+								<p id="p_direct_components_lin_injectKeystrokes_get_info">> List all the valid keys the user can inject into the victim</p>
+								<br>
+								<button id="button_direct_components_lin_injectKeystrokes_get" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Grab</button>
+								<br>
+								<br>
+								<p id="p_direct_components_lin_injectKeystrokes_text_info">> Inject a string through keystrokes that mimic typing</p>
+								<br>
+								<span id="span_direct_components_lin_injectKeystrokes_text_content">
+									<input type="text" id="input_direct_components_lin_injectKeystrokes_text" name="URL" placeholder="String to inject" style="width: 30em !important; height: 50px !important;">
+									<button id="button_direct_components_lin_injectKeystrokes_text" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Inject</button>
+								</span>
+								<br>
+								<br>
+								<p id="p_direct_components_lin_injectKeystrokes_button_info">> Inject a single key press through keystrokes that mimic button presses</p>
+								<br>
+								<span id="span_direct_components_lin_injectKeystrokes_button_content">
+									<input type="text" id="input_direct_components_lin_injectKeystrokes_button" name="URL" placeholder="Button press to inject" style="width: 30em !important; height: 50px !important;">
+									<button id="button_direct_components_lin_injectKeystrokes_button" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Inject</button>
+								</span>
+								<br>
+								<br>
+								<p id="p_direct_components_lin_injectKeystrokes_combination_info">> Inject a hotkey combination through keystrokes that mimic button pressesy</p>
+								<br>
+								<span id="span_direct_components_lin_injectKeystrokes_combination_content">
+									<input type="text" id="input_direct_components_lin_injectKeystrokes_combination" name="URL" placeholder="Hotkey combination to inject" style="width: 30em !important; height: 50px !important;">
+									<button id="button_direct_components_lin_injectKeystrokes_combination" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Inject</button>
+								</span>
+								<br>
+								<br>
+								<br>
+							</div>
+							<div id="div_direct_components_lin_setAudio" class="div_component_lin">
+								<br>
+								<div class="div_heading" id="div_direct_components_lin_setAudio_heading">
+									<h2 class="label" id="h2_direct_components_lin_setAudio_heading">Audio Controls</h2>
+								</div>
+								<p id="p_direct_components_lin_setAudio_info">> Set system wide audio level by percentage, range is 0-100</p>
+								<br>
+								<span id="span_direct_components_lin_setAudio_content">
+									<input type="number" id="input_direct_components_lin_setAudio" name="Sound Level" placeholder="Sound Level (%)" style="width: 30em !important; height: 50px !important;">
+									<button id="button_direct_components_lin_setAudio" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Set</button>
+								</span>
+								<br>
+								<br>
+								<br>
+							</div>
+							<div id="div_direct_components_lin_uploadFile" class="div_component_lin">
+								<br>
+								<div class="div_heading" id="div_direct_components_lin_uploadFile_heading">
+									<h2 class="label" id="h2_direct_components_lin_uploadFile_heading">Upload File</h2>
+								</div>
+								<p id="p_direct_components_lin_uploadFile_info">> Remotely upload a file to remote current working directory of scout</p>
+								<br>
+								<span id="span_direct_components_lin_uploadFile_content">
+									<input type="text" id="input_direct_components_lin_uploadFile" name="Upload File" placeholder="Directory of file to upload" style="width: 30em !important; height: 50px !important;">
+									<button id="button_direct_components_lin_uploadFile" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Upload</button>
+								</span>
+								<br>
+								<br>
+								<br>
+							</div>
+
+							<div id="div_direct_components_lin_bash" class="div_component_lin">
+								<br>
+								<div class="div_heading" id="div_direct_components_lin_bash_heading">
+									<h2 class="label" id="h2_direct_components_lin_bash_heading">Execute Bash Command</h2>
+								</div>
+								<p id="p_direct_components_lin_bash_info">> A remote shell command execution component of the scout, it allows the scout to remotely execute commands using bash shell</p>
+								<br>
+								<span id="span_direct_components_lin_bash_content">
+									<input type="text" id="input_direct_components_lin_bash" class="singleline command_input" name="Bash" value=">>> " style="width: 100% !important; height: 25px !important; background-color: #252629 !important; border-radius: 0px">
+									<br>
+									<br>
+									<button id="button_direct_components_lin_bash" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Execute</button>
+								</span>
+								<br>
+								<br>
+								<br>
+							</div>
+							<div id="div_direct_components_lin_python" class="div_component_lin">
+								<br>
+								<div class="div_heading" id="div_direct_components_lin_python_heading">
+									<h2 class="label" id="h2_direct_components_lin_python_heading">Execute File</h2>
+								</div>
+								<p id="p_direct_components_lin_python_file_info">> Execute arbitrary python code from a file to execute on the target system in-memory</p>
+								<br>
+								<span id="span_direct_components_lin_python_file_content">
+									<input type="text" id="input_direct_components_lin_python_file" name="Execute Python File" placeholder="Directory of file to execute with python" style="width: 30em !important; height: 50px !important;">
+									<button id="button_direct_components_lin_python_file" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Execute</button>
+								</span>
+								<br>
+								<br>
+								<p id="p_direct_components_lin_python_command_info">> Execute in-memory arbitrary python code on the target system</p>
+								<br>
+								<span id="span_direct_components_lin_python_command_content">
+									<div id="div_direct_components_lin_python_command_input">
+									</div>
+									<br>
+									<br>
+									<button id="button_direct_components_lin_python_command" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Execute</button>
+								</span>
+								<br>
+								<br>
+								<br>
+							</div>
+
+							<div id="div_direct_components_lin_cronJobPersistence" class="div_component_lin">
+								<br>
+								<div class="div_heading" id="div_direct_components_lin_cronJobPersistence_heading">
+									<h2 class="label" id="h2_direct_components_lin_cronJobPersistence_heading">Cron Job Persistence</h2>
+								</div>
+								<p id="p_direct_components_lin_cronJobPersistence_info">> Create a cron job of the scout so it runs at startup</p>
+								<br>
+								<button id="button_direct_components_lin_cronJobPersistence" class="select" style="width: 20% !important; height: 50px; font-size: 16px">Persist</button>
+								<br>
+								<br>
+								<br>
+							</div>
+						</div>
+						<br>
+					</div>
+
+					<div id="div_console">
+								<div id="div_console_header">
+									Output
+								</div>
+								<p id="p_console_output">
+								</p>
+							</div>
 
 					<br>
 

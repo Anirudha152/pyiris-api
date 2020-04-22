@@ -2,7 +2,7 @@
 body {
 	background: #36393e;
 	color: #bfbfbf;
-	font-family: Consolas;
+    font-family: Consolas, Monaco, "Courier New", monospace;
 	margin: 0;
 }
 h1:not(.label) {
@@ -24,9 +24,7 @@ h2:not(.custom_label) {
     border-radius: 3px;
     border-left: solid #4974a9 5px;
     font-weight: 100;
-}
-table{
-	border-collapse: collapse;
+    width: 88%;
 }
 label{
 	line-height: 38px;
@@ -218,14 +216,15 @@ li{
 /* Tables */
 table {
 	width: 100%;
-	min-width: 420px;
+	min-width: 450px;
 	margin-bottom: 2em;
+    border-collapse: collapse;
 }
 td{
 
 }
 th, td {
-    padding: 10px 6px;
+    padding: 8px 6px;
     text-align: left;
     border-bottom: 1px solid #5d5d5d;
 }
@@ -591,8 +590,7 @@ input:checked + .slider:before {
     border-radius: 3px;
     border-left: solid #4974a9 5px;
     font-weight: 100;
-    float: right;
-    width: 88%;
+    width: 88% !important;
 }
 
 #h2_scouts_table_heading {
@@ -613,8 +611,8 @@ input:checked + .slider:before {
     cursor: pointer;
 }
 
-#p_direct_components_console_output {
-    margin-top: 0px !important;
+#p_console_output {
+    margin-top: 0 !important;
     width: 100%;
     background-color: #252629;
     height: 400px;
@@ -622,8 +620,8 @@ input:checked + .slider:before {
     border: solid #252629 1px;
 }
 
-#div_direct_components_console_header {
-    margin-bottom: 0px !important;
+#div_console_header {
+    margin-bottom: 0 !important;
     width: 100%;
     border: solid #252629 1px;
 }
@@ -638,14 +636,14 @@ input:checked + .slider:before {
 }
 
 .multiline {
-    padding: 0px !important;
+    padding: 0 !important;
 }
 
 .command_input:focus {
     outline: none;
 }
 
-#div_direct_components_python_command_input {
+#div_direct_components_win_python_command_input {
     width: 100%;
     background-color: #252629;
     height: 400px;
@@ -653,7 +651,49 @@ input:checked + .slider:before {
     padding: 6px 10px;
 }
 
-#div_direct_components_python_command_input::selection {
+#div_direct_components_lin_python_command_input {
+    width: 100%;
+    background-color: #252629;
+    height: 400px;
+    overflow-y:auto;
+    padding: 6px 10px;
+}
+
+#div_direct_components_win_python_command_input::selection {
     background-color: #ffffff !important;
     color: #000000 !important;
+}
+
+#div_direct_components_lin_python_command_input::selection {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 2px;
+    background-color: #2f3136;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    background-color: #252629;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: #252629;
+}
+
+.div_heading {
+    display: flex;
+    flex-flow: row nowrap !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    width: 100% !important;
+    align-content: space-around;
+    margin: 0.5em;
+}
+
+.img_arrow {
+    margin-right: 20px !important;
 }

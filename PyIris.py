@@ -53,10 +53,10 @@ if __name__ == '__main__':
 
 
 try:
-    import logging
     app = Flask(__name__, static_folder="web_interface/static", template_folder="web_interface/templates")
     app.secret_key = os.urandom(24)
     config.app = app
+    import logging
     logging.getLogger('werkzeug').disabled = True
     os.environ['WERKZEUG_RUN_MAIN'] = 'true'
     for handler in logging.root.handlers[:]:
