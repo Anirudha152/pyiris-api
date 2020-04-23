@@ -11,3 +11,4 @@ cryptography==2.6.1
 pyHook-1.5.1-cp37-cp37m-win_amd64.whl
 pycaw==20181226
 pyreadline==2.1
+Flask
