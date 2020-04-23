@@ -33,13 +33,13 @@ def main(command):
                 print(config.pos + 'Reset all options')
         else:
             if interface == "GUI":
-                config.app.logger.error("[library/commands/listener_interface/reset] - Invalid option")
+                config.app.logger.error("\x1b[1m\x1b[31m[library/commands/listener_interface/reset] - Invalid option\x1b[0m")
                 return jsonify({"output": "Fail", "output_message": "Invalid option", "data": ""})
             elif interface == "CUI":
                 print(config.neg + 'Please specify a valid option to reset')
     except IndexError as e:
         if interface == "GUI":
-            config.app.logger.error("[library/commands/listener_interface/reset] - Index Error: " + str(e))
+            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/listener_interface/reset] - Index Error: " + str(e) + "\x1b[0m")
             return jsonify({"output": "Fail", "output_message": e, "data": ""})
         elif interface == "CUI":
             print(config.neg + 'Please specify a valid option to reset')

@@ -18,7 +18,7 @@ def main(scout_id):
         return True
     except socket.error:
         if interface == "GUI":
-            config.app.logger.error("[library/commands/direct_interface/ping] - Scout is dead, removing from database...")
+            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/direct_interface/ping] - Scout is dead, removing from database...\x1b[0m")
         elif interface == "CUI":
             print(config.neg + 'Scout is dead, removing from database...')
         del (config.scout_database[scout_id])

@@ -20,7 +20,7 @@ def main(scout_id):
                         config.change = True
                         return jsonify({"output": "Success", "output_message": "Disconnected scout", "data": ""})
                     except socket.error:
-                        config.app.logger.error("[library/commands/scout_interface/disconnect] - Scout is dead, removing from database...")
+                        config.app.logger.error("\x1b[1m\x1b[31m[library/commands/scout_interface/disconnect] - Scout is dead, removing from database...\x1b[0m")
                         del (config.scout_database[i])
                         config.change = True
                         return jsonify({"output": "Success", "output_message": "Scout is dead, removing from database...", "data": ""})
@@ -32,10 +32,10 @@ def main(scout_id):
                 config.change = True
                 return jsonify({"output": "Success", "output_message": "Disconnected scout", "data": ""})
         except (IndexError, KeyError):
-            config.app.logger.error("[library/commands/scout_interface/disconnect] - Invalid Scout ID")
+            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/scout_interface/disconnect] - Invalid Scout ID\x1b[0m")
             return jsonify({"output": "Fail", "output_message": "Please enter a valid scout ID", "data": ""})
         except socket.error:
-            config.app.logger.error("[library/commands/scout_interface/disconnect] - Scout is dead, removing from database...")
+            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/scout_interface/disconnect] - Scout is dead, removing from database...\x1b[0m")
             del (config.scout_database[scout_id])
             config.change = True
             return jsonify({"output": "Fail", "output_message": "Scout is dead, removing from database...", "data": ""})

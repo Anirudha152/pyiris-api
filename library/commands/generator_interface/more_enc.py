@@ -50,7 +50,7 @@ def main(command):
             return jsonify({"output": "Success", "output_message": "", "data": output})
     except (IndexError, KeyError) as e:
         if interface == "GUI":
-            config.app.logger.error("[library/commands/generator_interface/more_enc] - Error: " + str(e))
+            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/generator_interface/more_enc] - Error: " + str(e) + "\x1b[0m")
             return jsonify({"output": "Fail", "output_message": "Invalid component ID", "data": ""})
         elif interface == "CUI":
             print(config.neg + 'Please specify a valid encoder to show more info for')

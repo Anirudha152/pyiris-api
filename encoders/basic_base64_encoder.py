@@ -28,7 +28,7 @@ def main(option, filepath=None):
                     print('   ' + config.inf + 'Encoded scout and overwrote raw file with Base64 encoded file contents')
         except SyntaxError:
             if interface == "GUI":
-                config.app.logger.error("[encoders/basic_base64_encoder] - Could not encode scout")
+                config.app.logger.error("\x1b[1m\x1b[31m[encoders/basic_base64_encoder] - Could not encode scout\x1b[0m")
             elif interface == "CUI":
                 print('   ' + config.neg + 'Could not encode scout')
     elif option == 'info':

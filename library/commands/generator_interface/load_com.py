@@ -93,7 +93,7 @@ def main(command):
             return jsonify({"output": "Success", "output_message": "", "data": ""})
     except (KeyError, IndexError) as e:
         if interface == "GUI":
-            config.app.logger.error("[library/commands/generator_interface/load_com] - Error: " + str(e))
+            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/generator_interface/load_com] - Error: " + str(e) + "\x1b[0m")
             return jsonify({"output": "Fail", "output_message": "Invalid component ID", "data": ""})
         elif interface == "CUI":
             print(config.neg + 'Please specify a valid component to load or "all" to load all components. \x1b[1m\x1b[31mNote : the default component, */base is loaded by default\x1b[0m')

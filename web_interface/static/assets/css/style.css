@@ -29,9 +29,7 @@ h2:not(.custom_label) {
 label{
 	line-height: 38px;
 }
-p{
-	margin: 0.5em 0;
-}
+
 .left {
 	float: left;
 }
@@ -696,4 +694,17 @@ input:checked + .slider:before {
 
 .img_arrow {
     margin-right: 20px !important;
+}
+
+.input_console_command:focus{
+    outline: none;
+}
+
+.input_console_command{
+    padding: 0 !important;
+    width: 95% !important;
+}
+
+p {
+    white-space: normal !important;
 }

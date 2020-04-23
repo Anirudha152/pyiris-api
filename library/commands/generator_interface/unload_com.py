@@ -65,7 +65,7 @@ def main(command):
             return jsonify({"output": "Success", "output_message": "", "data": ""})
     except (KeyError, IndexError):
         if interface == "GUI":
-            config.app.logger.error("[library/commands/generator_interface/unload_com] - Invalid component ID")
+            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/generator_interface/unload_com] - Invalid component ID\x1b[0m")
             return jsonify({"output": "Fail", "output_message": "Invalid component ID", "data": ""})
         elif interface == "CUI":
             print(config.neg + 'Please specify a valid component to unload or "all" to load all components. \x1b[1m\x1b[31mNote : "base" component cannot be unloaded\x1b[0m')

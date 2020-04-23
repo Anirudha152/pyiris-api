@@ -25,10 +25,10 @@ def main(command):
                 else:
                     return jsonify({"output": "Success", "output_message": "", "data": [config.loaded_encoders, config.loaded_components, config.encoders, config.lin_components]})
             else:
-                config.app.logger.error("[library/commands/generator_interface/show] - Error: Invalid command")
+                config.app.logger.error("\x1b[1m\x1b[31m[library/commands/generator_interface/show] - Error: Invalid command\x1b[0m")
                 return jsonify({"output": "Fail", "output_message": "Invalid command", "data": ""})
         except IndexError as e:
-            config.app.logger.error("[library/commands/generator_interface/show] - Error: " + str(e))
+            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/generator_interface/show] - Error: " + str(e) + "\x1b[0m")
             return jsonify({"output": "Fail", "output_message": "Invalid command", "data": ""})
     elif interface == "CUI":
         try:

@@ -24,10 +24,10 @@ def main(command):
             else:
                 raise IndexError
         except IndexError as e:
-            config.app.logger.error("[library/commands/home_interface/rm] - Index Error: " + str(e))
+            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/home_interface/rm] - Index Error: " + str(e) + "\x1b[0m")
             return jsonify({'output': "Fail", "output_message": "Hostname is invalid", "data": ""})
         except ValueError as e:
-            config.app.logger.error("[library/commands/home_interface/rm] - Value Error: " + str(e))
+            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/home_interface/rm] - Value Error: " + str(e) + "\x1b[0m")
             return jsonify({'output': "Fail", "output_message": "Hostname is invalid", "data": ""})
     elif interface == "CUI":
         try:

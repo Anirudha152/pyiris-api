@@ -39,7 +39,7 @@ def main(command):
             print(config.neg + 'Please specify a valid argument, ["options"|"listeners"]')
     except IndexError as e:
         if interface == "GUI":
-            config.app.logger.error("[library/commands/listener_interface/show] - Index Error: " + e)
+            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/listener_interface/show] - Index Error: " + str(e) + "\x1b[0m")
             return jsonify({"output": "Success", "output_message": "Index Error", "data": ""})
         elif interface == "CUI":
             print(config.neg + 'Please specify what to show, ["options"|"listeners"]')

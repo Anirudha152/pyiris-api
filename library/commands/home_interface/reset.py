@@ -20,7 +20,7 @@ def main(command):
                 config.app.logger.info("[library/commands/home_interface/reset] - Reset blacklist")
                 return jsonify({'output': "Success", "output_message": "", "data": config.black_list})
         except ValueError as e:
-            config.app.logger.error("[library/commands/home_interface/reset] - Value Error: " + str(e))
+            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/home_interface/reset] - Value Error: " + str(e) + "\x1b[0m")
             return jsonify({'output': "Fail", "output_message": "Value Error", "data": ""})
     elif interface == "CUI":
         try:

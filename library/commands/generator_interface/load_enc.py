@@ -38,7 +38,7 @@ def main(command):
                 config.app.logger.info("[library/commands/generator_interface/load_enc] - Loaded : " + config.encoders[to_load])
             return jsonify({"output": "Success", "output_message": "", "data": [config.loaded_encoders, config.encoders]})
         except (KeyError, IndexError) as e:
-            config.app.logger.error("[library/commands/generator_interface/load_enc] - Error: " + str(e))
+            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/generator_interface/load_enc] - Error: " + str(e) + "\x1b[0m")
             return jsonify({"output": "Fail", "output_message": "Invalid component ID", "data": ""})
     elif interface == "CUI":
         try:

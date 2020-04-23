@@ -39,7 +39,7 @@ def main(command):
             return jsonify({"output": "Success", "output_message": "", "data": config.scout_values})
     except (IndexError, KeyError) as e:
         if interface == "GUI":
-            config.app.logger.error("[library/commands/generator_interface/set] - Error: " + str(e))
+            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/generator_interface/set] - Error: " + str(e) + "\x1b[0m")
             return jsonify({"output": "Fail", "output_message": "Invalid command", "data": ""})
         elif interface == "CUI":
             print(config.neg + 'Please specify a valid option and value')

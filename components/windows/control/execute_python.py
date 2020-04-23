@@ -25,7 +25,7 @@ def main(option, prompt = None):
                         config.app.logger.info("[components/windows/control/execute_python] - Valid module, loaded on")
                         config.import_statements.append('import ' + module_to_load)
                 except (ImportError, SyntaxError):
-                    config.app.logger.error("[components/windows/control/execute_python] - Invalid module, not loaded on")
+                    config.app.logger.error("\x1b[1m\x1b[31m[components/windows/control/execute_python] - Invalid module, not loaded on\x1b[0m")
         elif interface == "CUI":
             print(config.war + 'Manual intervention required for python_execute component')
             while True:

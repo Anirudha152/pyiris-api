@@ -133,6 +133,20 @@ def scouts():
     app.logger.info("[\033[92mScouts\033[0m] - " + "Loading page...")
     return render_template('scouts.html')
 
+"""
+@app.route('/testing', methods=['GET', 'POST'])
+def testing():
+    config.AbruptEnd = True
+    for handler in logging.root.handlers[:]:
+        logging.root.removeHandler(handler)
+    logging.basicConfig(level=logging.DEBUG, format="%(message)s")
+    app.logger.info("\n--------------------------------------")
+    for handler in logging.root.handlers[:]:
+        logging.root.removeHandler(handler)
+    logging.basicConfig(level=logging.DEBUG, format="[%(asctime)s] %(levelname)s > %(message)s")
+    app.logger.info("[\033[92mTesting\033[0m] - " + "Loading page...")
+    return render_template('testing.html')
+"""
 
 @app.route('/home_process', methods=['GET', 'POST'])
 def home_process():

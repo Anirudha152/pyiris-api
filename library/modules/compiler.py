@@ -91,8 +91,8 @@ def main(path, prompt = None):
         shutil.rmtree('build')
     else:
         if interface == "GUI":
-            config.app.logger.error("[library/modules/compiler] - Error, could not successfully compile scout (Is 'pyinstaller' installed and visible in your PATH?")
-            return jsonify({"output": "Fail", "output_message": "Error, could not successfully compile scout (Is 'pyinstaller' installed and visible in your PATH?", "data": ""})
+            config.app.logger.error("\x1b[1m\x1b[31m[library/modules/compiler] - Error, could not successfully compile scout (Is 'pyinstaller' installed and visible in your PATH?)\x1b[0m")
+            return jsonify({"output": "Fail", "output_message": "Error, could not successfully compile scout (Is 'pyinstaller' installed and visible in your PATH?)", "data": ""})
         elif interface == "CUI":
             print(config.neg + 'Error, could not successfully compile scout (Is "pyinstaller" installed and visible in your PATH?)')
             return
@@ -118,7 +118,7 @@ def main(path, prompt = None):
             print(config.pos + 'Successfully compiled single file scout to : ' + os.path.join(os.getcwd(), 'generated', filename))
     else:
         if interface == "GUI":
-            config.app.logger.error("[library/modules/compiler] - Error, could not successfully compile scout (Is 'pyinstaller' installed and visible in your PATH?)")
+            config.app.logger.error("\x1b[1m\x1b[31m[library/modules/compiler] - Error, could not successfully compile scout (Is 'pyinstaller' installed and visible in your PATH?)\x1b[0m")
             return jsonify({"output": "Fail", "output_message": "Error, could not successfully compile scout (Is 'pyinstaller' installed and visible in your PATH?)", "data": ""})
         elif interface == "CUI":
             print(config.neg + 'Error, could not successfully compile scout (Is "pyinstaller" installed and visible in your PATH?)')

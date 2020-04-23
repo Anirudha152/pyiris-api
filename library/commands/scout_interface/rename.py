@@ -14,7 +14,7 @@ def main(command):
             config.app.logger.info("[library/commands/scout_interface/rename] - Successfully renamed scout " + str(id) + " to " + str(new_name))
             return jsonify({"output": "Success", "output_message": "Successfully renamed scout", "data": ""})
         except (IndexError, KeyError):
-            config.app.logger.error("[library/commands/scout_interface/rename] - Invalid Scout ID ")
+            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/scout_interface/rename] - Invalid Scout ID\x1b[0m")
             return jsonify({"output": "Fail", "output_message": "Invalid Scout ID", "data": ""})
     elif interface == "CUI":
         try:

@@ -20,16 +20,16 @@ def main(scoutId, filepath):
             config.app.logger.info("[library/commands/direct_interface/upload] - Message from scout: " + response)
             return jsonify({"output": "Success", "output_message": "Command Output", "data": response})
         except IOError:
-            config.app.logger.error("[library/commands/direct_interface/upload] - File does not exist, cannot upload")
+            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/direct_interface/upload] - File does not exist, cannot upload\x1b[0m")
             return jsonify(
                 {"output": "Success", "output_message": "Command Output", "data": "[!]Error while uploading: File does not exist, cannot upload"})
         except IndexError:
-            config.app.logger.error("[library/commands/direct_interface/upload] - Please supply valid arguments for the command you are running")
+            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/direct_interface/upload] - Please supply valid arguments for the command you are running\x1b[0m")
             return jsonify(
                 {"output": "Success", "output_message": "Command Output",
                  "data": "[!]Error while uploading: Please supply valid arguments for the command you are running"})
         except Exception as e:
-            config.app.logger.error("[library/commands/direct_interface/upload] - Error while uploading file : " + str(e))
+            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/direct_interface/upload] - Error while uploading file : " + str(e) + "\x1b[0m")
             return jsonify({"output": "Success", "output_message": "Command Output",
                             "data": "[!]Error while uploading: " + str(e)})
     elif interface == "CUI":

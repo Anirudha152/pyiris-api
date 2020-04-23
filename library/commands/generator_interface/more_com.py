@@ -71,7 +71,7 @@ def main(command):
                     output = more_com(str(i))
             return output
         except (IndexError, KeyError) as e:
-            config.app.logger.error("[library/commands/generator_interface/more_com] - Error: " + str(e))
+            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/generator_interface/more_com] - Error: " + str(e) + "\x1b[0m")
             return jsonify({"output": "Fail", "output_message": "Invalid component ID", "data": ""})
     elif interface == "CUI":
         try:

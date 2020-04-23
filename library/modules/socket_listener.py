@@ -78,7 +78,7 @@ def main(host, port, name, reply):
                 continue
     except Exception as e:
         if interface == "GUI":
-            config.app.logger.error("[library/modules/socket_listener] - Error in listener thread : " + str(e) + ", killing thread...")
+            config.app.logger.error("\x1b[1m\x1b[31m[library/modules/socket_listener] - Error in listener thread : " + str(e) + ", killing thread...\x1b[0m")
         elif interface == "CUI":
             print('\n' + config.war + 'Error in listener thread : ' + str(e) + ', killing thread...')
         config.thread_message = ['neg', 'Error in listener thread : ' + str(e) + ', killing thread']

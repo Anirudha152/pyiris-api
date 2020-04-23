@@ -45,7 +45,7 @@ def main(inp_data, context_type, operation):
             break
     if error and output_list:  # we hit an error however we still hit a match indicating invalid format
         if interface == "GUI":
-            config.app.logger.error("[library/modules/generator_id_parser] - Invalid generator ID formatting : String detected while sorting for integer IDs")
+            config.app.logger.error("\x1b[1m\x1b[31m[library/modules/generator_id_parser] - Invalid generator ID formatting : String detected while sorting for integer IDs\x1b[0m")
         elif interface == "CUI":
             print(config.neg + 'Invalid generator ID formatting : String detected while sorting for integer IDs')
         return []
@@ -74,7 +74,7 @@ def main(inp_data, context_type, operation):
             # f_val and s_val are never negative since regex matches "positive number-positive number"
             if f_val > s_val:
                 if interface == "GUI":
-                    config.app.logger.error("[library/modules/generator_id_parser] - Invalid generator ID formatting : First range value is larger than second range value")
+                    config.app.logger.error("\x1b[1m\x1b[31m[library/modules/generator_id_parser] - Invalid generator ID formatting : First range value is larger than second range value\x1b[0m")
                 elif interface == "CUI":
                     print(config.neg + 'Invalid generator ID formatting : First range value is larger than second range value')
                 return []
@@ -83,7 +83,7 @@ def main(inp_data, context_type, operation):
                 output_list += mini_range  # fill each value in range of f and s into output
     except OverflowError:
         if interface == "GUI":
-            config.app.logger.error("[library/modules/generator_id_parser] - Range value is too large")
+            config.app.logger.error("\x1b[1m\x1b[31m[library/modules/generator_id_parser] - Range value is too large\x1b[0m")
         elif interface == "CUI":
             print(config.neg + 'Invalid generator ID formatting : Range value is too large')
         return []

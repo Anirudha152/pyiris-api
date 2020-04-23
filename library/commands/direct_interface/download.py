@@ -14,7 +14,7 @@ def main(sock):
             config.app.logger.info("[library/commands/direct_interface/download] - Receiving data...")
             data = recv_all.main_recv(sock).split(' ')
             if data[0].startswith('[-]') or data[0].startswith('[!]'):
-                config.app.logger.error("[library/commands/direct_interface/download] - ".join(data))
+                config.app.logger.error("\x1b[1m\x1b[31m[library/commands/direct_interface/download] - ".join(data) + "\x1b[0m")
                 return jsonify({"output": "Fail", "output_message": "[!]Error while downloading", "data": data})
             config.app.logger.info("[library/commands/direct_interface/download] - Done, writing file...")
             name = basename(' '.join(data[:-1]))
@@ -24,10 +24,10 @@ def main(sock):
             config.app.logger.info("[library/commands/direct_interface/download] - Downloaded file : " + name)
             return jsonify({"output": "Success", "output_message": "Downloaded successfully", "data": "[+]Downloaded file : " + name})
         except (TypeError, KeyError):
-            config.app.logger.error("[library/commands/direct_interface/download] - " + data)
+            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/direct_interface/download] - " + data + "\x1b[0m")
             return jsonify({"output": "Success", "output_message": "Command Output", "data": "[!]Error while downloading: " + data})
         except Exception as e:
-            config.app.logger.error("[library/commands/direct_interface/download] - Error while downloading file : " + str(e))
+            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/direct_interface/download] - Error while downloading file : " + str(e) + "\x1b[0m")
             return jsonify({"output": "Success", "output_message": "Command Output", "data": "[!]Error while downloading: " + str(e)})
     elif interface == "CUI":
         try:

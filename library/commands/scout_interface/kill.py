@@ -28,7 +28,7 @@ def main(scout_id):
                         return jsonify({"output": "Success", "output_message": "", "data": data})
                 except socket.error:
                     if interface == "GUI":
-                        config.app.logger.error("[library/commands/scout_interface/kill] - Scout is dead, removing from database...")
+                        config.app.logger.error("\x1b[1m\x1b[31m[library/commands/scout_interface/kill] - Scout is dead, removing from database...\x1b[0m")
                     elif interface == "CUI":
                         print(config.neg + 'Scout is dead, removing from database...')
                     del (config.scout_database[i])
@@ -51,14 +51,14 @@ def main(scout_id):
                 return jsonify({"output": "Success", "output_message": "", "data": data})
     except (IndexError, KeyError) as e:
         if interface == "GUI":
-            config.app.logger.error("[library/commands/scout_interface/kill] - Invalid scout ID")
+            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/scout_interface/kill] - Invalid scout ID\x1b[0m")
         elif interface == "CUI":
             print(config.neg + 'Please enter a valid scout ID')
         if interface == "GUI":
             return jsonify({"output": "Fail", "output_message": "Invalid scout ID", "data": ""})
     except socket.error:
         if interface == "GUI":
-            config.app.logger.error("[library/commands/scout_interface/kill] - Scout is dead, removing from database...")
+            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/scout_interface/kill] - Scout is dead, removing from database...\x1b[0m")
         elif interface == "CUI":
             print(config.neg + 'Scout is dead, removing from database...')
         del (config.scout_database[scout_id])

@@ -18,7 +18,7 @@ def main(command):
                 config.app.logger.info("[library/commands/listener_interface/kill] - Sent kill message to all listeners")
                 return jsonify({"output": "Success", "output_message": "Killing", "data": ""})
         except IndexError as e:
-            config.app.logger.error("[library/commands/listener_interface/kill] - Index Error: " + str(e))
+            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/listener_interface/kill] - Index Error: " + str(e) + "\x1b[0m")
             return jsonify({"output": "Fail", "output_message": e, "data": ""})
     elif interface == "CUI":
         try:

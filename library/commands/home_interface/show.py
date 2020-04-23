@@ -21,10 +21,10 @@ def main(command):
                 with open('resources/PyIris.cred', 'r') as f:
                     return jsonify({'output': 'Success', 'output_message': "", "data": f.read()})
             else:
-                config.app.logger.error("[library/commands/home_interface/show] - Invalid Command: " + str(command))
+                config.app.logger.error("\x1b[1m\x1b[31m[library/commands/home_interface/show] - Invalid Command: " + str(command) + "\x1b[0m")
                 return jsonify({'output': "Fail", "output_message": "Invalid command", "data": ""})
         except IndexError as e:
-            config.app.logger.error("[library/commands/home_interface/show] - Index Error: " + str(e))
+            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/home_interface/show] - Index Error: " + str(e) + "\x1b[0m")
             return jsonify({'output': "Fail", "output_message": "Invalid command", "data": ""})
     elif interface == "CUI":
         try:

@@ -25,4 +25,8 @@ def main(data, scout_id):
             print(config.inf + 'Attempting to run on scout...')
             print(send_and_recv.main('c exec_py ' + data, scout_id))
     else:
-        print(config.neg + 'Invalid file path supplied')
+        if interface == "GUI":
+            config.app.logger.error("[library/interfaces/python_execute_file] - Invalid file path supplied")
+            return jsonify({"output": "Success", "output_message": "Command Output", "data": "[-]Invalid file path supplied"})
+        elif interface == "CUI":
+            print(config.neg + 'Invalid file path supplied')

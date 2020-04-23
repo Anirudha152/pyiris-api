@@ -18,7 +18,7 @@ def main(sock):
     if type(raw_bytes) == str:
         if interface == "GUI":
             config.app.logger.info("[library/commands/direct_interface/screen] - Message from scout: " + raw_bytes)
-            return jsonify({"output": "Success", "output_message": "Command Output", "data": "[*]Message from scout: " + raw_bytes})
+            return jsonify({"output": "Success", "output_message": "Command Output", "data": raw_bytes})
         elif interface == "CUI":
             print(raw_bytes)
     else:

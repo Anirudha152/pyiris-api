@@ -60,7 +60,7 @@ def main():
                         config.monitoring = False
                         return output
                 except Exception as e:
-                    config.app.logger.error("[library/modules/monitor_listeners] - Error: " + str(e))
+                    config.app.logger.error("\x1b[1m\x1b[31m[library/modules/monitor_listeners] - Error: " + str(e) + "\x1b[0m")
                     return jsonify({"output": "Fail", "output_message": str(e), "data": ""})
             else:
                 for handler in logging.root.handlers[:]:

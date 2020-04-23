@@ -25,7 +25,7 @@ def main(command):
             else:
                 raise IndexError
         except IndexError:
-            config.app.logger.error("[library/commands/home_interface/add] - Hostname: " + str(hostname) + " is invalid")
+            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/home_interface/add] - Hostname: " + str(hostname) + " is invalid\x1b[0m")
             return jsonify({'output': "Fail", "output_message": "Hostname is invalid", "data": ""})
     elif interface == "CUI":
         try:
