@@ -322,25 +322,21 @@ $(document).ready(function () {
     function logOutputCB(data, extra_input=undefined) {
         if (data.output === "Success") {
             if (extra_input) {
-                if (extra_input.command !== "help_command")
-                    if (data.output_message === "return") {
-                        if (extra_input.command === "ping"){
-                            ScoutGlobals.error = true;
-                            showMessage("Scout is dead, removing from database...");
-                            scrollToTop();
-                        }
-                        ScoutGlobals.ifc = "Scouts";
-                        loaderDirect("-1");
-                    } else {
-                        if (extra_input.command === "ping"){
-                            ScoutGlobals.error = false;
-                            showMessage(data.output_message);
-                            scrollToTop();
-                        }
-                        loaderDirect("-1");
+                if (data.output_message === "return") {
+                    if (extra_input.command === "ping"){
+                        ScoutGlobals.error = true;
+                        showMessage("Scout is dead, removing from database...");
+                        scrollToTop();
                     }
-                else {
-                    logToConsole(data.data, true, false,true);
+                    ScoutGlobals.ifc = "Scouts";
+                    loaderDirect("-1");
+                } else {
+                    if (extra_input.command === "ping"){
+                        ScoutGlobals.error = false;
+                        showMessage(data.output_message);
+                        scrollToTop();
+                    }
+                    loaderDirect("-1");
                 }
             }
             else {
@@ -973,7 +969,19 @@ $(document).ready(function () {
             return this.selectionStart >= ScoutGlobals.readOnlyLength;
         }
     });
+    $(document).on('mousedown mouseup', '.singleline', function() {
+        if (this.selectionStart < ScoutGlobals.readOnlyLength) {
+            document.getElementById($(this).attr('id')).selectionStart = ScoutGlobals.readOnlyLength;
+            document.getElementById($(this).attr('id')).selectionEnd = ScoutGlobals.readOnlyLength;
+        }
+    });
     $(document).on('keypress, keydown', '.multiline', function(event) {
+        let splitId = $(this).attr('id').split('_');
+        let main_id = "#";
+        let index = splitId[splitId.length - 1];
+        for (let i = 0; i < splitId.length - 1; i++) {
+            main_id = main_id + splitId[i] + "_";
+        }
         if (this.selectionStart < ScoutGlobals.readOnlyLength) {
             document.getElementById($(this).attr('id')).selectionStart = $(this).val().length;
             document.getElementById($(this).attr('id')).selectionEnd = $(this).val().length;
@@ -987,16 +995,12 @@ $(document).ready(function () {
                 return this.selectionStart >= ScoutGlobals.readOnlyLength - 1;
             } else {
                 if (this.selectionStart === ScoutGlobals.readOnlyLength) {
-                    if ($(this).attr('id').split("_")[7] !== "0") {
+                    if (index !== "0") {
                         let $selector;
-                        if (ScoutGlobals.scoutOS === "win") {
-                            $selector = $("#input_direct_components_win_python_command_input_" + (parseInt($(this).attr('id').split("_")[7], 10) - 1).toString());
-                        } else if (ScoutGlobals.scoutOS === "lin") {
-                            $selector = $("#input_direct_components_lin_python_command_input_" + (parseInt($(this).attr('id').split("_")[7], 10) - 1).toString());
-                        }
+                        $selector = $(main_id + (parseInt(index, 10) - 1).toString());
                         let valueOfDeletable = $(this).val().slice(ScoutGlobals.readOnlyLength);
                         let pointerLocationToSet = $selector.val().length;
-                        deleteInputRow(parseInt($(this).attr('id').split("_")[7], 10));
+                        deleteInputRow(parseInt(index, 10), main_id, index);
                         $selector.val($selector.val() + valueOfDeletable);
                         $selector.focus();
                         document.getElementById($selector.attr('id')).selectionStart = pointerLocationToSet;
@@ -1010,46 +1014,27 @@ $(document).ready(function () {
         } else if (event.which === 13) {
             let valueOfEnterable = $(this).val().slice(this.selectionStart);
             $(this).val($(this).val().slice(0, this.selectionStart));
-            insertInputRow(parseInt($(this).attr('id').split("_")[7], 10));
-            let $selector;
-            if (ScoutGlobals.scoutOS === "win") {
-                $selector = $("#input_direct_components_win_python_command_input_" + (parseInt($(this).attr('id').split("_")[7], 10) + 1).toString());
-            } else if (ScoutGlobals.scoutOS === "lin") {
-                $selector = $("#input_direct_components_lin_python_command_input_" + (parseInt($(this).attr('id').split("_")[7], 10) + 1).toString());
-            }
+            insertInputRow(parseInt(index, 10), main_id, index);
+            let $selector = $(main_id + (parseInt(index, 10) + 1).toString())
             $selector.val(">>> " + valueOfEnterable);
             $selector.focus();
             document.getElementById($selector.attr('id')).selectionStart = ScoutGlobals.readOnlyLength;
             document.getElementById($selector.attr('id')).selectionEnd = ScoutGlobals.readOnlyLength;
             return false;
         } else if (event.which === 40) {
-            if (ScoutGlobals.scoutOS === "win") {
-                if (parseInt($(this).attr('id').split("_")[7], 10) < $("#div_direct_components_win_python_command_input").children().length - 1) {
-                    let pos = this.selectionStart;
-                    let $selector = $("#input_direct_components_win_python_command_input_" + (parseInt($(this).attr('id').split("_")[7], 10) + 1).toString());
-                    $selector.focus();
-                    document.getElementById($selector.attr('id')).selectionStart = pos;
-                    document.getElementById($selector.attr('id')).selectionEnd = pos;
-                }
-            } else if (ScoutGlobals.scoutOS === "lin") {
-                if (parseInt($(this).attr('id').split("_")[7], 10) < $("#div_direct_components_lin_python_command_input").children().length - 1) {
-                    let pos = this.selectionStart;
-                    let $selector = $("#input_direct_components_lin_python_command_input_" + (parseInt($(this).attr('id').split("_")[7], 10) + 1).toString());
-                    $selector.focus();
-                    document.getElementById($selector.attr('id')).selectionStart = pos;
-                    document.getElementById($selector.attr('id')).selectionEnd = pos;
-                }
+            if (parseInt(index, 10) < $(this).parent().children().length - 1) {
+                let pos = this.selectionStart;
+                let $selector = $(main_id + (parseInt(index, 10) + 1).toString());
+                $selector.focus();
+                document.getElementById($selector.attr('id')).selectionStart = pos;
+                document.getElementById($selector.attr('id')).selectionEnd = pos;
             }
             return false;
         } else if (event.which === 38) {
-            if (parseInt($(this).attr('id').split("_")[7], 10) > 0) {
+            if (parseInt(index, 10) > 0) {
                 let pos = this.selectionStart;
                 let $selector;
-                if (ScoutGlobals.scoutOS === "win") {
-                    $selector = $("#input_direct_components_win_python_command_input_" + (parseInt($(this).attr('id').split("_")[7], 10) - 1).toString());
-                } else if (ScoutGlobals.scoutOS === "lin") {
-                    $selector = $("#input_direct_components_lin_python_command_input_" + (parseInt($(this).attr('id').split("_")[7], 10) - 1).toString());
-                }
+                $selector = $(main_id + (parseInt(index, 10) - 1).toString());
                 $selector.focus();
                 document.getElementById($selector.attr('id')).selectionStart = pos;
                 document.getElementById($selector.attr('id')).selectionEnd = pos;
@@ -1065,37 +1050,28 @@ $(document).ready(function () {
             document.getElementById($(this).attr('id')).selectionEnd = ScoutGlobals.readOnlyLength;
         }
     });
-    $(document).on('mousedown mouseup', '.singleline', function() {
-        if (this.selectionStart < ScoutGlobals.readOnlyLength) {
-            document.getElementById($(this).attr('id')).selectionStart = ScoutGlobals.readOnlyLength;
-            document.getElementById($(this).attr('id')).selectionEnd = ScoutGlobals.readOnlyLength;
+    $(document).on('keypress, keydown', '.triggerOnExit', function(event) {
+        if ((event.ctrlKey || event.metaKey) && event.keyCode == 67) {
+            let pythonProgram = "";
+            $(this).parent().children().each(function () {
+                pythonProgram = pythonProgram + $(this).val().slice(ScoutGlobals.readOnlyLength) + "\n";
+            });
+            $(".input_console_command").last().val("exec_py " + pythonProgram, true);
+            triggerAjaxDirectInterface("exec_py " + pythonProgram, true, logOutputCB, undefined);
         }
     });
-    function deleteInputRow(rowId) {
-        if (ScoutGlobals.scoutOS === "win") {
-            $("#input_direct_components_win_python_command_input_" + rowId.toString()).remove();
-            for (let i = rowId + 1; i <= $("#div_direct_components_win_python_command_input").children().length; i++) {
-                $("#input_direct_components_win_python_command_input_" + i.toString()).attr('id', "input_direct_components_win_python_command_input_" + (i - 1).toString());
-            }
-        } else if (ScoutGlobals.scoutOS === "lin") {
-            $("#input_direct_components_lin_python_command_input_" + rowId.toString()).remove();
-            for (let i = rowId + 1; i <= $("#div_direct_components_lin_python_command_input").children().length; i++) {
-                $("#input_direct_components_lin_python_command_input_" + i.toString()).attr('id', "input_direct_components_lin_python_command_input_" + (i - 1).toString());
-            }
+    function deleteInputRow(rowId, main_id, index) {
+        //fix this shit
+        $(main_id + rowId.toString()).remove();
+        for (let i = rowId + 1; i <= $(main_id + "0").parent().children().length; i++) {
+            $(main_id + i.toString()).attr('id', main_id.substring(1) + (i - 1).toString());
         }
     }
-    function insertInputRow(rowId) {
-        if (ScoutGlobals.scoutOS === "win") {
-            for (let i = $("#div_direct_components_win_python_command_input").children().length - 1; i > rowId; i--) {
-                $("#input_direct_components_win_python_command_input_" + i.toString()).attr('id', "input_direct_components_win_python_command_input_" + (i + 1).toString());
-            }
-            $("#div_direct_components_win_python_command_input").insertAt(rowId + 1, "<input type='text' id='input_direct_components_win_python_command_input_" + (rowId + 1).toString() + "' class='multiline command_input' name='Python' value='>>> ' style='width: 100% !important; height: 25px !important; background-color: #252629 !important; border-radius: 0 !important; margin: 0 !important;' autocomplete='off'>");
-        } else if (ScoutGlobals.scoutOS === "lin") {
-            for (let i = $("#div_direct_components_lin_python_command_input").children().length - 1; i > rowId; i--) {
-                $("#input_direct_components_lin_python_command_input_" + i.toString()).attr('id', "input_direct_components_lin_python_command_input_" + (i + 1).toString());
-            }
-            $("#div_direct_components_lin_python_command_input").insertAt(rowId + 1, "<input type='text' id='input_direct_components_lin_python_command_input_" + (rowId + 1).toString() + "' class='multiline command_input' name='Python' value='>>> ' style='width: 100% !important; height: 25px !important; background-color: #252629 !important; border-radius: 0 !important; margin: 0 !important;' autocomplete='off'>");
+    function insertInputRow(rowId, main_id, index) {
+        for (let i = $(main_id + "0").parent().children().length - 1; i > rowId; i--) {
+            $(main_id + i.toString()).attr('id', main_id.substring(1) + (i + 1).toString());
         }
+        $(main_id + "0").parent().insertAt(rowId + 1, "<input type='text' id='" + main_id.substring(1) + (rowId + 1).toString() + "' class='" + $(main_id + "0").attr('class') + "' name='Python' value='>>> ' style='width: 100% !important; height: 25px !important; background-color: #252629 !important; border-radius: 0 !important; margin: 0 !important;' autocomplete='off'>");
     }
     jQuery.fn.insertAt = function(index, element) {
         let lastIndex = this.children().length;
@@ -1316,7 +1292,11 @@ $(document).ready(function () {
                 if (val === "ping" || val === "disconnect" || val === "kill" || val.split(" ")[0] === "sleep"){
                     triggerAjaxDirectInterface(val, true, logOutputCB, {"command": val});
                 } else if (val === "help" || val === "?") {
-                    triggerAjaxDirectInterface("help_command", true, logOutputCB, {"command": "help_command"});
+                    triggerAjaxDirectInterface("help_command", true, logOutputCB);
+                } else if (val === "exec_py_script") {
+                    $("#p_console_output").append("<div id='div_console_scripter_"+String(ScoutGlobals.terminalCount)+"'></div>")
+                    $("#div_console_scripter_"+String(ScoutGlobals.terminalCount)).html("You are currently in the python executor scripter, script a chain of python instructions to run, press execute to run (only works if python execute component is loaded)<input type='text' id='input_console_scripter_"+String(ScoutGlobals.terminalCount)+"_0' class='multiline command_input triggerOnExit' name='Python' value='>>> ' style='width: 100% !important; height: 25px !important; background-color: #252629 !important; border-radius: 0 !important; margin: 0 !important;' autocomplete='off'>");
+                    ScoutGlobals.terminalCount = ScoutGlobals.terminalCount + 1;
                 } else {
                     triggerAjaxDirectInterface(val, true, logOutputCB, undefined);
                 }
@@ -1713,7 +1693,7 @@ $(document).ready(function () {
     }
 
     // Main function to log to console
-    function logToConsole(t, newline, input=false, help=false) {
+    function logToConsole(t, newline, input=false) {
         let $selector = $("#p_console_output");
         if (!input) {
             let appendString;
@@ -1729,11 +1709,6 @@ $(document).ready(function () {
                 .replace(/\[\&#8209;\]/g, "<p1 style='color: #e74856'>[-]</p1>")
                 .replace(/\[\!\]/g, "<p1 style='color: #f9f1a5'>[!]</p1>")
                 .replace(/\[\>\]/g, "<p1 style='color: #b4009e'>[>]</p1>");
-            if (help) {
-                appendString = appendString
-                    .replace("exec_py_script", "<p1 style='color: #e74856'>exec_py_script</p1>")
-                    .replace("Script\u00A0in\u00A0the\u00A0terminal\u00A0a\u00A0block\u00A0of\u00A0in&#8209;memory\u00A0arbitrary\u00A0python\u00A0code\u00A0to\u00A0execute\u00A0on\u00A0the\u00A0target\u00A0system","<p1 style='color: #e74856'>Function\u00A0not\u00A0supported\u00A0in\u00A0web\u00A0command\u00A0line.\u00A0Please\u00A0use\u00A0execute\u00A0python\u00A0to\u00A0script\u00A0a\u00A0program</p1>");
-            }
             appendString = String.raw`${appendString}`;
             appendString = appendString.replace(/\n/g, "<br>");
             $selector.append(appendString);
@@ -1746,10 +1721,10 @@ $(document).ready(function () {
             if (index) {
                 $("#input_console_command_" + String(index - 1)).attr("readonly", true);
                 logToConsole("[>]", false);
-                $selector.append("<input type='text' style='height: auto !important; background-color: #252629 !important; font-size: inherit !important; color: #bfbfbb !important;' id='input_console_command_" + String(index) + "' class='input_console_command'><br>");
+                $selector.append("<input type='text' style='height: auto !important; background-color: #252629 !important; font-size: inherit !important; color: #bfbfbb !important;' id='input_console_command_" + String(index) + "' class='input_console_command' autocomplete='off'><br>");
             } else {
                 logToConsole("[>]", false);
-                $selector.append("<input type='text' style='height: auto !important; background-color: #252629 !important; font-size: inherit !important; color: #bfbfbb !important;' id='input_console_command_0' class='input_console_command'><br>");
+                $selector.append("<input type='text' style='height: auto !important; background-color: #252629 !important; font-size: inherit !important; color: #bfbfbb !important;' id='input_console_command_0' class='input_console_command' autocomplete='off'><br>");
             }
             $("#input_console_command_" + String(index)).focus();
         }
