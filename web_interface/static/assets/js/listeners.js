@@ -8,6 +8,7 @@ ListenerGlobals = {
     "error": true
 };
 $(document).ready(function () {
+    $('body').append('<div style="" id="div_loading"><div class="loader">Loading...</div></div>');
     // load settings from server memory
     triggerAjax("show options", true, '/listeners_process', showOptionsCB, undefined);
     function showOptionsCB(data) {
@@ -43,6 +44,7 @@ $(document).ready(function () {
                 rotate(270, "#img_listeners_arrow");
                 listenerSettings();
             }
+            removeLoader()
         }
     }
 
@@ -63,7 +65,7 @@ $(document).ready(function () {
     }
 
     // arrow click event
-    $(".img_arrow").click(function(){
+    $(document).on("click", ".img_arrow", function(){
         if ($(this).attr('id') === "img_main_settings_arrow") {
             if (ListenerGlobals.mainSettingsShown) {
                 rotate(270, "#img_main_settings_arrow");
@@ -100,7 +102,7 @@ $(document).ready(function () {
     });
 
     // main settings update event
-    $(".button_main_settings").click(function () {
+    $(document).on("click", ".button_main_settings", function () {
         let option = $(this).attr('id').split('_')[3][0].toUpperCase() + $(this).attr('id').split('_')[3].slice(1);
         if ($("#input_main_settings_" + option.toLowerCase()).val() !== "" || option === "Reply") {
             triggerAjax("set " + option + " " + $("#input_main_settings_" + option.toLowerCase()).val(), true, '/listeners_process', mainSettingsUpdateCB, {'option': option});
@@ -114,7 +116,7 @@ $(document).ready(function () {
     }
 
     // bind event
-    $("#button_bind").click(function () {
+    $(document).on("click", "#button_bind", function () {
         $("#i_bind_spinner").show();
         if ($("#input_bind_interface").val() !== "" && $("#input_bind_port").val() !== "") {
             triggerAjax("bind " + $("#input_bind_interface").val() + " " + $("#input_bind_port").val(), true, '/listeners_process', bindClickCB, undefined);
@@ -146,7 +148,7 @@ $(document).ready(function () {
     }
 
     // click run event
-    $("#button_run").click(function (){
+    $(document).on("click", "#button_run", function (){
         triggerAjax("run", true, '/listeners_process', undefined, undefined);
     });
 
@@ -160,13 +162,13 @@ $(document).ready(function () {
     });
 
     // kill all listeners event
-    $("#td_remove_listener_main").click(function () {
+    $(document).on("click", "#td_remove_listener_main", function () {
         $("#i_remove_listener_spinner_main").show();
         triggerAjax("kill all", true, '/listeners_process', undefined, undefined);
     });
 
     //reset
-    $(".button_main_settings_reset").click(function () {
+    $(document).on("click", ".button_main_settings_reset", function () {
         let command = "reset ";
         if ($(this).attr('id') === "button_main_settings_reset_all") {
             command = command + "all";
@@ -222,6 +224,13 @@ $(document).ready(function () {
     function scrollToTop() {
         document.body.scrollTop = 0; // For Safari
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
+
+    function removeLoader() {
+        $("#div_loading").fadeOut(500, function() {
+            $("#div_loading").remove();
+        });
+        $(".container").removeClass("hide")
     }
 
     function triggerAjax (data, async, url, callback, extra_input){

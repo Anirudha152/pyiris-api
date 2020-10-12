@@ -1,10 +1,9 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
-if interface == "GUI":
-    from flask import jsonify
 
 
 def main(option):
@@ -14,16 +13,16 @@ def main(option):
         config.functions.append('''
 def system_stat(option):
     if option == 'lock':
-        main_send('[*]Locking user...', s)
+        send_all(s,'[*]Locking user...')
         windll.user32.LockWorkStation()
     elif option == 'logout':
-        main_send('[*]Logging user out...', s)
+        send_all(s,'[*]Logging user out...')
         os.system('shutdown /l')
     elif option == 'restart':
-        main_send('[*]System restarting...', s)
+        send_all(s,'[*]System restarting...')
         os.system('shutdown /r /t 0')
     elif option == 'shutdown':
-        main_send('[*]System shutting down...', s)
+        send_all(s,'[*]System shutting down...')
         os.system('shutdown /s /t 0')''')
         config.logics.append('''
             elif command in ('lock','logout','restart','shutdown'):

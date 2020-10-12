@@ -1,13 +1,25 @@
-# WEB + COM
+# GUI + CUI
 # done
 import time
+import library.commands.global_interface.clear as clear
 import library.commands.global_interface.quit as quit
+import library.commands.global_interface.python as python
+import library.commands.global_interface.local as local
+import library.commands.global_interface.help as help
 import library.commands.home_interface.regen as regen
 import library.commands.home_interface.add as add
+import library.commands.home_interface.show as show
 import library.commands.home_interface.rm as rm
 import library.commands.home_interface.reset as reset
+import library.interfaces.listener_interface as listener_interface
+import library.interfaces.scout_interface as scout_interface
+import library.interfaces.generator_interface as generator_interface
 import library.modules.config as config
-import library.commands.home_interface.show as show
+
+try:
+    import readline
+except ImportError:
+    import gnureadline as readline
 
 config.main()
 interface = config.interface
@@ -19,13 +31,6 @@ if interface == "CUI":
     import library.interfaces.listener_interface as listener_interface
     import library.interfaces.scout_interface as scout_interface
     import library.interfaces.generator_interface as generator_interface
-
-try:
-    import readline
-except ImportError:
-    import gnureadline as readline
-
-
 home_commands = ['clear', 'help', 'local', 'python', 'quit', 'add', 'regen', 'reset', 'rm', 'show', 'generator',
                  'listeners',
                  'scouts']
@@ -40,7 +45,7 @@ def home_completer(text, state):
                 state -= 1
 
 
-def main(prompt = None):
+def main(prompt=None):
     if interface == "GUI":
         command = prompt.split(' ', 1)[0].lower()
         if command == 'add':
@@ -100,12 +105,5 @@ def main(prompt = None):
                     pass
                 else:
                     print(config.neg + 'Invalid command, run "help" for help menu')
-            except EOFError:
-                try:
-                    time.sleep(2)
-                except KeyboardInterrupt:
-                    quit.main()
             except KeyboardInterrupt:
                 quit.main()
-
-

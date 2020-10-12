@@ -1,10 +1,13 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
 if interface == "GUI":
     from flask import jsonify
+    import library.modules.log as log
+
 
 def main(command):
     try:
@@ -36,10 +39,13 @@ def main(command):
                 print('\n'.join('     '.join(item[i].ljust(l[i]) for i in range(len(l)))
                                 for item in header) + '\n')
         else:
+            if interface == "GUI":
+                log.log_error('Please specify a valid argument, ["options"|"listeners"]')
+                return jsonify({"output": "Fail", "output_message": "Invalid Argument", "data": ""})
             print(config.neg + 'Please specify a valid argument, ["options"|"listeners"]')
     except IndexError as e:
         if interface == "GUI":
-            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/listener_interface/show] - Index Error: " + str(e) + "\x1b[0m")
-            return jsonify({"output": "Success", "output_message": "Index Error", "data": ""})
+            log.log_error("Index Error: " + str(e))
+            return jsonify({"output": "Fail", "output_message": "Index Error: " + str(e), "data": ""})
         elif interface == "CUI":
             print(config.neg + 'Please specify what to show, ["options"|"listeners"]')

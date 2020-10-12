@@ -1,10 +1,9 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
-if interface == "GUI":
-    from flask import jsonify
 
 
 def main(option):
@@ -18,7 +17,7 @@ def set_audio_range():
     interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
     volume = ctypes.cast(interface, ctypes.POINTER(IAudioEndpointVolume))
     range_vol = volume.GetVolumeRange()
-    main_send('[*]Max decibel level(100%) : ' + str(range_vol[1]) + '\\n[*]Minimum decibel level(0%) : ' + str(range_vol[0]), s)
+    send_all(s,'[*]Max decibel level(100%) : ' + str(range_vol[1]) + '\\n[*]Minimum decibel level(0%) : ' + str(range_vol[0]))
 
 
 def set_audio(data):
@@ -27,7 +26,7 @@ def set_audio(data):
     interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
     volume = ctypes.cast(interface, ctypes.POINTER(IAudioEndpointVolume))
     volume.SetMasterVolumeLevel(float(number), None)
-    main_send('[+]Set volume to : ' + str(number), s)''')
+    send_all(s,'[+]Set volume to : ' + str(number))''')
         config.logics.append('''
             elif command == "set_audio":
                 set_audio(data)''')
@@ -50,4 +49,3 @@ def set_audio(data):
                   '\nRequired Modules : ctypes, pycaw (external)' \
                   '\nCommands         : set_audio <number>' \
                   '\nDescription      : Sets the system audio levels\n')
-

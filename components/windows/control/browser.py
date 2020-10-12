@@ -1,10 +1,9 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
-if interface == "GUI":
-    from flask import jsonify
 
 
 def main(option):
@@ -15,9 +14,9 @@ def browse(site):
     site = site.split(' ',1)[1]
     open_bool = webbrowser.open(site)
     if open_bool:
-        main_send('[+]Opened site : ' + site, s)
+        send_all(s,'[+]Opened site : ' + site)
     else:
-        main_send('[-]Could not open site : ' + site, s)''')
+        send_all(s,'[-]Could not open site : ' + site)''')
         config.logics.append('''
             elif command == "browse":
                 browse(data)''')

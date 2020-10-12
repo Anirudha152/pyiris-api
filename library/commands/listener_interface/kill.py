@@ -1,8 +1,12 @@
+# GUI + CUI
+# done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
 if interface == "GUI":
     from flask import jsonify
+    import library.modules.log as log
 
 
 def main(command):
@@ -11,14 +15,14 @@ def main(command):
             id = command.split(' ', 1)[1]
             if id in list(config.listener_database.keys()):
                 del (config.listener_database[id])
-                config.app.logger.info("[library/commands/listener_interface/kill] - Sent kill message to listener " + str(id))
+                log.log_normal("Sent kill message to listener " + str(id))
                 return jsonify({"output": "Success", "output_message": "Killing", "data": ""})
             elif id == 'all':
                 config.listener_database = {}
-                config.app.logger.info("[library/commands/listener_interface/kill] - Sent kill message to all listeners")
+                log.log_normal("Sent kill message to all listeners")
                 return jsonify({"output": "Success", "output_message": "Killing", "data": ""})
         except IndexError as e:
-            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/listener_interface/kill] - Index Error: " + str(e) + "\x1b[0m")
+            log.log_error("Index Error: " + str(e))
             return jsonify({"output": "Fail", "output_message": e, "data": ""})
     elif interface == "CUI":
         try:

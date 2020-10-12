@@ -1,10 +1,11 @@
-# COM Only
+# CUI
 # done
 import library.modules.config as config
 import os
 
 config.main()
 interface = config.interface
+
 
 def main(command):
     if interface == "CUI":
@@ -15,8 +16,8 @@ def main(command):
                                             'The local port to connect back on (Reverse) or the remote port to listen on (Bind)'],
                                    'Timeout': ['5', 'The timeout value for the scout'],
                                    'Windows': ['True', 'When "True", will generate a windows scout, else a linux scout'],
-                                   'Path': [os.path.join(config.started_at, 'generated', 'payload.py'),
-                                            'Path to generate payload python file to'],
+                                   'Dir': [os.path.join(config.started_at, 'generated'),
+                                            'Directory to generate payload in'],
                                    'Compile': ['False',
                                                'When "True", will compile scout to EXE (windows) or ELF (Linux), '
                                                'else it will not compile']}
@@ -32,8 +33,8 @@ def main(command):
                                        'Timeout': ['5', 'The timeout value for the scout'],
                                        'Windows': ['True',
                                                    'When "True", will generate a windows scout, else a linux scout'],
-                                       'Path': [os.path.join(config.started_at, 'generated', 'payload.py'),
-                                                'Path to generate payload python file to'],
+                                       'Dir': [os.path.join(config.started_at, 'generated'),
+                                                'Directory to generate payload in'],
                                        'Compile': ['False',
                                                    'When "True", will compile scout to EXE (windows) or ELF (Linux), '
                                                    'else it will not compile']}

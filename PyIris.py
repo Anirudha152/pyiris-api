@@ -1,13 +1,11 @@
-# WEB + COM
-# done
-# Version 1.0.0
+# GUI + CUI
+# Version 1.1.4
 import library.modules.bootstrap as bootstrap
 import time
 import argparse
-import library.modules.config as config
-import os
 import logging
-import click
+import os
+import library.modules.config as config
 
 config.main()
 parser = argparse.ArgumentParser(description='GUI / CUI')
@@ -36,6 +34,7 @@ if __name__ == '__main__':
                 import library.interfaces.scout_interface as scout_interface
                 import library.interfaces.direct_interface as direct_interface
                 import library.modules.monitor_listeners as monitor_listeners
+                import library.modules.log as log
                 from flask import Flask, redirect, url_for, send_from_directory, render_template, request, jsonify
                 import sys
                 clear.main()
@@ -49,22 +48,15 @@ if __name__ == '__main__':
         print('[!]User aborted bootstrap, requesting shutdown...')
         quit()
     except Exception as e:
-        print('[!]Unexpected Error : ' + str(e))
-
+        logging.critical("Critical Error occurred please inform developer, dumping stack trace and exiting...", exc_info=True)
 
 try:
     app = Flask(__name__, static_folder="web_interface/static", template_folder="web_interface/templates")
     app.secret_key = os.urandom(24)
     config.app = app
-    import logging
-    logging.getLogger('werkzeug').disabled = True
-    os.environ['WERKZEUG_RUN_MAIN'] = 'true'
-    for handler in logging.root.handlers[:]:
-        logging.root.removeHandler(handler)
-    logging.basicConfig(level=logging.DEBUG, format="%(message)s")
-    app.logger.info("PyIris Web Interface Started on \033[35mlocalhost\033[0m:\033[35m5000\033[0m")
+    log.plaintext("PyIris Web Interface Started on \033[35mlocalhost\033[0m:\033[35m5000\033[0m")
 except Exception as e:
-    print(e)
+    logging.critical("Critical Error occurred please inform developer, dumping stack trace and exiting...", exc_info=True)
     quit()
 
 
@@ -80,127 +72,88 @@ def favicon():
 
 @app.route('/home', methods=['GET', 'POST'])
 def home():
-    config.AbruptEnd = True
-    for handler in logging.root.handlers[:]:
-        logging.root.removeHandler(handler)
-    logging.basicConfig(level=logging.DEBUG, format="%(message)s")
-    app.logger.info("\n--------------------------------------")
-    for handler in logging.root.handlers[:]:
-        logging.root.removeHandler(handler)
-    logging.basicConfig(level=logging.DEBUG, format="[%(asctime)s] %(levelname)s > %(message)s")
-    app.logger.info("[\033[92mHome\033[0m] - " + "Loading page...")
+    config.abrupt_end = True
+    log.page_loaded("Home")
     return render_template('home.html')
 
 
 @app.route('/generator', methods=['GET', 'POST'])
 def generator():
-    config.AbruptEnd = True
-    for handler in logging.root.handlers[:]:
-        logging.root.removeHandler(handler)
-    logging.basicConfig(level=logging.DEBUG, format="%(message)s")
-    app.logger.info("\n--------------------------------------")
-    for handler in logging.root.handlers[:]:
-        logging.root.removeHandler(handler)
-    logging.basicConfig(level=logging.DEBUG, format="[%(asctime)s] %(levelname)s > %(message)s")
-    app.logger.info("[\033[92mGenerator\033[0m] - " + "Loading page...")
+    config.abrupt_end = True
+    log.page_loaded("Generator")
     return render_template('generator.html')
 
 
 @app.route('/listeners', methods=['GET', 'POST'])
 def listener():
-    config.AbruptEnd = True
-    for handler in logging.root.handlers[:]:
-        logging.root.removeHandler(handler)
-    logging.basicConfig(level=logging.DEBUG, format="%(message)s")
-    app.logger.info("\n--------------------------------------")
-    for handler in logging.root.handlers[:]:
-        logging.root.removeHandler(handler)
-    logging.basicConfig(level=logging.DEBUG, format="[%(asctime)s] %(levelname)s > %(message)s")
-    app.logger.info("[\033[92mListeners\033[0m] - " + "Loading page...")
+    config.abrupt_end = True
+    log.page_loaded("Listeners")
     return render_template('listeners.html')
 
 
 @app.route('/scouts', methods=['GET', 'POST'])
 def scouts():
-    config.AbruptEnd = True
-    for handler in logging.root.handlers[:]:
-        logging.root.removeHandler(handler)
-    logging.basicConfig(level=logging.DEBUG, format="%(message)s")
-    app.logger.info("\n--------------------------------------")
-    for handler in logging.root.handlers[:]:
-        logging.root.removeHandler(handler)
-    logging.basicConfig(level=logging.DEBUG, format="[%(asctime)s] %(levelname)s > %(message)s")
-    app.logger.info("[\033[92mScouts\033[0m] - " + "Loading page...")
+    config.abrupt_end = True
+    log.page_loaded("Scouts")
     return render_template('scouts.html')
+
 
 """
 @app.route('/testing', methods=['GET', 'POST'])
 def testing():
-    config.AbruptEnd = True
-    for handler in logging.root.handlers[:]:
-        logging.root.removeHandler(handler)
-    logging.basicConfig(level=logging.DEBUG, format="%(message)s")
-    app.logger.info("\n--------------------------------------")
-    for handler in logging.root.handlers[:]:
-        logging.root.removeHandler(handler)
-    logging.basicConfig(level=logging.DEBUG, format="[%(asctime)s] %(levelname)s > %(message)s")
-    app.logger.info("[\033[92mTesting\033[0m] - " + "Loading page...")
+    config.abrupt_end = True
+    log.page_loaded("Testing")
     return render_template('testing.html')
 """
 
+
 @app.route('/home_process', methods=['GET', 'POST'])
 def home_process():
-    config.toBridge = False
-    config.bridgedTo = None
-    app.logger.info("[\033[94mHome_Process\033[0m] - " + request.form['command'])
+    config.bridged = False
+    config.bridged_to = None
+    log.request_made(str(request.form['command']), "Home_Process")
     output = home_interface.main(request.form['command'])
     return output
 
 
 @app.route('/generator_process', methods=['GET', 'POST'])
 def generator_process():
-    config.toBridge = False
-    config.bridgedTo = None
-    app.logger.info("[\033[94mGenerator_Process\033[0m] - " + request.form['command'])
+    config.bridged = False
+    config.bridged_to = None
+    log.request_made(str(request.form['command']), "Generator_Process")
     output = generator_interface.main(request.form['command'])
     return output
 
 
 @app.route('/listeners_process', methods=['GET', 'POST'])
 def listener_process():
-    app.logger.info("[\033[94mListeners_Process\033[0m] - " + request.form['command'])
-    if request.form['command'] != None:
-        config.toBridge = False
-        config.bridgedTo = None
+    log.request_made(str(request.form['command']), "Listeners_Process")
+    if request.form['command'] is not None:
+        config.bridged = False
+        config.bridged_to = None
         output = listener_interface.main(request.form['command'])
         return output
 
 
 @app.route('/scouts_process', methods=['GET', 'POST'])
 def scouts_process():
-    app.logger.info("[\033[94mScouts_Process\033[0m] - " + request.form['command'])
+    log.request_made(str(request.form['command']), "Scouts_Process")
     output = scout_interface.main(request.form['command'])
-    if output is None:
-        try:
-            if config.toBridge == True:
-                output = jsonify({"output": "Success", "output_message": "Bridging successful", "data": config.bridgedTo})
-        except Exception as e:
-            output = jsonify({"output": "Fail", "output_message": str(e), "data": ""})
     return output
 
 
 @app.route('/direct_process', methods=['GET', 'POST'])
 def direct_process():
-    app.logger.info("[\033[94mDirect_Process\033[0m] - " + request.form['command'])
+    log.request_made(str(request.form['command']), "Direct_Process")
     output = direct_interface.main(request.form['scoutId'], request.form['command'])
-    if output == "back":
-        output = jsonify({"output": "Success", "output_message": "return", "data": ""})
+    if output == "return to scouts":
+        output = jsonify({"output": "Success", "output_message": "Returning to scouts", "data": ""})
     return output
 
 
 @app.route('/monitor_process', methods=['GET', 'POST'])
 def monitor_process():
-    app.logger.info("[\033[94mMonitor_Process\033[0m] - " + request.form['command'])
+    log.request_made(str(request.form['command']), "Monitor_Process")
     if request.form['command'].split(' ')[0] == "monitor":
         if request.form['command'].split(' ')[1] == "normal":
             output = monitor_listeners.main()
@@ -209,6 +162,5 @@ def monitor_process():
         return output
 
 
-
 if __name__ == '__main__' and interface == "GUI":
-    app.run(debug=True)
+    app.run()

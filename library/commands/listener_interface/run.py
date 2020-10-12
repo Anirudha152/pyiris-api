@@ -1,12 +1,16 @@
+# GUI + CUI
+# done
 import threading
 import time
 import library.modules.config as config
 import library.modules.socket_listener as socket_listener
+
 config.main()
 interface = config.interface
 if interface == "GUI":
     from flask import jsonify
-    import library.modules.monitor_listeners as monitor_listeners
+
+
 def main():
     if interface == "GUI":
         try:
@@ -19,9 +23,8 @@ def main():
             t.start()
             time.sleep(3)
             return jsonify({"output": "Success", "output_message": "Listener Started", "data": ""})
-        except (IndexError, ValueError):
-            return jsonify({"output": "Fail", "output_message": "Unknown error occurred", "data": ""})
-
+        except (IndexError, ValueError) as e:
+            return jsonify({"output": "Fail", "output_message": str(e), "data": ""})
     elif interface == "CUI":
         try:
             host = config.listener_values['Interface'][0]

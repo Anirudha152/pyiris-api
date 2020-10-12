@@ -1,11 +1,14 @@
+# GUI + CUI
+# done
 import base64
 import library.modules.config as config
 from itertools import cycle
 from library.modules import return_random_string
+
 config.main()
 interface = config.interface
 if interface == "GUI":
-    from flask import jsonify
+    import library.modules.log as log
 
 
 def xor_encoder(plaintext, cipher):
@@ -17,7 +20,7 @@ def xor_encoder(plaintext, cipher):
 
 def main(option, filepath=None):
     if not filepath:
-        filepath = config.scout_values['Path'][0]
+        filepath = config.scout_values['Dir'][0]
     if option == 'encode':
         try:
             imported_modules = ['from itertools import cycle', 'from base64 import b64decode']
@@ -29,7 +32,7 @@ def main(option, filepath=None):
                     imported_modules.append(i)
             key = return_random_string.main(50)
             if interface == "GUI":
-                config.app.logger.info("[encoders/xor_cipher_encryption] - Random 50 length XOR cipher key : " + key)
+                log.log_normal("Random 50 length XOR cipher key : " + key)
             elif interface == "CUI":
                 print('   ' + config.inf + 'Random 50 length XOR cipher key : ' + key)
             encoded_source = base64.b64encode((xor_encoder('\n'.join(source), key)).encode()).decode()
@@ -38,12 +41,12 @@ def main(option, filepath=None):
             with open(filepath, 'w') as f:
                 f.write(obfuscated)
                 if interface == "GUI":
-                    config.app.logger.info("[encoders/xor_cipher_encryption] - Encoded scout and overwrote raw file with XOR encoded file contents")
+                    log.log_normal("Encoded scout and overwrote raw file with XOR encoded file contents")
                 elif interface == "CUI":
                     print('   ' + config.inf + 'Encoded scout and overwrote raw file with XOR encoded file contents')
         except SyntaxError:
             if interface == "GUI":
-                config.app.logger.error("\x1b[1m\x1b[31m[encoders/xor_cipher_encryption] - Could not encode scout\x1b[0m")
+                log.log_error("Could not encode scout")
             elif interface == "CUI":
                 print('   ' + config.neg + 'Could not encode scout')
     elif option == 'info':

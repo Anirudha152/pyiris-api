@@ -1,4 +1,4 @@
-# WEB + COM
+# GUI + CUI
 # done
 import os
 import library.modules.config as config
@@ -8,7 +8,7 @@ config.main()
 interface = config.interface
 
 
-def main(prompt = None):
+def main(prompt=None):
     if interface == "GUI":
         command = prompt.split(' ', 1)
         move_back_to = os.getcwd()

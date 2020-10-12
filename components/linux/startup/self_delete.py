@@ -1,10 +1,10 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
-if interface == "GUI":
-    from flask import jsonify
+
 
 def main(option):
     if option == 'generate':

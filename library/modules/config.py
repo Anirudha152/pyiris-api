@@ -1,5 +1,7 @@
+# config (all global variables are stored here)
 import os
 import collections
+import logging
 import library.modules.get_all_modules as get_all_modules
 import library.modules.get_private_ip as get_private_ip
 
@@ -20,8 +22,8 @@ def main():
                     'Port': ['9999', 'The local port to connect back on (Reverse) or the remote port to listen on (Bind)'],
                     'Timeout': ['5', 'The timeout value for the scout'],
                     'Windows': ['True', 'When "True", will generate a windows scout, else a linux scout'],
-                    'Path': [os.path.join(started_at, 'generated', 'payload.py'),
-                             'Path to generate payload python file to'],
+                    'Dir': [os.path.join(started_at, 'generated'),
+                             'Directory to generate payload in'],
                     'Compile': ['False',
                                 'When "True", will compile scout to EXE (windows) or ELF (Linux), '
                                 'else it will not compile']}
@@ -31,9 +33,15 @@ def main():
     scout_database = {}
     black_list = []
     white_list = []
+    # GUI required variables:
     change = False
     monitoring = False
-    AbruptEnd = False
+    abrupt_end = False
+    bridged = False
+    bridged_to = None
+    thread_message = []
+    level = logging.WARNING
+    # End of GUI required variables
     win_components = collections.OrderedDict()
     tmp_counter = 0
     iterdir = list(get_all_modules.main(os.getcwd() + '/components/windows'))
@@ -92,4 +100,5 @@ def main():
     inf = '\x1b[1m\x1b[34m[*]\x1b[0m'
     pro = '\x1b[1m\x1b[35m[>]\x1b[0m'
     lod = '\x1b[1m\x1b[34m[...]\x1b[0m'
+    local_time_dir = ''
     globals().update(locals())

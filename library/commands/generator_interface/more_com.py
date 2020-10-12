@@ -1,19 +1,21 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
 import library.modules.generator_id_parser as generator_id_parser
+
 config.main()
 interface = config.interface
 if interface == "GUI":
     from flask import jsonify
+    import library.modules.log as log
 
 tmp_win = list(config.win_components.values())
 for i in tmp_win:
-    exec ('import components.' + i.replace('/', '.') + ' as ' + i.replace('/', '_'))
+    exec('import components.' + i.replace('/', '.') + ' as ' + i.replace('/', '_'))
 print(config.pos + 'Loaded all windows components info - OK')
 tmp_lin = list(config.lin_components.values())
 for i in tmp_lin:
-    exec ('import components.' + i.replace('/', '.') + ' as ' + i.replace('/', '_'))
+    exec('import components.' + i.replace('/', '.') + ' as ' + i.replace('/', '_'))
 print(config.pos + 'Loaded all linux components info - OK')
 
 
@@ -22,17 +24,17 @@ def more_com(load_on):
         if config.scout_values['Windows'][0] == 'True':
             sample_space = list(set(tmp_win + list(config.loaded_components.values())))
             if load_on in sample_space:
-                output = my_exec(load_on.replace('/', '_') + '.main("info")')
+                output = exec_with_return(load_on.replace('/', '_') + '.main("info")')
             else:
                 load_on = dict(list(config.win_components.items()) + list(config.loaded_components.items()))[load_on]
-                output = my_exec(load_on.replace('/', '_') + '.main("info")')
+                output = exec_with_return(load_on.replace('/', '_') + '.main("info")')
         else:
             sample_space = list(set(tmp_lin + list(config.loaded_components.values())))
             if load_on in sample_space:
-                output = my_exec(load_on.replace('/', '_') + '.main("info")')
+                output = exec_with_return(load_on.replace('/', '_') + '.main("info")')
             else:
                 load_on = dict(list(config.lin_components.items()) + list(config.loaded_components.items()))[load_on]
-                output = my_exec(load_on.replace('/', '_') + '.main("info")')
+                output = exec_with_return(load_on.replace('/', '_') + '.main("info")')
         return output
     elif interface == "CUI":
         if config.scout_values['Windows'][0] == 'True':
@@ -71,7 +73,7 @@ def main(command):
                     output = more_com(str(i))
             return output
         except (IndexError, KeyError) as e:
-            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/generator_interface/more_com] - Error: " + str(e) + "\x1b[0m")
+            log.log_error("Error: " + str(e))
             return jsonify({"output": "Fail", "output_message": "Invalid component ID", "data": ""})
     elif interface == "CUI":
         try:
@@ -94,7 +96,7 @@ def main(command):
             print(config.neg + 'Please specify a valid component to show more info for')
 
 
-def my_exec(code):
+def exec_with_return(code):
     exec('global j; j = %s' % code)
     global j
     return j

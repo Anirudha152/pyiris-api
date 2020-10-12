@@ -10,26 +10,12 @@ let GeneratorGlobals = {
     "error": true
 };
 $(document).ready(function () {
-
-    //load all available encoders and components into tables & update all values from server memory
+    // load all available encoders and components into tables & update all values from server memory
     function reloadAll() {
-        GeneratorGlobals = {
-            "encoderArray": [],
-            "mainSettingsShown": false,
-            "componentsShown": true,
-            "availableEncodersShown": true,
-            "miscellaneousSettingsShown": false,
-            "loadedEncodersShown": true,
-            "modulesArray": [],
-            "globalEncoders": undefined,
-            "error": true
-        };
+        $('body').append('<div style="" id="div_loading"><div class="loader">Loading...</div></div>');
         $("#table_components").find("tr:gt(0)").remove();
         $("#table_available_encoders").find("tr:gt(0)").remove();
-        triggerAjax("more_com all", false, '/generator_process', reloadCompCB, undefined);
-        triggerAjax("more_enc all", false, '/generator_process', reloadEncCB, undefined);
-        triggerAjax("show loaded", true, '/generator_process', showLoadedCB, undefined);
-        MiscSettings();
+        triggerAjax("more_com all", true, '/generator_process', reloadCompCB, undefined);
     }
     function reloadCompCB(data) {
         for (const [key, value] of Object.entries(data.data)) {
@@ -37,6 +23,7 @@ $(document).ready(function () {
                 $('#table_components').append("<tr id='tr_components_" + String(key) + "'><th>" + String(key) + "</th><td>" + value.Name + "</td><td>" + value.Description + "</td><td><label class='label_checkbox_container'><input class = 'input_checkbox_components' id = 'input_checkbox_components_" + String(key) + "' type='checkbox'><span class='checkmark'></span></label></td></tr>");
             }
         }
+        triggerAjax("more_enc all", true, '/generator_process', reloadEncCB, undefined);
     }
     function reloadEncCB(data) {
         for (const [key, value] of Object.entries(data.data)) {
@@ -44,6 +31,7 @@ $(document).ready(function () {
                 $('#table_available_encoders').append("<tr id='tr_available_encoders_" + String(key) + "'><th>" + String(key) + "</th><td>" + value.Name + "</td><td>" + value.Description + "</td><td class='td_add_encoder' id='td_add_encoder_" + String(key) + "'><button style='font-size: x-large;'>+</button></td></tr>");
             }
         }
+        triggerAjax("show loaded", true, '/generator_process', showLoadedCB, undefined);
     }
     function showLoadedCB(data){
         if (data.output === "Success") {
@@ -62,17 +50,19 @@ $(document).ready(function () {
                 $("#input_checkbox_components_0").prop('checked', true);
                 $("#tr_components_0").css("background-color", "#4974a9");
             }
-
-            for (let i = 0; i < data.data[1]; i++) {
-                $("#input_checkbox_components_" + String(data.data[1][i])).prop('checked', true);
-                $("#tr_components_" + String(data.data[1][i])).css("background-color", "#4974a9");
+            let modules = Object.keys(data.data[1])
+            for (let i = 0; i < modules.length; i++) {
+                $("#input_checkbox_components_" + modules[i]).prop('checked', true);
+                $("#tr_components_" + modules[i]).css("background-color", "#4974a9");
             }
             LoadedEncodersSettings();
+            MiscSettings();
+            removeLoader();
         }
     }
     reloadAll();
 
-    //load all options from server memory
+    // load all options from server memory
     triggerAjax("show options", true, '/generator_process', showOptionsCB, undefined);
     function showOptionsCB(data) {
         $("#i_generate_spinner").hide();
@@ -102,7 +92,7 @@ $(document).ready(function () {
                 hideCompilerSettings();
             }
 
-            //arrow stuff
+            // arrow stuff
             if(GeneratorGlobals.mainSettingsShown) {
                 rotate(0, "#img_main_settings_arrow");
                 $("#div_main_settings").show();
@@ -143,8 +133,8 @@ $(document).ready(function () {
         }
     }
 
-    //arrow click event
-    $(".img_arrow").click(function(){
+    // arrow click event
+    $(document).on("click", ".img_arrow", function(){
         if ($(this).attr('id') === "img_main_settings_arrow") {
             if (GeneratorGlobals.mainSettingsShown) {
                 rotate(270, "#img_main_settings_arrow");
@@ -199,8 +189,8 @@ $(document).ready(function () {
         }
      });
 
-    //hostname_button click event
-    $("#button_host").click(function () {
+    // hostname_button click event
+    $(document).on("click", "#button_host", function() {
         let $input_host = $("#input_host");
         if ($input_host.val() !== "") {
             let command = "set Host " + getColumn("String") + ", " + $input_host.val();
@@ -222,8 +212,8 @@ $(document).ready(function () {
         }
     }
 
-    //port_button click event
-    $("#button_port").click(function () {
+    // port_button click event
+    $(document).on("click", "#button_port", function() {
         let $input_port = $("#input_port");
         if($input_port.val() !== "") {
             triggerAjax("set Port " + $input_port.val(), true, '/generator_process', setPortCB, undefined);
@@ -241,8 +231,8 @@ $(document).ready(function () {
         }
     }
 
-    //timeout_button click event
-    $("#button_timeout").click(function () {
+    // timeout_button click event
+    $(document).on("click", "#button_timeout", function() {
         let $input_timeout = $("#input_timeout");
         if($input_timeout.val() !== "") {
             triggerAjax("set Timeout " + $input_timeout.val(), true, '/generator_process', setTimeoutCB, undefined);
@@ -260,8 +250,8 @@ $(document).ready(function () {
         }
     }
 
-    //compile_checkbox click event
-    $("#input_checkbox_compile").on('change', function () {
+    // compile_checkbox click event
+    $(document).on('change', "#input_checkbox_compile", function() {
         if ($(this).is(':checked')) {
             showCompilerSettings();
             triggerAjax("set Compile True", true, '/generator_process', undefined, undefined);
@@ -272,8 +262,8 @@ $(document).ready(function () {
         }
     });
 
-    //window_checkbox click event
-    $("#input_checkbox_windows").on('change', function () {
+    // window_checkbox click event
+    $(document).on('change', "#input_checkbox_windows", function() {
         if ($(this).is(':checked')) {
             triggerAjax("set Windows True", true, '/generator_process', undefined, undefined);
         } else {
@@ -282,8 +272,8 @@ $(document).ready(function () {
         reloadAll();
     });
 
-    //customFileIconPath
-    $("#input_checkbox_compile_custom_icon").click(function () {
+    // customFileIconPath
+    $(document).on("click", "#input_checkbox_compile_custom_icon", function() {
         if ($(this).is(':checked')) {
             $("#tr_compile_custom_icon_path").show();
         } else {
@@ -291,8 +281,8 @@ $(document).ready(function () {
         }
     });
 
-    //hostname_delete click event
-    $(document).on("click", ".td_remove_host", function () {
+    // hostname_delete click event
+    $(document).on("click", ".td_remove_host", function() {
         let id = parseInt($(this).attr('id').split("_")[3], 10);
         let columnArray = getColumn("Array");
         columnArray.splice(id, 1);
@@ -307,8 +297,8 @@ $(document).ready(function () {
         triggerAjax(command, true, '/generator_process', addHostCB, undefined);
     });
 
-    //on component checkbox click event
-    $(".input_checkbox_components").click(function () {
+    // on component checkbox click event
+    $(document).on("click", ".input_checkbox_components", function() {
         let id = parseInt($(this).attr('id').split("_")[3], 10);
         MiscSettings();
         if ($(this).is(':checked')) {
@@ -335,18 +325,12 @@ $(document).ready(function () {
         }
     });
 
-    //on add encoder click event
-    $(".td_add_encoder").click(function () {
+    // on add encoder click event
+    $(document).on("click", ".td_add_encoder", function() {
         let id = $(this).attr('id').split("_")[3];
         GeneratorGlobals.encoderArray.push(parseInt(id, 10));
         let command = "load_enc ";
-        for (let i = 0; i < GeneratorGlobals.encoderArray.length; i++) {
-            if (i === GeneratorGlobals.encoderArray.length - 1) {
-                command = command + String(GeneratorGlobals.encoderArray[i]);
-            } else {
-                command = command + String(GeneratorGlobals.encoderArray[i]) + ",";
-            }
-        }
+        command = command + JSON.stringify(GeneratorGlobals.encoderArray);
         triggerAjax(command, true, '/generator_process', addEncoderCB, undefined);
     });
     function addEncoderCB(data) {
@@ -359,8 +343,8 @@ $(document).ready(function () {
         LoadedEncodersSettings();
     }
 
-    //on click of select / deselect all components button
-    $("#input_checkbox_components_all").click(function () {
+    // on click of select / deselect all components button
+    $(document).on("click", "#input_checkbox_components_all", function() {
         if ($(this).is(':checked')) {
             triggerAjax("load_com all", true, '/generator_process', undefined, undefined);
             let checkboxes = $("input:checkbox:not(:checked)[class='input_checkbox_components'][id!='input_checkbox_components_0'][id!='input_checkbox_components_1']").not(this);
@@ -375,13 +359,13 @@ $(document).ready(function () {
         MiscSettings();
     });
 
-    //on click of reload all button
-    $("#button_reload_all").click(function () {
+    // on click of reload all button
+    $(document).on("click", "#button_reload_all", function() {
         reloadAll();
     });
 
-    //module adder
-    $("#button_modules").click(function () {
+    // module adder
+    $(document).on("click", "#button_modules", function() {
         if ($("#input_modules").val() !== "") {
             $("#table_modules").find("tr:gt(1)").remove();
             GeneratorGlobals.modulesArray.push($("#input_modules").val());
@@ -393,8 +377,8 @@ $(document).ready(function () {
         }
     });
 
-    //module remover
-    $(document).on("click", ".td_remove_module", function () {
+    // module remover
+    $(document).on("click", ".td_remove_module", function() {
         let id = parseInt($(this).attr('id').split("_")[3], 10);
         GeneratorGlobals.modulesArray.splice(id, 1);
         $("#table_modules").find("tr:gt(1)").remove();
@@ -403,24 +387,17 @@ $(document).ready(function () {
         }
     });
 
-    //encoder remover
-    $(document).on("click", ".td_remove_loaded_encoder", function () {
+    // encoder remover
+    $(document).on("click", ".td_remove_loaded_encoder", function() {
         let id = parseInt($(this).attr('id').split("_")[4], 10);
         GeneratorGlobals.encoderArray.splice(id, 1);
         let command = "load_enc ";
-        for (let i = 0; i < GeneratorGlobals.encoderArray.length; i++) {
-            if (i === GeneratorGlobals.encoderArray.length - 1) {
-                command = command + String(GeneratorGlobals.encoderArray[i]);
-            }
-            else {
-                command = command + String(GeneratorGlobals.encoderArray[i]) + ",";
-            }
-        }
+        command = command + JSON.stringify(GeneratorGlobals.encoderArray);
         triggerAjax(command, true, '/generator_process', addEncoderCB, undefined);
     });
 
-    //generate
-    $("#button_generate").click(function () {
+    // generate
+    $(document).on("click", "#button_generate", function() {
         $("#i_generate_spinner").show();
         let command = "generate ";
         let conditions = {'compile': false, 'onefile': false, 'windowed': false, 'custom_icon': false, 'custom_icon_filepath': '', 'execute_python_modules_present': false, 'execute_python_modules': [], 'scout_sleep_time': 0, 'request_root_message': ''};
@@ -462,7 +439,7 @@ $(document).ready(function () {
         scrollToTop();
     }
 
-    // extra functions
+    //  extra functions
     function getKeyByValue(object, value) {
         return Object.keys(object).find(key => object[key] === value);
     }
@@ -643,6 +620,13 @@ $(document).ready(function () {
                 $("#table_loaded_encoders").hide();
             }
         }
+    }
+
+    function removeLoader() {
+        $("#div_loading").fadeOut(500, function() {
+            $("#div_loading").remove();
+        });
+        $(".container").removeClass("hide")
     }
 
     function triggerAjax (data, async, url, callback, extra_input){

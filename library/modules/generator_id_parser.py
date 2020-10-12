@@ -1,7 +1,12 @@
+# GUI + CUI
+# done
 import re
 import library.modules.config as config
+
 config.main()
 interface = config.interface
+if interface == "GUI":
+    import library.modules.log as log
 
 
 def main(inp_data, context_type, operation):
@@ -31,8 +36,7 @@ def main(inp_data, context_type, operation):
         data = list(set(data))  # remove all duplicates after comma split
 
     for i in data:
-        if re.match('^[0-9]+\-[0-9]+$',
-                    i):  # initialize regex match to format of range IDs, matches "positive number-positive number"
+        if re.match('^[0-9]+\-[0-9]+$',i):  # initialize regex match to format of range IDs, matches "positive number-positive number"
             ranges.append(i)
         else:
             non_ranges.append(i)
@@ -45,13 +49,13 @@ def main(inp_data, context_type, operation):
             break
     if error and output_list:  # we hit an error however we still hit a match indicating invalid format
         if interface == "GUI":
-            config.app.logger.error("\x1b[1m\x1b[31m[library/modules/generator_id_parser] - Invalid generator ID formatting : String detected while sorting for integer IDs\x1b[0m")
+            log.log_error('Invalid generator ID formatting : String detected while sorting for integer IDs')
         elif interface == "CUI":
             print(config.neg + 'Invalid generator ID formatting : String detected while sorting for integer IDs')
         return []
     elif error and not output_list and not ranges:  # nothing in non ranges is an integer and there are no proper ranges meaning string based input only
         if interface == "GUI":
-            config.app.logger.info("[library/modules/generator_id_parser] - Generator found no IDs")
+            log.log_error('Generator found no IDs')
         elif interface == "CUI":
             print(config.inf + 'Generator found no IDs')
         if type(inp_data) is list:
@@ -74,7 +78,7 @@ def main(inp_data, context_type, operation):
             # f_val and s_val are never negative since regex matches "positive number-positive number"
             if f_val > s_val:
                 if interface == "GUI":
-                    config.app.logger.error("\x1b[1m\x1b[31m[library/modules/generator_id_parser] - Invalid generator ID formatting : First range value is larger than second range value\x1b[0m")
+                    log.log_error('Invalid generator ID formatting : First range value is larger than second range value')
                 elif interface == "CUI":
                     print(config.neg + 'Invalid generator ID formatting : First range value is larger than second range value')
                 return []
@@ -83,7 +87,7 @@ def main(inp_data, context_type, operation):
                 output_list += mini_range  # fill each value in range of f and s into output
     except OverflowError:
         if interface == "GUI":
-            config.app.logger.error("\x1b[1m\x1b[31m[library/modules/generator_id_parser] - Range value is too large\x1b[0m")
+            log.log_error('Invalid generator ID formatting : Range value is too large')
         elif interface == "CUI":
             print(config.neg + 'Invalid generator ID formatting : Range value is too large')
         return []
@@ -91,7 +95,7 @@ def main(inp_data, context_type, operation):
         output_list = list(set(output_list))  # remove all duplicates in the range addition section ^
         output_list.sort()  # sort for better eyecandy when loading components
     if interface == "GUI":
-        config.app.logger.info("[library/modules/generator_id_parser] - Generator ID formatting successful")
+        log.log_normal('Generator ID formatting successful')
     elif interface == "CUI":
         print(config.pos + 'Generator ID formatting successful')
     if type(output_list) is list:

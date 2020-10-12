@@ -1,10 +1,12 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
 if interface == "GUI":
     from flask import jsonify
+    import library.modules.log as log
 
 
 def main(command):
@@ -14,20 +16,20 @@ def main(command):
             if list_type == 'wh':
                 hostname = config.white_list[int(command.split(' ', 2)[2])]
                 config.white_list.remove(hostname)
-                config.app.logger.info("[library/commands/home_interface/rm] - Removed " + str(hostname) + " from whitelist")
+                log.log_normal("Removed " + str(hostname) + " from whitelist")
                 return jsonify({'output': "Success", "output_message": "", "data": config.white_list})
             elif list_type == 'bl':
                 hostname = config.black_list[int(command.split(' ', 2)[2])]
                 config.black_list.remove(hostname)
-                config.app.logger.info("[library/commands/home_interface/rm] - Removed " + str(hostname) + " from blacklist")
+                log.log_normal("Removed " + str(hostname) + " from blacklist")
                 return jsonify({'output': "Success", "output_message": "", "data": config.black_list})
             else:
                 raise IndexError
         except IndexError as e:
-            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/home_interface/rm] - Index Error: " + str(e) + "\x1b[0m")
+            log.log_error("Index Error: " + str(e))
             return jsonify({'output': "Fail", "output_message": "Hostname is invalid", "data": ""})
         except ValueError as e:
-            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/home_interface/rm] - Value Error: " + str(e) + "\x1b[0m")
+            log.log_error("Value Error: " + str(e))
             return jsonify({'output': "Fail", "output_message": "Hostname is invalid", "data": ""})
     elif interface == "CUI":
         try:

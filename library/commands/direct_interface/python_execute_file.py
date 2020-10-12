@@ -1,10 +1,14 @@
+# GUI + CUI
+# done
 import library.modules.send_and_recv as send_and_recv
 import os
 import library.modules.config as config
+
 config.main()
 interface = config.interface
 if interface == "GUI":
     from flask import jsonify
+    import library.modules.log as log
 
 
 def main(data, scout_id):
@@ -13,11 +17,11 @@ def main(data, scout_id):
         with open(file_path, 'r') as f:
             data = f.read()
         if interface == "GUI":
-            config.app.logger.info("[library/interfaces/python_execute_file] - Read in data from script file : " + file_path)
-            config.app.logger.info("[library/interfaces/python_execute_file] - Sending file data to scout")
-            config.app.logger.info("[library/interfaces/python_execute_file] - Attempting to run on scout...")
+            log.log_normal("Read in data from script file : " + file_path)
+            log.log_normal("Sending file data to scout")
+            log.log_normal("Attempting to run on scout...")
             output = send_and_recv.main('g exec_py ' + data, scout_id)
-            config.app.logger.info("[library/interfaces/python_execute_file] - Message from scout: " + output)
+            log.log_normal("Message from scout: " + output)
             return jsonify({"output": "Success", "output_message": "Command Output", "data": output})
         elif interface == "CUI":
             print(config.pos + 'Read in data from script file : ' + file_path)
@@ -26,7 +30,8 @@ def main(data, scout_id):
             print(send_and_recv.main('c exec_py ' + data, scout_id))
     else:
         if interface == "GUI":
-            config.app.logger.error("[library/interfaces/python_execute_file] - Invalid file path supplied")
-            return jsonify({"output": "Success", "output_message": "Command Output", "data": "[-]Invalid file path supplied"})
+            log.log_error("Invalid file path supplied")
+            return jsonify(
+                {"output": "Success", "output_message": "Command Output", "data": "[-]Invalid file path supplied"})
         elif interface == "CUI":
             print(config.neg + 'Invalid file path supplied')

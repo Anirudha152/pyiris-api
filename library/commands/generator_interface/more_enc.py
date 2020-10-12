@@ -1,15 +1,17 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
 import library.modules.generator_id_parser as generator_id_parser
+
 config.main()
 interface = config.interface
 if interface == "GUI":
     from flask import jsonify
+    import library.modules.log as log
 
 tmp_enc = list(config.encoders.values())
 for i in tmp_enc:
-    exec ('import encoders.' + i.replace('/', '.') + ' as ' + i.replace('/', '_'))
+    exec('import encoders.' + i.replace('/', '.') + ' as ' + i.replace('/', '_'))
 print(config.pos + 'Loaded all encoders info - OK')
 
 
@@ -22,7 +24,7 @@ def more_enc(load_on):
         else:
             raise KeyError
     if interface == "GUI":
-        output = my_exec(load_on.replace('/', '_') + '.main("info")')
+        output = exec_with_return(load_on.replace('/', '_') + '.main("info")')
         return output
     elif interface == "CUI":
         exec(load_on.replace('/', '_') + '.main("info")')
@@ -33,7 +35,7 @@ def main(command):
         load_on = command.split(' ', 1)[1]
         if load_on == 'all':
             output = {}
-            for i in config.encoders.keys():
+            for i in config.encoders.keys(): # this could be config.encoders.values()... need to find out what angus did
                 if interface == "GUI":
                     output[i] = more_enc(str(i))
                 elif interface == "CUI":
@@ -48,14 +50,15 @@ def main(command):
                     more_enc(str(i))
         if interface == "GUI":
             return jsonify({"output": "Success", "output_message": "", "data": output})
-    except (IndexError, KeyError) as e:
+    except (IndexError, KeyError):
         if interface == "GUI":
-            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/generator_interface/more_enc] - Error: " + str(e) + "\x1b[0m")
+            log.log_error("Error: " + str(e))
             return jsonify({"output": "Fail", "output_message": "Invalid component ID", "data": ""})
         elif interface == "CUI":
             print(config.neg + 'Please specify a valid encoder to show more info for')
 
-def my_exec(code):
+
+def exec_with_return(code):
     exec('global j; j = %s' % code)
     global j
     return j

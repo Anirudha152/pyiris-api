@@ -1,9 +1,14 @@
-# WEB + COM
+# GUI + CUI
 # done
 import time
 import library.modules.generator_append as generator_append
+import library.commands.global_interface.clear as clear
 import library.commands.global_interface.quit as quit
+import library.commands.global_interface.python as python
+import library.commands.global_interface.local as local
+import library.commands.global_interface.help as help
 import library.commands.generator_interface.show as show
+import library.commands.generator_interface.reset as reset
 import library.commands.generator_interface.set as set
 import library.commands.generator_interface.load_com as load_com
 import library.commands.generator_interface.unload_com as unload_com
@@ -13,6 +18,13 @@ import library.commands.generator_interface.load_enc as load_enc
 import library.commands.generator_interface.unload_enc as unload_enc
 import library.commands.generator_interface.more_enc as more_enc
 import library.modules.config as config
+
+try:
+    import readline
+except ImportError:
+    import gnureadline as readline
+
+
 config.main()
 interface = config.interface
 if interface == "CUI":
@@ -21,13 +33,6 @@ if interface == "CUI":
     import library.commands.global_interface.local as local
     import library.commands.global_interface.help as help
     import library.commands.generator_interface.reset as reset
-try:
-    import readline
-except ImportError:
-    import gnureadline as readline
-
-
-
 generator_commands = ['clear', 'help', 'local', 'python', 'quit', 'generate', 'load_com', 'unload_com', 'load_enc',
                       'unload_enc', 'more_com', 'more_enc', 'reset', 'set', 'show', 'back']
 
@@ -41,7 +46,7 @@ def generator_completer(text, state):
                 state -= 1
 
 
-def main(prompt = None):
+def main(prompt=None):
     if interface == "GUI":
         generator_append.main()
         command = prompt.split(' ', 1)[0].lower()
@@ -109,10 +114,5 @@ def main(prompt = None):
                     pass
                 else:
                     print(config.neg + 'Invalid command, run "help" for help menu')
-            except EOFError:
-                try:
-                    time.sleep(2)
-                except KeyboardInterrupt:
-                    quit.main()
             except KeyboardInterrupt:
                 quit.main()

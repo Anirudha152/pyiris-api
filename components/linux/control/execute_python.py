@@ -1,16 +1,18 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+import time
+
 config.main()
 interface = config.interface
 if interface == "GUI":
-    from flask import jsonify
     from json import loads
+    import library.modules.log as log
 elif interface == "CUI":
     import time
 
 
-def main(option, prompt = None):
+def main(option, prompt=None):
     if option == 'generate':
         config.import_statements.append('import sys')
         config.import_statements.append('from io import StringIO')
@@ -23,17 +25,17 @@ def main(option, prompt = None):
                 try:
                     if module_to_load != "":
                         exec('import ' + module_to_load)
-                        config.app.logger.info("[components/linux/control/execute_python] - Valid module, loaded on")
+                        log.log_normal("Valid module, loaded on")
                         config.import_statements.append('import ' + module_to_load)
                 except (ImportError, SyntaxError):
-                    config.app.logger.error("\x1b[1m\x1b[31m[components/linux/control/execute_python] - Invalid module, not loaded on\x1b[0m")
+                    log.log_error("Invalid module, not loaded on")
         elif interface == "CUI":
             print(config.war + 'Manual intervention required for python_execute component')
             while True:
                 try:
                     module_to_load = input('\x1b[1m\x1b[37m[\x1b[0m\033[92m' +
-                                           '\x1b[1m\x1b[31mlinux/control/execute_python\x1b[0m' +
-                                           '\x1b[1m\x1b[37m > ]\x1b[0m ' + 'Input name of other library to package into python_execute [CTRL-C to quit] : ')
+                                '\x1b[1m\x1b[31mlinux/control/execute_python\x1b[0m' +
+                                '\x1b[1m\x1b[37m > ]\x1b[0m ' +'Input name of other library to package into python_execute [CTRL-C to quit] : ')
                     if not module_to_load:
                         print(config.neg + 'Input the name of a module')
                         continue
@@ -41,14 +43,8 @@ def main(option, prompt = None):
                         exec('import ' + module_to_load)
                         print(config.pos + 'Valid module, loaded on')
                         config.import_statements.append('import ' + module_to_load)
-                    except (ImportError, SyntaxError):
+                    except ImportError:
                         print(config.neg + 'Invalid module, not loaded on')
-                except EOFError:
-                    try:
-                        time.sleep(2)
-                    except KeyboardInterrupt:
-                        print('\n' + config.pos + 'Done...')
-                        break
                 except KeyboardInterrupt:
                     print('\n' + config.pos + 'Done...')
                     break
@@ -64,8 +60,7 @@ def exec_py(command):
         result.write(str(e) + '\\n')
     sys.stdout = old_stdout
     result_string = result.getvalue()
-    s.sendall(().encode())
-    main_send('[*]Result of code : \\n\\n' + result_string, s)
+    send_all(s,'[*]Result of code : \\n\\n' + result_string)
 ''')
         config.logics.append('''
             elif command == "exec_py":

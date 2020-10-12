@@ -1,6 +1,5 @@
-import library.modules.config as config
-config.main()
-interface = config.interface
+# GUI + CUI
+# done
 import time
 import library.commands.scout_interface.show as show
 import library.commands.scout_interface.rename as rename
@@ -9,7 +8,15 @@ import library.commands.scout_interface.sleep as sleep
 import library.commands.scout_interface.ping as ping
 import library.commands.scout_interface.disconnect as disconnect
 import library.interfaces.direct_interface as direct_interface
+import library.modules.config as config
 
+try:
+    import readline
+except ImportError:
+    import gnureadline as readline
+
+config.main()
+interface = config.interface
 if interface == "CUI":
     import library.commands.scout_interface.more as more
     import library.commands.global_interface.clear as clear
@@ -17,14 +24,8 @@ if interface == "CUI":
     import library.commands.global_interface.python as python
     import library.commands.global_interface.local as local
     import library.commands.global_interface.help as help
-
-
-
-try:
-    import readline
-except ImportError:
-    import gnureadline as readline
-
+elif interface == "GUI":
+    from flask import jsonify
 scout_commands = ['clear', 'help', 'local', 'python', 'quit', 'bridge', 'disconnect', 'kill', 'more', 'ping', 'rename',
                   'show', 'sleep', 'back']
 
@@ -38,7 +39,7 @@ def scout_completer(text, state):
                 state -= 1
 
 
-def main(prompt = None):
+def main(prompt=None):
     if interface == "GUI":
         command = prompt.split(' ', 1)[0].lower()
         if command == "disconnect":
@@ -52,9 +53,9 @@ def main(prompt = None):
         elif command == "sleep":
             output = sleep.main(prompt)
         elif command == "bridge":
-            config.toBridge = True
-            config.bridgedTo = [prompt.split(' ', 1)[1].lower(), config.scout_database[prompt.split(' ', 1)[1].lower()][1] + ":" + config.scout_database[prompt.split(' ', 1)[1].lower()][2]]
-            return
+            config.bridged = True
+            config.bridged_to = [prompt.split(' ', 1)[1].lower(), config.scout_database[prompt.split(' ', 1)[1].lower()][1] + ":" + config.scout_database[prompt.split(' ', 1)[1].lower()][2]]
+            output = jsonify({"output": "Success", "output_message": "Bridging successful", "data": config.bridged_to})
         return output
     elif interface == "CUI":
         readline.parse_and_bind("tab: complete")
@@ -101,10 +102,5 @@ def main(prompt = None):
                     pass
                 else:
                     print(config.neg + 'Invalid command, run "help" for help menu')
-            except EOFError:
-                try:
-                    time.sleep(2)
-                except KeyboardInterrupt:
-                    quit.main()
             except KeyboardInterrupt:
                 quit.main()

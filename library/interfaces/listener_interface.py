@@ -1,11 +1,6 @@
-# WEB
-#
+# GUI + CUI
+# done
 import time
-import library.commands.global_interface.clear as clear
-import library.commands.global_interface.quit as quit
-import library.commands.global_interface.python as python
-import library.commands.global_interface.local as local
-import library.commands.global_interface.help as help
 import library.commands.listener_interface.show as show
 import library.commands.listener_interface.set as set
 import library.commands.listener_interface.run as run
@@ -15,15 +10,20 @@ import library.commands.listener_interface.reset as reset
 import library.commands.listener_interface.rename as rename
 import library.modules.socket_connector as socket_connector
 import library.modules.config as config
-config.main()
-interface = config.interface
-
 
 try:
     import readline
 except ImportError:
     import gnureadline as readline
 
+config.main()
+interface = config.interface
+if interface == "CUI":
+    import library.commands.global_interface.clear as clear
+    import library.commands.global_interface.quit as quit
+    import library.commands.global_interface.python as python
+    import library.commands.global_interface.local as local
+    import library.commands.global_interface.help as help
 listener_commands = ['clear', 'help', 'local', 'python', 'quit', 'bind', 'kill', 'more', 'rename', 'reset', 'run',
                      'set', 'show',
                      'back']
@@ -38,7 +38,7 @@ def listener_completer(text, state):
                 state -= 1
 
 
-def main(prompt = None):
+def main(prompt=None):
     if interface == "GUI":
         command = prompt.split(' ', 1)[0].lower()
         if command == "show":
@@ -98,10 +98,5 @@ def main(prompt = None):
                     pass
                 else:
                     print(config.neg + 'Invalid command, run "help" for help menu')
-            except EOFError:
-                try:
-                    time.sleep(2)
-                except KeyboardInterrupt:
-                    quit.main()
             except KeyboardInterrupt:
                 quit.main()

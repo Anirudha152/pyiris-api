@@ -1,12 +1,15 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+import library.modules.generator_id_parser as generator_id_parser
+
 config.main()
 interface = config.interface
 if interface == "GUI":
     from flask import jsonify
-elif interface == "CUI":
-    import library.modules.generator_id_parser as generator_id_parser
+    from json import loads
+    import library.modules.log as log
+
 
 def load_enc(load_on):
     if load_on in config.encoders:
@@ -17,29 +20,30 @@ def load_enc(load_on):
         else:
             raise KeyError
     if interface == "GUI":
-        config.app.logger.info("[library/commands/generator_interface/load_enc] - Loaded : " + load_on)
+        log.log_normal("Loaded : " + load_on)
     elif interface == "CUI":
         print(config.pos + 'Loaded : ' + load_on)
     config.loaded_encoders.append(load_on)
 
 
 def main(command):
+    print(command)
     if interface == "GUI":
         try:
             config.loaded_encoders = []
-            load_on = command.split(' ', 1)[1]
-            if load_on == "":
+            load_on = loads(command.split(' ', 1)[1])
+            if not load_on:
                 config.loaded_encoders = []
                 return jsonify({"output": "Success", "output_message": "", "data": [config.loaded_encoders, config.encoders]})
-            load_on = load_on.split(',')
             for to_load in load_on:
-                config.app.logger.info("[library/commands/generator_interface/load_enc] - Loading : " + config.encoders[to_load])
-                config.loaded_encoders.append(config.encoders[to_load])
-                config.app.logger.info("[library/commands/generator_interface/load_enc] - Loaded : " + config.encoders[to_load])
+                log.log_normal("Loading : " + config.encoders[str(to_load)])
+                config.loaded_encoders.append(config.encoders[str(to_load)])
+                log.log_normal("Loaded : " + config.encoders[str(to_load)])
             return jsonify({"output": "Success", "output_message": "", "data": [config.loaded_encoders, config.encoders]})
         except (KeyError, IndexError) as e:
-            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/generator_interface/load_enc] - Error: " + str(e) + "\x1b[0m")
-            return jsonify({"output": "Fail", "output_message": "Invalid component ID", "data": ""})
+            log.log_error("Error: " + str(e))
+            raise e
+            return jsonify({"output": "Fail", "output_message": "Invalid encoder ID", "data": ""})
     elif interface == "CUI":
         try:
             load_on = command.split(' ', 1)[1]
@@ -50,4 +54,3 @@ def main(command):
                 load_enc(str(i))
         except (KeyError, IndexError):
             print(config.neg + 'Please specify a valid encoder to load')
-

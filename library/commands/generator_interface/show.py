@@ -1,10 +1,12 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
 if interface == "GUI":
     from flask import jsonify
+    import library.modules.log as log
 
 
 def main(command):
@@ -16,26 +18,25 @@ def main(command):
             elif to_show == 'loaded':
                 if config.scout_values['Windows'][0] == 'True':
                     win = True
-                    #config.app.logger.info("[library/commands/generator_interface/show] - Generator is set to generate Windows specific scout")
+                    log.log_normal("Generator is set to generate Windows specific scout")
                 else:
                     win = False
-                    #config.app.logger.info("[library/commands/generator_interface/show] - Generator is set to generate Linux specific scout")
+                    log.log_normal("Generator is set to generate Linux specific scout")
                 if win:
                     return jsonify({"output": "Success", "output_message": "", "data": [config.loaded_encoders, config.loaded_components, config.encoders, config.win_components]})
                 else:
                     return jsonify({"output": "Success", "output_message": "", "data": [config.loaded_encoders, config.loaded_components, config.encoders, config.lin_components]})
             else:
-                config.app.logger.error("\x1b[1m\x1b[31m[library/commands/generator_interface/show] - Error: Invalid command\x1b[0m")
+                log.log_error("Error: Invalid command")
                 return jsonify({"output": "Fail", "output_message": "Invalid command", "data": ""})
         except IndexError as e:
-            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/generator_interface/show] - Error: " + str(e) + "\x1b[0m")
+            log.log_error("Error: " + str(e))
             return jsonify({"output": "Fail", "output_message": "Invalid command", "data": ""})
     elif interface == "CUI":
         try:
             to_show = command.split(' ', 1)[1]
             if to_show == 'options':
                 header = [['    Option', 'Value', 'Info'], ['    ======', '=====', '====']]
-
                 for o, v in config.scout_values.items():
                     header.append(['    ' + o, str(v[0]), v[1]])
                 print('\n')
@@ -66,14 +67,13 @@ def main(command):
                     print('\n' + config.inf + 'Generator is set to generate Windows specific scout')
                 else:
                     print(config.inf + 'Generator is set to generate Linux specific scout')
-                print(config.inf + 'Loaded components : ')
+                print(config.inf + 'Loaded compoonents : ')
                 for i in config.loaded_components:
                     if config.loaded_components[i].endswith('/base'):
                         print('   [-] ' + i)
                     else:
                         print('   [' + i + '] ' + config.loaded_components[i])
-                print(
-                    '\n' + config.inf + 'Encoder stack (Scout is encoded by the top encoder first then the next all the way to the bottom) : ')
+                print('\n' + config.inf + 'Encoder stack (Scout is encoded by the top encoder first then the next all the way to the bottom) : ')
                 for i in range(len(config.loaded_encoders)):
                     print('   [' + str(i) + '] ' + config.loaded_encoders[i])
                 print('')

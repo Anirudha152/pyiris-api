@@ -1,14 +1,17 @@
+# GUI + CUI
+# done
 import library.modules.config as config
 from base64 import b64encode
+
 config.main()
 interface = config.interface
 if interface == "GUI":
-    from flask import jsonify
+    import library.modules.log as log
 
 
 def main(option, filepath=None):
     if not filepath:
-        filepath = config.scout_values['Path'][0]
+        filepath = config.scout_values['Dir'][0]
     if option == 'encode':
         try:
             imported_modules = ['from base64 import b64decode']
@@ -18,17 +21,17 @@ def main(option, filepath=None):
             for i in source:
                 if 'import' in i and i != 'from base64 import b64decode':
                     imported_modules.append(i)
-            encoded_source = b64encode(('\n'.join(source)).encode()).decode()
-            obfuscated = ';'.join(imported_modules) + ';exec(b64decode("' + encoded_source + '").decode())'
+            encoded_soure = b64encode(('\n'.join(source)).encode()).decode()
+            obfuscated = ';'.join(imported_modules) + ';exec(b64decode("' + encoded_soure + '").decode())'
             with open(filepath, 'w') as f:
                 f.write(obfuscated)
                 if interface == "GUI":
-                    config.app.logger.info("[encoders/basic_base64_encoder] - Encoded scout and overwrote raw file with Base64 encoded file contents")
+                    log.log_normal("Encoded scout and overwrote raw file with Base64 encoded file contents")
                 elif interface == "CUI":
                     print('   ' + config.inf + 'Encoded scout and overwrote raw file with Base64 encoded file contents')
         except SyntaxError:
             if interface == "GUI":
-                config.app.logger.error("\x1b[1m\x1b[31m[encoders/basic_base64_encoder] - Could not encode scout\x1b[0m")
+                log.log_error("Could not encode scout")
             elif interface == "CUI":
                 print('   ' + config.neg + 'Could not encode scout')
     elif option == 'info':

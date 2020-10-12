@@ -1,10 +1,10 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
-if interface == "GUI":
-    from flask import jsonify
+
 
 def main(option):
     if option == 'generate':
@@ -30,7 +30,7 @@ def sysinfo():
     data += '   System time    : ' + str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')) + '\\n'
     data += '   Timezone       : ' + str(strftime("%z", gmtime())) + '\\n'
     data += '   Language       : ' + str(' '.join(getdefaultlocale())) + '\\n'
-    main_send(data, s)''')
+    send_all(s,data)''')
         config.logics.append('''
             elif command == "sysinfo":
                 sysinfo()''')

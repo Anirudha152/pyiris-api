@@ -1,3 +1,5 @@
+# Bootstrap: interface is set here
+# done
 import library.modules.config as config
 
 config.main()
@@ -5,17 +7,17 @@ config.main()
 windows_modules = ['pyperclip', 'win32crypt', 'cv2', 'pythoncom', 'mss', 'PIL', 'pyautogui', 'colorama',
                    'cryptography', 'pyHook', 'pycaw', 'readline']
 linux_modules = ['cv2', 'mss', 'PIL', 'Xlib', 'pyautogui', 'pyperclip', 'pyxhook', 'crontab', 'cryptography',
-                 'gnureadline', 'alsaaudio']
+                 'readline', 'alsaaudio']
 
 
 def main():
-
     try:
         import sys
         import time
         import os
         os.system("")
         if os.name == 'nt':
+            pass
             import colorama
             colorama.init(convert=True)
         print(config.inf + 'Starting...')  # first initial print statement that sets all colors of input to blue for cmder , some kind of encoding error in its console....
@@ -41,14 +43,14 @@ def main():
         if platform.uname()[0] == 'Windows':
             print(config.pos + 'OS Windows - OK')
             for i in windows_modules:
-                exec ('import ' + i)
+                exec('import ' + i)
                 print(config.pos + 'Successfully imported : ' + i + ' - OK')
             print(config.pos + 'Third party imports - OK')
             keygen.main('system_initiated')
         elif platform.uname()[0] == 'Linux':
             print(config.pos + 'OS Linux - OK')
             for i in linux_modules:
-                exec ('import ' + i)
+                exec('import ' + i)
                 print(config.pos + 'Successfully imported : ' + i + ' - OK')
             keygen.main('system_initiated')
         else:

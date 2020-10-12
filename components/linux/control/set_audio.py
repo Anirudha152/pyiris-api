@@ -1,10 +1,9 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.config as config
+
 config.main()
 interface = config.interface
-if interface == "GUI":
-    from flask import jsonify
 
 
 def main(option):
@@ -16,7 +15,7 @@ def set_audio(data):
     vol = alsaaudio.Mixer(alsaaudio.mixers()[0])
     vol.setvolume(int(vol_level))
     volume_range = vol.getrange()
-    main_send('[+]Set volume to : ' + str(vol_level), s)''')
+    send_all(s,'[+]Set volume to : ' + str(vol_level))''')
         config.logics.append('''
             elif command == "set_audio":
                 set_audio(data)''')

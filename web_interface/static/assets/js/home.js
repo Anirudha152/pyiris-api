@@ -1,4 +1,5 @@
 $(document).ready(function () {
+	$('body').append('<div style="" id="div_loading"><div class="loader">Loading...</div></div>');
 	//load key value
 	triggerAjax("show key", true, '/home_process', showKeyCB, undefined);
 	function showKeyCB(data) {
@@ -23,10 +24,11 @@ $(document).ready(function () {
 			}
 			$("#input_blacklist").val("");
 		}
+		removeLoader();
 	}
 
 	//whitelist add function
-	$("#button_whitelist").click(function () {
+	$(document).on("click", "#button_whitelist", function () {
 		if ($("#input_whitelist").val() !== "") {
 			triggerAjax("add wh " + $("#input_whitelist").val(), true, '/home_process', addWhitelistCB, undefined);
 		}
@@ -42,7 +44,7 @@ $(document).ready(function () {
 	}
 
 	//blacklist add function
-	$("#button_blacklist").click(function () {
+	$(document).on("click", "#button_blacklist", function () {
 		triggerAjax("add bl " + $("#input_blacklist").val(), true, '/home_process', addBlacklistCB, undefined);
 	});
 	function addBlacklistCB(data) {
@@ -113,6 +115,13 @@ $(document).ready(function () {
 			triggerAjax("regen " + $("#input_key").val(), true, '/home_process', showKeyCB, undefined);
 		}
 	});
+
+	function removeLoader() {
+        $("#div_loading").fadeOut(750, function() {
+            $("#div_loading").remove();
+        });
+        $(".container").removeClass("hide")
+    }
 
 	function triggerAjax (data, async, url, callback, extra_input){
         $.ajax({

