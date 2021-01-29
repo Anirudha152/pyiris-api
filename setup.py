@@ -9,7 +9,7 @@ requires = ["opencv-python==4.4.0.44",
         "pyperclip==1.8.1",
         "PyInstaller==4.0",
         "Pillow==8.0.1",
-        "cryptography==3.1.1",
+        "cryptography==3.2",
         "PyAutoGUI==0.9.52"]
 
 if platform.uname()[0] == 'Windows':
