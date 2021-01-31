@@ -128,6 +128,17 @@ Common Terms:
 - Components: These are loadable modules which give functionality to the deployable scout. They are referenced by their Ids
 - Base: These are code bases upon which components are loaded. They essentially control the mode of connection and communication between PyIris and the payload.
 - Encoders: These are programs which encrypt the scout's source code. They can be stacked
+- Scout Values: These are generation options used to control generation. Here is a table with the names of the options and their defualt values
+
+|Option|Default Value|Info|
+|:---|:---|:---|
+|Host|`p.config.private_ip`|The local hostname to connect back to (Reverse) or the interface to listen on (Bind). You can set multiple hostnames to connect back to by separating them with commas|
+|Port|`'9999'`|The local port to connect back on (Reverse) or the remote port to listen on (Bind)|
+|Timeout|`'5'`|The timeout value for the scout|
+|Windows|`'True'`|When "True", will generate a windows scout, else a linux scout|
+|Dir|`os.path.join(p.config.started_at, 'generated')`|Directory to generate payload in|
+|Compile|`'False'`|When "True", will compile scout to EXE (windows) or ELF (Linux), else it will not compile|
+
 Note: Shortcuts exist when loading modules by their IDs in bulk. This is a guide to format `component_str` and `encoder_str`. To load multiple components use "-" between the ID ranges of the components to load them. To load separate ID elements use "," to denote separate elements. Ranges can also be nested as elements. When loading components the final ID's will be formatted in order and stripped of duplicates, when loading encoders ID's of encoders remain in the order they originally were in duplicates remain since encoders can be stacked.
 #### `load_component(component_str)`
 This command loads components which will eventually be loaded onto the deployable scout
@@ -172,3 +183,4 @@ output = p.generate.unload_encoder("0,1") # removing encoders at 1st and 2nd ind
 print(output) # {'status': 'ok', 'message': 'Unloaded encoders successfully', 'data': {'loaded_encoders': ['xor_cipher_encryption']}}
 ```
 
+#### `set_scout_values(to_set, set_val)`
