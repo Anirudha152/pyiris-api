@@ -210,3 +210,6 @@ This command prints and provides information about `"components"`, `"encoders"`,
 output = p.generate.show("options")
 print(output) # {'status': 'ok', 'message': '', 'data': {'scout_values': {'Host': ['192.168.1.7', 'The local hostname to connect back to (Reverse) or the interface to listen on (Bind). You can set multiple hostnames to connect back to by separating them with commas'], 'Port': ['9999', 'The local port to connect back on (Reverse) or the remote port to listen on (Bind)'], 'Timeout': ['5', 'The timeout value for the scout'], 'Windows': ['True', 'When "True", will generate a windows scout, else a linux scout'], 'Dir': ['C:/***/***/***/generated', 'Directory to generate payload in'], 'Compile': ['False', 'When "True", will compile scout to EXE (windows) or ELF (Linux), else it will not compile']}}}
 ```
+
+#### `generate(generator_settings=None)`
+This command generates a deployable PyIris scout to whatever `'Dir'` was specified in scout_values.
