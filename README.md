@@ -141,7 +141,8 @@ Common Terms:
 
 Note: Shortcuts exist when loading modules by their IDs in bulk. This is a guide to format `component_str` and `encoder_str`. To load multiple components use "-" between the ID ranges of the components to load them. To load separate ID elements use "," to denote separate elements. Ranges can also be nested as elements. When loading components the final ID's will be formatted in order and stripped of duplicates, when loading encoders ID's of encoders remain in the order they originally were in duplicates remain since encoders can be stacked.
 #### `load_component(component_str)`
-This command loads components which will eventually be loaded onto the deployable scout
+This command loads components which will eventually be loaded onto the deployable scout.
+(If `component_str` is `"all"`, all components will be loaded)
 ```py
 output = p.generate.load_component("3-7")
 print(output) # {'status': 'ok', 'message': 'Loaded components successfully', 'data': {'loaded_components': OrderedDict([('base', 'windows/bases/reverse_tcp_base'), ('3', 'windows/control/browser'), ('4', 'windows/control/check_admin'), ('5', 'windows/control/chrome_password_dump'), ('6', 'windows/control/clip_logger'), ('7', 'windows/control/download_file')])}}
@@ -149,6 +150,7 @@ print(output) # {'status': 'ok', 'message': 'Loaded components successfully', 'd
 
 #### `component_info(component_str)`
 This command prints and provides detalied information about a loadable component
+(If `component_str` is `"all"`, information about all components will be shown)
 ```py
 output = p.generate.component_info("3")
 print(output) # {'status': 'ok', 'message': 'Retrieved Component Info', 'data': {'component_info': {'3': {'Name': 'Browser component', 'OS': 'Windows', 'Required Modules': 'webbrowser', 'Commands': 'browse <site>', 'Description': 'Opens a new browser to the specified site'}}}}
@@ -156,6 +158,7 @@ print(output) # {'status': 'ok', 'message': 'Retrieved Component Info', 'data': 
 
 #### `unload_component(component_str)`
 This command unloads previously loaded components
+(If `component_str` is `"all"`, all components will be unloaded)
 ```py
 output = p.generate.unload_component("3,4")
 print(output) # {'status': 'ok', 'message': 'Unloaded components successfully', 'data': {'loaded_components': OrderedDict([('5', 'windows/control/chrome_password_dump'), ('6', 'windows/control/clip_logger'), ('7', 'windows/control/download_file'), ('base', 'windows/bases/reverse_tcp_base')])}}
@@ -163,6 +166,7 @@ print(output) # {'status': 'ok', 'message': 'Unloaded components successfully', 
 
 #### `load_encoder(encoder_str)`
 This command loads stackable encoders which will encode the scout's source code
+(If `encoder_str` is `"all"`, all encoders will be loaded on once in the order of their indexes)
 ```py
 output = p.generate.load_encoder("0,1,2")
 print(output) # {'status': 'ok', 'message': 'Loaded encoders successfully', 'data': {'loaded_encoders': ['aes_stream_encoder', 'basic_base64_encoder', 'xor_cipher_encryption']}}
@@ -170,6 +174,7 @@ print(output) # {'status': 'ok', 'message': 'Loaded encoders successfully', 'dat
 
 #### `encoder_info(encoder_str)`
 This command prints and provides detailed information about encoders
+(If `encoder_str` is `"all"`, information about all encoders will be displayed)
 ```py
 output = p.generate.encoder_info("0")
 print(output) # {'status': 'ok', 'message': 'Retrieved Encoder Info', 'data': {'encoder_info': {'0': {'Name': 'AES Encoder', 'Required Modules': 'cryptography', 'Description': 'Uses Fernet to AES encrypt the scout'}}}}
@@ -177,6 +182,7 @@ print(output) # {'status': 'ok', 'message': 'Retrieved Encoder Info', 'data': {'
 
 #### `unload_encoder(encoder_indexes)`
 This command unloads encoders by index.
+(If `encoder_str` is `"all"`, all encoders will be unloaded)
 ```py
 p.generate.load_encoder("2,2,2")
 output = p.generate.unload_encoder("0,1") # removing encoders at 1st and 2nd index
@@ -184,3 +190,23 @@ print(output) # {'status': 'ok', 'message': 'Unloaded encoders successfully', 'd
 ```
 
 #### `set_scout_values(to_set, set_val)`
+This command allows you to set scout_values. Valid options are defined in the table above
+```py
+output = p.generate.set_scout_values("Compile", "True")
+print(output) #{'status': 'ok', 'message': 'Set "Compile" to "True"', 'data': {'scout_values': {'Host': ['192.168.1.7', 'The local hostname to connect back to (Reverse) or the interface to listen on (Bind). You can set multiple hostnames to connect back to by separating them with commas'], 'Port': ['9999', 'The local port to connect back on (Reverse) or the remote port to listen on (Bind)'], 'Timeout': ['5', 'The timeout value for the scout'], 'Windows': ['True', 'When "True", will generate a windows scout, else a linux scout'], 'Dir': ['C:/***/***/***/generated', 'Directory to generate payload in'], 'Compile': ['True', 'When "True", will compile scout to EXE (windows) or ELF (Linux), else it will not compile']}}}
+```
+
+#### `reset_scout_values(to_reset)`
+This command resets one or all scout_values back to default
+(If `to_reset` is `"all"`, all scout_values will be reset)
+```py
+output = p.generate.reset_scout_values("all")
+print(output) # {'status': 'ok', 'message': 'Reset all options', 'data': {'scout_values': {'Host': ['192.168.1.7', 'The local hostname to connect back to (Reverse) or the interface to listen on (Bind). You can set multiple hostnames to connect back to by separating them with commas'], 'Port': ['9999', 'The local port to connect back on (Reverse) or the remote port to listen on (Bind)'], 'Timeout': ['5', 'The timeout value for the scout'], 'Windows': ['True', 'When "True", will generate a windows scout, else a linux scout'], 'Dir': ['C:/***/***/***/generated', 'Directory to generate payload in'], 'Compile': ['False', 'When "True", will compile scout to EXE (windows) or ELF (Linux), else it will not compile']}}}
+```
+
+#### `show(to_show)`
+This command prints and provides information about `"components"`, `"encoders"`, `"loaded`" components & encoders, `"options"` (scout_values).
+```py
+output = p.generate.show("options")
+print(output) # {'status': 'ok', 'message': '', 'data': {'scout_values': {'Host': ['192.168.1.7', 'The local hostname to connect back to (Reverse) or the interface to listen on (Bind). You can set multiple hostnames to connect back to by separating them with commas'], 'Port': ['9999', 'The local port to connect back on (Reverse) or the remote port to listen on (Bind)'], 'Timeout': ['5', 'The timeout value for the scout'], 'Windows': ['True', 'When "True", will generate a windows scout, else a linux scout'], 'Dir': ['C:/***/***/***/generated', 'Directory to generate payload in'], 'Compile': ['False', 'When "True", will compile scout to EXE (windows) or ELF (Linux), else it will not compile']}}}
+```
