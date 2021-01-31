@@ -133,4 +133,42 @@ Note: Shortcuts exist when loading modules by their IDs in bulk. This is a guide
 This command loads components which will eventually be loaded onto the deployable scout
 ```py
 output = p.generate.load_component("3-7")
+print(output) # {'status': 'ok', 'message': 'Loaded components successfully', 'data': {'loaded_components': OrderedDict([('base', 'windows/bases/reverse_tcp_base'), ('3', 'windows/control/browser'), ('4', 'windows/control/check_admin'), ('5', 'windows/control/chrome_password_dump'), ('6', 'windows/control/clip_logger'), ('7', 'windows/control/download_file')])}}
 ```
+
+#### `component_info(component_str)`
+This command prints and provides detalied information about a loadable component
+```py
+output = p.generate.component_info("3")
+print(output) # {'status': 'ok', 'message': 'Retrieved Component Info', 'data': {'component_info': {'3': {'Name': 'Browser component', 'OS': 'Windows', 'Required Modules': 'webbrowser', 'Commands': 'browse <site>', 'Description': 'Opens a new browser to the specified site'}}}}
+```
+
+#### `unload_component(component_str)`
+This command unloads previously loaded components
+```py
+output = p.generate.unload_component("3,4")
+print(output) # {'status': 'ok', 'message': 'Unloaded components successfully', 'data': {'loaded_components': OrderedDict([('5', 'windows/control/chrome_password_dump'), ('6', 'windows/control/clip_logger'), ('7', 'windows/control/download_file'), ('base', 'windows/bases/reverse_tcp_base')])}}
+```
+
+#### `load_encoder(encoder_str)`
+This command loads stackable encoders which will encode the scout's source code
+```py
+output = p.generate.load_encoder("0,1,2")
+print(output) # {'status': 'ok', 'message': 'Loaded encoders successfully', 'data': {'loaded_encoders': ['aes_stream_encoder', 'basic_base64_encoder', 'xor_cipher_encryption']}}
+```
+
+#### `encoder_info(encoder_str)`
+This command prints and provides detailed information about encoders
+```py
+output = p.generate.encoder_info("0")
+print(output) # {'status': 'ok', 'message': 'Retrieved Encoder Info', 'data': {'encoder_info': {'0': {'Name': 'AES Encoder', 'Required Modules': 'cryptography', 'Description': 'Uses Fernet to AES encrypt the scout'}}}}
+```
+
+#### `unload_encoder(encoder_indexes)`
+This command unloads encoders by index.
+```py
+p.generate.load_encoder("2,2,2")
+output = p.generate.unload_encoder("0,1") # removing encoders at 1st and 2nd index
+print(output) # {'status': 'ok', 'message': 'Unloaded encoders successfully', 'data': {'loaded_encoders': ['xor_cipher_encryption']}}
+```
+
