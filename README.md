@@ -213,3 +213,21 @@ print(output) # {'status': 'ok', 'message': '', 'data': {'scout_values': {'Host'
 
 #### `generate(generator_settings=None)`
 This command generates a deployable PyIris scout to whatever `'Dir'` was specified in scout_values.
+
+`generator_settings` is a dictionary used to pass any extra options to specific components which require them. For example: pyiris_api/components/windows/control/execute_python.py may require extra imports which can be specified using
+`generate(generator_settings={"execute_python_modules"=["flask", "numpy"]})`
+Currently, only 5 components require extra options. Here they are:
+
+|Component|Dictionary Key|Value Type|Info|Default|
+|:---|:---|:---|:---|:---|
+|windows/control/execute_python, linux/control/execute_python|`"execute_python_modules"`|list|A list of python modules which will be imported for executing remotely|`[]`|
+|windows/startup/sleep, linux/startup/sleep|`"scout_sleep_time"`|int|Amount of time in seconds for scout to sleep on startup to avoid antivirus detection|`60`|
+|linux/startup/req_root|`"request_root_message"`|str|A social engineering message to be displayed on startup to request for root|`"ERROR - This file must be run as root to work"`|
+
+Another optional key present CONTINUE HERE LMAO
+```py
+p.generate.load_component("all")
+p.generate.load_encoder("0,1")
+p.set_scout_values("Compile", "True")
+
+```
