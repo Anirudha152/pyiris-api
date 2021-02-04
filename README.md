@@ -21,7 +21,9 @@ Commands:
   - [`.remove_from_list()`](#remove_from_listlist_type,-hostname)
   - [`.set_list()`](#set_listlist_type-to_set)
   - [`.regen_key()`](#regen_keykeynone)
-  - [`.show()`](#showlist_type)<br>
+  - [`.show()`](#showlist_type)
+  
+  
 - [`pyiris.generate`](#generator-commands)
   - [`.load_base()`](#load_basebase_id)
   - [`.base_info()`](#base_infobase_str)
