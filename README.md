@@ -18,7 +18,10 @@ Commands:
 - [`pyiris.home`](#Home-Commands)
   - [`.add_to_list()`](#add_to_listlist_type-hostname)
   - [`.reset_list()`](#reset_listlist_type)
-  - [`.remove_list()`](#remove_listlist_type,-hostname)
+  - [`.remove_from_list()`](#remove_from_listlist_type,-hostname)
+  - [`.set_list()`](#set_listlist_type-to_set)
+  - [`.regen_key()`](#regen_keykeynone)
+  - [`.show()`](#showlist_type)
 
 ## Basic Usage
 For a basic instance,
@@ -95,14 +98,14 @@ output = p.home.reset_list("whitelist")
 print(output) # {"status": "ok", "message": "Reset Whitelist", "data": {"whitelist": []}}
 ```
 
-#### `remove_list(list_type, hostname)`
+#### `remove_from_list(list_type, hostname)`
 Remove a host from a list
 ```py
 print(p.config.white_list) # []
 p.home.add_to_list("whitelist", "192.168.1.7")
 p.home.add_to_list("whitelist", "192.168.1.8")
 print(p.config.white_list) # ["192.168.1.7", "192.168.1.8"]
-output = p.home.remove_list("whitelist", "192.168.1.7")
+output = p.home.remove_from_list("whitelist", "192.168.1.7")
 print(output) # {"status": "ok", "message": "Removed 192.168.1.7 from Whitelist", "data": {"whitelist": ["192.168.1.8"]}}
 ```
 
