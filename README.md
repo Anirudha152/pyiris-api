@@ -13,6 +13,7 @@ Introduction:
 - [Basic Usage](#Basic-Usage)
 - [Global Variables](#Config-Variables)
 - [Command Output Format](#Command-Output-Format)
+
 Commands:
 - [`pyiris.home`](#Home-Commands)
   - [`.add_to_list()`](#add_to_listlist_type-hostname)
