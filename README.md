@@ -10,9 +10,11 @@ pip install pyiris-api
 # Official Documentation & Usage Guide
 ## Content:
 
-- [Basic-Usage](#Basic-Usage)
+- [Basic Usage](#Basic-Usage)
 - [Global Variables](#Config-Variables)
 - [Command Output Format](#Command-Output-Format)
+- [Home Commands](#Home-Commands)
+- - hi
 
 ## Basic Usage
 For a basic instance,
