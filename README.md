@@ -92,6 +92,7 @@ Any command run by the PyIris object will have an output with a format as follow
 
 ## Home Commands:
 These are the home commands of PyIris. Use these commands to manipulate the host whitelist, host blacklist and PyIris key.
+
 Common Terms:
 - Host Whitelist: 
 - Host Blacklist:
@@ -155,6 +156,7 @@ print(output) # {"status": "ok", "message": "", "data": {"whitelist": []}}
 
 ## Generator Commands
 These are the generator commands of PyIris which let you dynamically load modules and generate a deployable payload. It allows you to dynamically add and remove functionality to the deployable scout while supporting source code encryption and code compilation.
+
 Common Terms:
 
 - Scout: This is the deployable program which will connect to PyIris and execute commands on the target computer
@@ -253,7 +255,7 @@ print(output) # {'status': 'ok', 'message': 'Reset all options', 'data': {'scout
 ```
 
 #### `show(to_show)`
-This command prints and provides information about `"bases",` `"components"`, `"encoders"`, `"loaded`" components & encoders, `"options"` (scout_values).
+This command prints and provides information about `"bases"`, `"components"`, `"encoders"`, `"loaded`" components & encoders, `"options"` (scout_values).
 ```py
 output = p.generate.show("options")
 print(output) # {'status': 'ok', 'message': '', 'data': {'scout_values': {'Host': ['192.168.1.7', 'The local hostname to connect back to (Reverse) or the interface to listen on (Bind). You can set multiple hostnames to connect back to by separating them with commas'], 'Port': ['9999', 'The local port to connect back on (Reverse) or the remote port to listen on (Bind)'], 'Timeout': ['5', 'The timeout value for the scout'], 'Windows': ['True', 'When "True", will generate a windows scout, else a linux scout'], 'Dir': ['C:/***/***/***/generated', 'Directory to generate payload in'], 'Compile': ['False', 'When "True", will compile scout to EXE (windows) or ELF (Linux), else it will not compile']}}}
@@ -288,3 +290,19 @@ p.generate.set_scout_values("Compile", "True")
 output = p.generate.generate(generator_settings={"execute_python_modules": ["numpy", "flask", "cryptography"], "scout_sleep_time": 120, "compiler_settings":{"onefile": True, "windowed": True, "custom_icon_filepath": "C:/Path/To/Icon/icon.ico"}})
 print(output) # {'status': 'ok', 'message': 'Generation and Compilation Successful', 'data': None}
 ```
+
+## Listener Commands
+These are the listener commands of PyIris which let PyIris connect to deployed and running scouts, either by running a listener or binding to the scout.
+
+Common Terms:
+
+- Listener: A socket listener which awaits connections from scouts with `reverse_tcp_base`s
+
+#### `bind(host, port)`
+This command allows you to bind to a scout with a `bind_tcp_base`
+```py
+output = p.listener.bind("192.168.1.7", 9999)
+print(output) # {'status': 'ok', 'message': 'Connection Established to 192.168.29.139:9999', 'data': {'scout_database': {'0': ['192.168.29.139', '9999', '192.168.29.139:9999', 'L8m5o', '2021-02-04 19:39:33', 'Bind']}}}
+```
+
+#### ``
