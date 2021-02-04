@@ -297,6 +297,14 @@ These are the listener commands of PyIris which let PyIris connect to deployed a
 Common Terms:
 
 - Listener: A socket listener which awaits connections from scouts with `reverse_tcp_base`s
+- Listener Values: These are listener options used to control and customize listeners. Here is a table with the names of the options and their defualt values
+
+|Option|Default Value|Info|
+|:---|:---|:---|
+|Interface|`'0.0.0.0'`|The local interface to start a listener|
+|Port|`'9999'`|The local port to start a listener|
+|Name|`'Listener'`|The name of the listener|
+|Reply|`'Reply'`|The reply to send back in the case of a failed listener authentication/ connection|
 
 #### `bind(host, port)`
 This command allows you to bind to a scout with a `bind_tcp_base`
@@ -305,4 +313,11 @@ output = p.listener.bind("192.168.1.7", 9999)
 print(output) # {'status': 'ok', 'message': 'Connection Established to 192.168.29.139:9999', 'data': {'scout_database': {'0': ['192.168.29.139', '9999', '192.168.29.139:9999', 'L8m5o', '2021-02-04 19:39:33', 'Bind']}}}
 ```
 
-#### ``
+#### `run_listener()`
+This command allows you to initailaise a listener on the interface and port sepcified in `listener_values`
+```py
+output = p.listener.run_listener()
+print(output) # {'status': 'ok', 'message': 'Started Listener', 'data': None}
+```
+
+
