@@ -10,9 +10,9 @@ pip install pyiris-api
 # Official Documentation & Usage Guide
 ## Content:
 
-[Basic-Usage](##Basic)
+[Basic-Usage](##Basic-Usage)
 
-## Basic Usage:
+## Basic Usage
 For a basic instance,
 ```py
 from pyiris_api import PyIris
