@@ -14,7 +14,7 @@ pip install pyiris-api
 - [Global Variables](#Config-Variables)
 - [Command Output Format](#Command-Output-Format)
 - [Home Commands](#Home-Commands)
-- - [add_to_list](#`add_to_list(list_type, hostname)`)
+- [add_to_list](#add_to_list(list_type,-hostname))
 
 ## Basic Usage
 For a basic instance,
