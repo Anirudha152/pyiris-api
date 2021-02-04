@@ -9,14 +9,15 @@ pip install pyiris-api
 
 # Official Documentation & Usage Guide
 ## Content:
-
+Introduction:
 - [Basic Usage](#Basic-Usage)
 - [Global Variables](#Config-Variables)
 - [Command Output Format](#Command-Output-Format)
-- [Home Commands](#Home-Commands)
-- - [`add_to_list()`](#add_to_listlist_type-hostname)
-- - [`reset_list()`](#reset_listlist_type)
-- - [`remove_list()`](#remove_listlist_type,-hostname)
+Commands:
+- [`pyiris.home`](#Home-Commands)
+  - [`.add_to_list()`](#add_to_listlist_type-hostname)
+  - [`.reset_list()`](#reset_listlist_type)
+  - [`.remove_list()`](#remove_listlist_type,-hostname)
 
 ## Basic Usage
 For a basic instance,
