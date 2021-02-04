@@ -10,7 +10,9 @@ pip install pyiris-api
 # Official Documentation & Usage Guide
 ## Content:
 
-[Basic-Usage](#Basic-Usage)
+- [Basic-Usage](#Basic-Usage)
+- [Global Variables](#Config-Variables)
+- [Command Output Format](#Command-Output-Format)
 
 ## Basic Usage
 For a basic instance,
@@ -53,7 +55,7 @@ from pyiris_api import PyIris
 p = PyIris.Main(myGlobalVar="myGlobalVar")
 ```
 
-#### IMPORTANT NOTE:
+## Command Output Format
 Any command run by the PyIris object will have an output with a format as follows:
 ```py
 {"status": "ok", "message": "This is a message", "data": None}
@@ -61,6 +63,7 @@ Any command run by the PyIris object will have an output with a format as follow
 - `"status"` is a string which can have values `"ok"`, `"error"`, `"warning"`. It is used to check the status of the command.
 - `"message"` is a string which will have a small description of the command output
 - `"data"` will either be `None` or a dictionary containing useful command output.
+
 ## Home Commands:
 These are the home commands of PyIris. Use these commands to manipulate the host whitelist, host blacklist and PyIris key.
 Common Terms:
