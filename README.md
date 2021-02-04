@@ -10,7 +10,7 @@ pip install pyiris-api
 # Official Documentation & Usage Guide
 ## Content:
 
-[Basic-Usage](##Basic)
+[Basic-Usage](#Basic)
 
 ## Basic
 For a basic instance,
