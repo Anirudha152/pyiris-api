@@ -163,7 +163,7 @@ Common Terms:
 - Components: These are loadable modules which give functionality to the deployable scout. They are referenced by their Ids
 - Base: These are code bases upon which components are loaded. They essentially control the mode of connection and communication between PyIris and the payload.
 - Encoders: These are programs which encrypt the scout's source code. They can be stacked
-- Scout Values: These are generation options used to control generation. Here is a table with the names of the options and their defualt values
+- Scout Options / Scout Values: These are generation options used to control generation. Here is a table with the names of the options and their defualt values
 
 |Option|Default Value|Info|
 |:---|:---|:---|
@@ -239,18 +239,18 @@ output = p.generate.unload_encoder("0,1") # removing encoders at 1st and 2nd ind
 print(output) # {'status': 'ok', 'message': 'Unloaded encoders successfully', 'data': {'loaded_encoders': ['xor_cipher_encryption']}}
 ```
 
-#### `set_scout_values(to_set, set_val)`
-This command allows you to set scout_values. Valid options are defined in the table above
+#### `set_option(to_set, set_val)`
+This command allows you to set scout options. Valid options are defined in the table above
 ```py
-output = p.generate.set_scout_values("Compile", "True")
+output = p.generate.set_option("Compile", "True")
 print(output) #{'status': 'ok', 'message': 'Set "Compile" to "True"', 'data': {'scout_values': {'Host': ['192.168.1.7', 'The local hostname to connect back to (Reverse) or the interface to listen on (Bind). You can set multiple hostnames to connect back to by separating them with commas'], 'Port': ['9999', 'The local port to connect back on (Reverse) or the remote port to listen on (Bind)'], 'Timeout': ['5', 'The timeout value for the scout'], 'Windows': ['True', 'When "True", will generate a windows scout, else a linux scout'], 'Dir': ['C:/***/***/***/generated', 'Directory to generate payload in'], 'Compile': ['True', 'When "True", will compile scout to EXE (windows) or ELF (Linux), else it will not compile']}}}
 ```
 
-#### `reset_scout_values(to_reset)`
-This command resets one or all scout_values back to default
-(If `to_reset` is `"all"`, all scout_values will be reset)
+#### `reset_option(to_reset)`
+This command resets one or all scout options back to default
+(If `to_reset` is `"all"`, all scout options will be reset)
 ```py
-output = p.generate.reset_scout_values("all")
+output = p.generate.reset_option("all")
 print(output) # {'status': 'ok', 'message': 'Reset all options', 'data': {'scout_values': {'Host': ['192.168.1.7', 'The local hostname to connect back to (Reverse) or the interface to listen on (Bind). You can set multiple hostnames to connect back to by separating them with commas'], 'Port': ['9999', 'The local port to connect back on (Reverse) or the remote port to listen on (Bind)'], 'Timeout': ['5', 'The timeout value for the scout'], 'Windows': ['True', 'When "True", will generate a windows scout, else a linux scout'], 'Dir': ['C:/***/***/***/generated', 'Directory to generate payload in'], 'Compile': ['False', 'When "True", will compile scout to EXE (windows) or ELF (Linux), else it will not compile']}}}
 ```
 
@@ -262,7 +262,7 @@ print(output) # {'status': 'ok', 'message': '', 'data': {'scout_values': {'Host'
 ```
 
 #### `generate(generator_settings=None)`
-This command generates a deployable PyIris scout to whatever `'Dir'` was specified in scout_values.
+This command generates a deployable PyIris scout to whatever `'Dir'` was specified in scout options.
 
 `generator_settings` is an optional dictionary used to pass any extra options to specific components which require them. For example: pyiris_api/components/windows/control/execute_python.py may require extra imports which can be specified using
 `generate(generator_settings={"execute_python_modules"=["flask", "numpy"]})`
@@ -286,7 +286,7 @@ Another optional key present in `generator_settings` is `"compiler_settings"` wh
 p.generate.load_base("0")
 p.generate.load_component("all")
 p.generate.load_encoder("0,1")
-p.generate.set_scout_values("Compile", "True")
+p.generate.set_option("Compile", "True")
 output = p.generate.generate(generator_settings={"execute_python_modules": ["numpy", "flask", "cryptography"], "scout_sleep_time": 120, "compiler_settings":{"onefile": True, "windowed": True, "custom_icon_filepath": "C:/Path/To/Icon/icon.ico"}})
 print(output) # {'status': 'ok', 'message': 'Generation and Compilation Successful', 'data': None}
 ```
@@ -297,7 +297,7 @@ These are the listener commands of PyIris which let PyIris connect to deployed a
 Common Terms:
 
 - Listener: A socket listener which awaits connections from scouts with `reverse_tcp_base`s
-- Listener Values: These are listener options used to control and customize listeners. Here is a table with the names of the options and their defualt values
+- Listener Options / Listener Values: These are listener options used to control and customize listeners. Here is a table with the names of the options and their defualt values
 
 |Option|Default Value|Info|
 |:---|:---|:---|
@@ -321,6 +321,22 @@ print(output) # {'status': 'ok', 'message': 'Started Listener', 'data': None}
 ```
 
 #### `kill_listener(to_kill)`
+This command allows to kill a listener by listener id
 ```py
 output = p.listener.kill_listener("0")
+print(output) # {'status': 'ok', 'message': 'Sent kill message to listener of ID : 0...', 'data': {'listener_database': {}}}
+```
+
+#### `set_option(to_set, set_val)`
+This command allows you to set listener options. Valid options are defined in the table above.
+```py
+output = p.listener.set_option("Interface", "127.0.0.1")
+print(output) # {'status': 'ok', 'message': 'Set "Interface" to "127.0.0.1"', 'data': {'listener_values': {'Interface': ['127.0.0.1', 'The local interface to start a listener'], 'Port': ['9999', 'The local port to start a listener'], 'Name': ['Listener', 'Name of the listener'], 'Reply': ['', 'The reply to send back in the case of a failed listener authentication/ connection']}}}
+```
+
+#### `reset_option(to_reset)`
+This command resets one or all listener options back to default
+(If `to_reset` is `"all"`, all listener options will be reset)
+```py
+output = p.listener.reset_option("")
 ```
