@@ -320,4 +320,7 @@ output = p.listener.run_listener()
 print(output) # {'status': 'ok', 'message': 'Started Listener', 'data': None}
 ```
 
-
+#### `kill_listener(to_kill)`
+```py
+output = p.listener.kill_listener("0")
+```
