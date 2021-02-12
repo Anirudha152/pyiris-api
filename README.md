@@ -20,7 +20,7 @@ Commands:
 
   - [`.add_to_list()`](#add_to_listlist_type-hostname)
   - [`.reset_list()`](#reset_listlist_type)
-  - [`.remove_from_list()`](#remove_from_listlist_type,-hostname)
+  - [`.remove_from_list()`](#remove_from_listlist_type-hostname)
   - [`.set_list()`](#set_listlist_type-to_set)
   - [`.regen_key()`](#regen_keykeynone)
   - [`.show()`](#showlist_type)
@@ -35,10 +35,20 @@ Commands:
   - [`.load_encoder()`](#load_encoderencoder_str)
   - [`.encoder_info()`](#encoder_infoencoder_str)
   - [`.unload_encoder()`](#unload_encoderencoder_indexes)
-  - [`.set_scout_values()`](#set_scout_valuesto_set-set_val)
-  - [`.reset_scout_values()`](#reset_scout_valuesto_reset)
+  - [`.set_option()`](#set_optionto_set-set_val)
+  - [`.reset_option()`](#reset_optionto_reset)
   - [`.show()`](#showto_show)
   - [`.generate()`](#generategenerator_settingsnone)
+  
+- [`pyiris.listener`](#listener-commands)
+  - [`.bind()`](#bindhost-port)
+  - [`.run_listener()`](#run_listener)
+  - [`.kill_listener()`](#kill_listenerto_kill)
+  - [`.set_option()`](#set_optionto_set-set_val-1)
+  - [`.reset_option()`](#reset_optionto_reset-1)
+  - [`.listener_info()`](#listener_infoto_show)
+  - [`.rename_listener()`](#rename_listenerto_rename-rename_val)
+  - [`.show()`](#showto_show-1)
 
 ## Basic Usage
 For a basic instance,
