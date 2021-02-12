@@ -373,3 +373,6 @@ This command prints and provides information about `"options"` and `"listeners"`
 output = p.listener.show("listeners")
 print(output) # {'status': 'ok', 'message': '', 'data': {'listener_database': {'0': {'host': '0.0.0.0', 'port': '9999', 'name': 'Listener', 'created_at': 'YYYY-MM-DD HH:MM:SS', 'connections': ['192.168.1.7:42069']}}}}
 ```
+
+## Scout Commands
+These are scout commands used to ping, disconnect, sleep, kill and bridge to any of the scouts connected from the listener_commands.
