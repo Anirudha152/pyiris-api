@@ -338,5 +338,28 @@ print(output) # {'status': 'ok', 'message': 'Set "Interface" to "127.0.0.1"', 'd
 This command resets one or all listener options back to default
 (If `to_reset` is `"all"`, all listener options will be reset)
 ```py
-output = p.listener.reset_option("")
+output = p.listener.reset_option("Interface")
+print(output) # {'status': 'ok', 'message': 'Reset all options', 'data': {'listener_values': {'Interface': ['0.0.0.0', 'The local interface to start a listener'], 'Port': ['9999', 'The local port to start a listener'], 'Name': ['Listener', 'Name of the listener'], 'Reply': ['', 'The reply to send back in the case of a failed listener authentication/ connection']}}}
+```
+
+#### `listener_info(to_show)`
+This command prints and provides detailed information about 1 or all listeners
+(If `to_show` is `"all"`, information abut all listeners will be shown)
+```py
+output = p.listener.listener_info("0")
+print(output) # {'status': 'ok', 'message': '', 'data': {'listener_database': {'0': {'host': '0.0.0.0', 'port': '9999', 'name': 'Listener', 'created_at': 'YYYY-MM-DD HH:MM:SS', 'connections': ['192.168.1.7:42069']}}}}
+```
+
+#### `rename_listener(to_rename, rename_val)`
+This command renames a listener
+```py
+output = p.listener.rename_listener("0", "Listener1")
+print(output) # {'status': 'ok', 'message': 'Successfully renamed listener 0 to Listener1', 'data': None}
+```
+
+#### `show(to_show)`
+This command prints and provides information about `"options"` and `"listeners"`.
+```py
+output = p.listener.show("listeners")
+print(output) # {'status': 'ok', 'message': '', 'data': {'listener_database': {'0': {'host': '0.0.0.0', 'port': '9999', 'name': 'Listener', 'created_at': 'YYYY-MM-DD HH:MM:SS', 'connections': ['192.168.1.7:42069']}}}}
 ```
