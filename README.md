@@ -265,7 +265,7 @@ print(output) # {'status': 'ok', 'message': 'Reset all options', 'data': {'scout
 ```
 
 #### `show(to_show)`
-This command prints and provides information about `"bases"`, `"components"`, `"encoders"`, `"loaded`" components & encoders, `"options"` (scout_values).
+This command prints and provides information about `"bases"`, `"components"`, `"encoders"`, `"loaded`" base, components & encoders, `"options"` (scout_values).
 ```py
 output = p.generate.show("options")
 print(output) # {'status': 'ok', 'message': '', 'data': {'scout_values': {'Host': ['192.168.1.7', 'The local hostname to connect back to (Reverse) or the interface to listen on (Bind). You can set multiple hostnames to connect back to by separating them with commas'], 'Port': ['9999', 'The local port to connect back on (Reverse) or the remote port to listen on (Bind)'], 'Timeout': ['5', 'The timeout value for the scout'], 'Windows': ['True', 'When "True", will generate a windows scout, else a linux scout'], 'Dir': ['C:/***/***/***/generated', 'Directory to generate payload in'], 'Compile': ['False', 'When "True", will compile scout to EXE (windows) or ELF (Linux), else it will not compile']}}}
@@ -376,3 +376,50 @@ print(output) # {'status': 'ok', 'message': '', 'data': {'listener_database': {'
 
 ## Scout Commands
 These are scout commands used to ping, disconnect, sleep, kill and bridge to any of the scouts connected from the listener_commands.
+
+Common Terms
+
+- Scout: This is the deployable program which will connect to PyIris and execute commands on the target computer
+- Ping: Ping the scout and wait for a response
+- Disconnect: Disconnect from the scout but keep it running
+- Sleep: Same as disconnect but instead wait a specific amount of time before trying to reconnect
+- Kill: Disconnects and terminates the payload
+
+#### `ping_scout(scout_id)`
+This command will ping the scout and wait for a response
+```py
+output = p.scout.ping_scout("0")
+print(output) # {'status': 'ok', 'message': '[+]Scout is alive', 'data': None}
+```
+
+#### `disconnect_scout(scout_id)`
+This command will disconnect from the scout
+```py
+output = p.scout.disconnect_scout("0")
+print(output) # {'status': 'ok', 'message': 'Successfully disconnected scout', 'data': {'scout_database': {}}}
+```
+
+#### `kill_scout(scout_id)`
+This command will kill the scout
+```py
+output = p.scout.kill_scout("0")
+print(output) # {'status': 'ok', 'message': 'Successfully killed scout', 'data': {'scout_database': {}}}
+```
+
+
+#### `sleep_scout(scout_id, sleep_dur)`
+This command will disconnect and sleep the scout for `sleep_dur`s
+```py
+output = p.scout.sleep_scout("0", 25)
+print(output) # {'status': 'ok', 'message': 'Successfully slept scout for 25s', 'data': {'scout_database': {}}}
+```
+
+
+#### `rename_scout(scout_id, rename_val)`
+This command will rename the scout
+```py
+output = p.scout.rename_scout("0", "Vulnerable Windows 10 PC")
+print(output) # {'status': 'ok', 'message': 'Successfully renamed scout 0 to Vulnerable Windows 10 PC', 'data': None}
+```
+
+#### `show(to_show)`
