@@ -50,6 +50,21 @@ Commands:
   - [`.rename_listener()`](#rename_listenerto_rename-rename_val)
   - [`.show()`](#showto_show-1)
 
+- [`pyiris.scout`](#scout-commands)
+  - [`.ping_scout()`](#ping_scoutscout_id)
+  - [`.disconnect_scout()`](#disconnect_scoutscout_id)
+  - [`.kill_scout()`](#kill_scoutscout_id)
+  - [`.sleep_scout()`](#sleep_scoutscout_id-sleep_dur)
+  - [`.rename_scout()`](#rename_scoutscout_id-rename_val)
+  - [`.show()`](#showto_show-2)
+  - [`.scout_info()`](#scout_infoscout_id)
+  - [`.bridge_scout()`](#bridge_scoutscout_id)
+
+- [`pyiris.direct`](#direct-commands)
+  - [`.send()`](#sendcommand)
+  - [`.get_bridged()`](#get_bridged)
+
+
 ## Basic Usage
 For a basic instance,
 ```py
