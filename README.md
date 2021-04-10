@@ -1,6 +1,6 @@
 # The PyIris Project - API
-This is a version of PyIris packaged into an API. To access the implementation of this api, visit \<pyiris-api-implementation\>
-For more information about PyIris as a whole, visit its official github page: \<pyiris\>
+This is a version of PyIris packaged into an API. To access the implementation of this api, visit [pyiris-api-implementation](https://github.com/Anirudha152/pyiris-api-implementation "API Implementation")
+For more information about PyIris as a whole, visit its official github page: [PyIris](https://github.com/angus-y/PyIris-backdoor "PyIris")
 
 # Installation
 ```
