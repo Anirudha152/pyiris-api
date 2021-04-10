@@ -14,7 +14,7 @@ def main(self, compiler_settings):
     self.log.inf("Initiating compilation of scout : " + local_dir)
     tags = []
 
-    if not "onefile" in compiler_settings.keys():
+    if "onefile" not in compiler_settings.keys():
         tags.append("--onefile")
     else:
         if compiler_settings["onefile"]:

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="31954b92-d46d-4cd5-bf2f-fcb5bb6bb84a" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/PyIris.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/PyIris.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/components/linux/startup/sleep.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/components/linux/startup/sleep.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/components/windows/control/execute_python.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/components/windows/control/execute_python.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/components/windows/control/startup_folder_persistence.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/components/windows/control/startup_folder_persistence.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/components/windows/startup/startup_folder_persistence.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/components/windows/startup/startup_folder_persistence.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/commands/direct_interface/flush.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/commands/direct_interface/flush.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/commands/direct_interface/send.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/commands/direct_interface/send.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/commands/direct_interface/webcam_stream.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/commands/direct_interface/webcam_stream.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/commands/generator_interface/generate.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/commands/generator_interface/generate.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/commands/generator_interface/load_com.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/commands/generator_interface/load_com.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/commands/generator_interface/reset.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/commands/generator_interface/reset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/commands/generator_interface/set.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/commands/generator_interface/set.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/commands/generator_interface/show.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/commands/generator_interface/show.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/commands/generator_interface/unload_com.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/commands/generator_interface/unload_com.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/commands/global_interface/quit.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/commands/global_interface/quit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/commands/listener_interface/more.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/commands/listener_interface/more.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/commands/listener_interface/rename.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/commands/listener_interface/rename.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/commands/listener_interface/show.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/commands/listener_interface/show.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/commands/scout_interface/disconnect.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/commands/scout_interface/disconnect.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/commands/scout_interface/kill.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/commands/scout_interface/kill.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/commands/scout_interface/more.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/commands/scout_interface/more.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/commands/scout_interface/ping.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/commands/scout_interface/ping.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/commands/scout_interface/rename.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/commands/scout_interface/rename.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/commands/scout_interface/show.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/commands/scout_interface/show.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/commands/scout_interface/sleep.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/commands/scout_interface/sleep.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/interfaces/direct_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/interfaces/direct_interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/interfaces/generator_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/interfaces/generator_interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/interfaces/home_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/interfaces/home_interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/interfaces/listener_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/interfaces/listener_interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/interfaces/scout_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/interfaces/scout_interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/modules/compiler.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/modules/compiler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/modules/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/modules/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/modules/config_initialiser.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/modules/config_initialiser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/modules/decorators.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/modules/decorators.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/modules/generator_append.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/modules/check_loaded_components.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/modules/generator_id_parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/modules/generator_id_parser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/modules/get_all_modules.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/modules/get_all_modules.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/modules/send_and_recv.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/modules/send_and_recv.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/modules/should_listener_die.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/modules/should_listener_die.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/modules/socket_connector.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/modules/socket_connector.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/modules/socket_listener.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/modules/socket_listener.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/library/modules/sort_dictionary_by_int_val.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/library/modules/sort_dictionary_by_int_val.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyiris_api/setup/windows/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/pyiris_api/setup/windows/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FlaskConsoleOptions" custom-start-script="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))">
+    <envs>
+      <env key="FLASK_APP" value="app" />
+    </envs>
+    <option name="myCustomStartScript" value="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))" />
+    <option name="myEnvs">
+      <map>
+        <entry key="FLASK_APP" value="app" />
+      </map>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$USER_HOME$/AppData/Local/Programs/Python/Python38/Lib/site-packages/pyiris_api/library/modules/config.py" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="ProjectId" id="1ngPHjoGwdh3B1JaneC2pZBzmhj" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="ReaderModeSettings">
+    <option name="enabled" value="false" />
+  </component>
+  <component name="RunManager">
+    <configuration name="setup" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="pyiris-api" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/setup.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.setup" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="31954b92-d46d-4cd5-bf2f-fcb5bb6bb84a" name="Default Changelist" comment="" />
+      <created>1611808674879</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1611808674879</updated>
+      <workItem from="1611808676085" duration="12015000" />
+      <workItem from="1611824373609" duration="4068000" />
+      <workItem from="1611910142700" duration="10075000" />
+      <workItem from="1611938387778" duration="4787000" />
+      <workItem from="1612068476049" duration="4898000" />
+      <workItem from="1612107361037" duration="688000" />
+      <workItem from="1612171259288" duration="3074000" />
+      <workItem from="1612195936542" duration="4482000" />
+      <workItem from="1612272516135" duration="8292000" />
+      <workItem from="1612429033859" duration="20710000" />
+      <workItem from="1613020849728" duration="13393000" />
+      <workItem from="1614312218781" duration="25000" />
+      <workItem from="1614320484615" duration="593000" />
+      <workItem from="1617850019027" duration="2962000" />
+      <workItem from="1617976045888" duration="4029000" />
+      <workItem from="1618039507294" duration="8294000" />
+      <workItem from="1618058767102" duration="1115000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/pyiris_api$setup.coverage" NAME="setup Coverage Results" MODIFIED="1611810754439" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+</project>

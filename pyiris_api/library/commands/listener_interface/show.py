@@ -17,8 +17,8 @@ def main(self, to_show):
                       ['    ==', '====', '==============']]
             tmp_list = []
             for i in self.config.listener_database:
-                tmp_list.append([i, self.config.listener_database[i][2],
-                                 self.config.listener_database[i][0] + ':' + str(self.config.listener_database[i][1])])
+                tmp_list.append([i, self.config.listener_database[i]["name"],
+                                 self.config.listener_database[i]["host"] + ':' + str(self.config.listener_database[i]["port"])])
             tmp_list.sort()
             for i in tmp_list:
                 header.append(['    ' + i[0], i[1], i[2]])

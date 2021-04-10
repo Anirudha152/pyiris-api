@@ -12,8 +12,8 @@ def main(self, scout_id):
             for i in list(self.config.scout_database.keys()):
                 try:
                     self.log.inf('Pinging scout of ID : ' + i)
-                    send_all.main(self.config.scout_database[i][0], 'ping')
-                    data = recv_all.main(self.config.scout_database[i][0])
+                    send_all.main(self.config.scout_database[i]["conn_object"], 'ping')
+                    data = recv_all.main(self.config.scout_database[i]["conn_object"])
                     if not data:
                         raise socket.error
                     self.log.blank(data)
@@ -31,8 +31,8 @@ def main(self, scout_id):
                 return {"status": "ok", "message": "All scouts are alive", "data": None}
         else:
             self.log.inf('Pinging scout of ID : ' + scout_id)
-            send_all.main(self.config.scout_database[scout_id][0], 'ping')
-            data = recv_all.main(self.config.scout_database[scout_id][0])
+            send_all.main(self.config.scout_database[scout_id]["conn_object"], 'ping')
+            data = recv_all.main(self.config.scout_database[scout_id]["conn_object"])
             self.log.blank(data)
             return {"status": "ok", "message": data, "data": None}
     except (IndexError, KeyError):
@@ -45,4 +45,4 @@ def main(self, scout_id):
             self.config.change = True
         except IndexError:
             self.log.err('Scout does not exist in database!')
-        return {"status": "error", "message": "Scout is already dead", "data": None}
+        return {"status": "error", "message": "Scout is dead", "data": None}

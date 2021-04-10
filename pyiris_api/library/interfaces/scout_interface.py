@@ -22,14 +22,14 @@ class Main:
     def kill_scout(self, scout_id):
         return kill.main(self, scout_id)
 
-    def more_scout(self, to_show):
+    def scout_info(self, to_show):
         return more.main(self, to_show)
 
     def ping_scout(self, scout_id):
         return ping.main(self, scout_id)
 
-    def rename_scout(self, to_rename, rename_val):
-        return rename.main(self, to_rename, rename_val)
+    def rename_scout(self, scout_id, rename_val):
+        return rename.main(self, scout_id, rename_val)
 
     def show(self, to_show):
         return show.main(self, to_show)
@@ -38,7 +38,7 @@ class Main:
         return sleep.main(self, scout_id, sleep_dur)
 
     def bridge_scout(self, scout_id):
-        if str(scout_id) in self.config.scout_database.keys():
+        if str(scout_id) in list(self.config.scout_database.keys()):
             self.config.bridged_to = str(scout_id)
             return {"status": "ok", "message": "Successfully bridged", "data": None}
         else:

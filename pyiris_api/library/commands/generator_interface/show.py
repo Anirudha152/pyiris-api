@@ -14,6 +14,23 @@ def main(self, to_show):
             for line in to_print.split("\n"):
                 self.log.blank(line.strip())
             return {"status": "ok", "message": "", "data": {"scout_values": self.config.scout_values}}
+        elif to_show == "bases":
+            if self.config.scout_values['Windows'][0] == 'True':
+                self.log.blank('\n')
+                self.log.inf('Generator is set to generate Windows scout')
+                self.log.inf('All loadable Windows bases :')
+                for i in self.config.win_bases:
+                    self.log.blank('   [' + i + '] ' + self.config.win_bases[i])
+                self.log.blank('')
+                return {"status": "ok", "message": "", "data": {"win_bases": self.config.win_bases}}
+            else:
+                self.log.blank('\n')
+                self.log.inf('Generator is set to generate Linux scout')
+                self.log.inf('All loadable Linux bases :')
+                for i in self.config.lin_bases:
+                    self.log.blank('   [' + i + '] ' + self.config.lin_bases[i])
+                self.log.blank('')
+                return {"status": "ok", "message": "", "data": {"lin_bases": self.config.lin_bases}}
         elif to_show == "components":
             if self.config.scout_values['Windows'][0] == 'True':
                 self.log.blank('\n')
@@ -43,21 +60,19 @@ def main(self, to_show):
                 self.log.inf('Generator is set to generate Windows specific scout')
             else:
                 self.log.inf('Generator is set to generate Linux specific scout')
+            self.log.inf('Loaded base : \n[base] ' + self.config.loaded_base)
             self.log.inf('Loaded components : ')
             for i in self.config.loaded_components:
-                if self.config.loaded_components[i].endswith('/base'):
-                    self.log.blank('   [-] ' + i)
-                else:
-                    self.log.blank('   [' + i + '] ' + self.config.loaded_components[i])
+                self.log.blank('   [' + i + '] ' + self.config.loaded_components[i])
             self.log.blank('\n')
             self.log.inf('Encoder stack (Scout is encoded by the top encoder first then the next all the way to the bottom) : ')
             for i in range(len(self.config.loaded_encoders)):
                 self.log.blank('   [' + str(i) + '] ' + self.config.loaded_encoders[i])
             self.log.blank('')
-            return {"status": "ok", "message": "", "data": {"loaded_components": self.config.loaded_components, "loaded_encoders": self.config.loaded_encoders}}
+            return {"status": "ok", "message": "", "data": {"loaded_base": self.config.loaded_base, "loaded_components": self.config.loaded_components, "loaded_encoders": self.config.loaded_encoders}}
         else:
-            self.log.err('Please specify a valid argument, ["options"|"components"|"loaded"|"encoders"]')
-            return {"status": "error", "message": "Please specify a valid argument, [\"options\"|\"components\"|\"loaded\"|\"encoders\"]", "data": None}
+            self.log.err('Please specify a valid argument, ["options"|"bases"|"components"|"loaded"|"encoders"]')
+            return {"status": "error", "message": "Please specify a valid argument, [\"options\"|\"bases\"|\"components\"|\"loaded\"|\"encoders\"]", "data": None}
     except IndexError as e:
-        self.log.err("Please specify a valid argument, [\"options\"|\"components\"|\"loaded\"|\"encoders\"]")
-        return {"status": "error", "message": "Please specify a valid argument, [\"options\"|\"components\"|\"loaded\"|\"encoders\"]", "data": None}
+        self.log.err("Please specify a valid argument, [\"options\"|\"bases\"|\"components\"|\"loaded\"|\"encoders\"]")
+        return {"status": "error", "message": "Please specify a valid argument, [\"options\"|\"bases\"|\"components\"|\"loaded\"|\"encoders\"]", "data": None}

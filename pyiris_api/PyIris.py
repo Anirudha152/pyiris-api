@@ -24,7 +24,7 @@ class Main:
             quit()
         self.global_functions = global_interface.Main(self)
         self.home = home_interface.Main(self)
-        self.generator = generator_interface.Main(self)
+        self.generate = generator_interface.Main(self)
         self.listener = listener_interface.Main(self)
         self.direct = direct_interface.Main(self)
         self.scout = scout_interface.Main(self)

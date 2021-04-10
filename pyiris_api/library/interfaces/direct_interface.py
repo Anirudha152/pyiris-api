@@ -15,7 +15,9 @@ class Main:
         return send.main(self, command)
 
     def get_bridged(self):
-        scout_info = self.config.scout_database[self.config.bridged_to].copy()
-        del scout_info[0]
-        scout_info.insert(0, self.config.bridged_to)
-        return {"status": "ok", "message": "", "data": {"scout_info": scout_info}}
+        try:
+            scout_info = self.config.scout_database[str(self.config.bridged_to)].copy()
+            del scout_info['conn_object']
+            return {"status": "ok", "message": "", "data": {"scout_info": {self.config.bridged_to: scout_info}}}
+        except KeyError:
+            return {"status": "error", "message": "Not currently bridged to a scout", "data": None}

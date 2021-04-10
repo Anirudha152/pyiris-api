@@ -3,24 +3,22 @@
 import collections
 import pyiris_api.library.modules.key_from_val as key_from_val
 import pyiris_api.library.modules.generator_id_parser as generator_id_parser
+import pyiris_api.library.modules.check_loaded_components as check_loaded_components
 
 
 def unload_com(self, load_off):
     if load_off == 'all':
         if self.config.scout_values['Windows'][0] == 'True':
             self.config.loaded_components = collections.OrderedDict()
-            self.config.loaded_components['base'] = self.config.win_base_to_use
+            self.config.loaded_base = self.config.win_base_to_use
             self.log.pos("Unloaded all loaded windows components")
             return {"status": "ok", "message": "Unloaded all loaded windows components", "data": None}
         else:
             self.config.loaded_components = collections.OrderedDict()
-            self.config.loaded_components['base'] = self.config.lin_base_to_use
+            self.config.loaded_base = self.config.lin_base_to_use
             self.log.pos("Unloaded all loaded linux components")
             return {"status": "ok", "message": "Unloaded all loaded linux components", "data": None}
     else:
-        if load_off == 'base' or key_from_val.main(self.config.loaded_components, load_off) == 'base':
-            self.log.war("Do not unload base components, loading another base component will automatically replace the already loaded base component as there can only be one base component")
-            raise KeyError
         try:
             name = self.config.loaded_components[load_off]
             del (self.config.loaded_components[load_off])
@@ -40,6 +38,7 @@ def main(self, command):
         for i in load_off:
             self.log.inf("Unloading : " + str(i))
             unload_com(self, str(i))
+        check_loaded_components.main(self)
         return {"status": "ok", "message": "Unloaded components successfully", "data": {"loaded_components": self.config.loaded_components}}
     except (KeyError, IndexError):
         self.log.err('Please specify a valid component to unload or "all" to load all components. \x1b[1m\x1b[31mNote : "base" component cannot be unloaded\x1b[0m')

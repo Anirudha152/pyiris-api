@@ -16,7 +16,7 @@ def main(self, sock, command):
         return {"status": "error", "message": "", "data": {"scout_output": '[-]Invalid timeout value'}}
     while True:
         try:
-            data = recv_all.main(self.config.scout_database[self.config.bridged_to][0], timeout)
+            data = recv_all.main(self.config.scout_database[self.config.bridged_to]["conn_object"], timeout)
             if len(data) == 0:
                 break
             bytes_flushed += len(data)

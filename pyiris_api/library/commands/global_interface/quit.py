@@ -24,10 +24,10 @@ def main(self):
             self.log.lod('Disconnecting all scouts')
             for i in self.config.scout_database:
                 try:
-                    send_all.main(self.config.scout_database[i][0], 'disconnect')
-                    self.config.scout_database[i][0].settimeout(5)
-                    buffer_out_reply = recv_all.main(self.config.scout_database[i][0])
-                    self.config.scout_database[i][0].close()
+                    send_all.main(self.config.scout_database[i]["conn_object"], 'disconnect')
+                    self.config.scout_database[i]["conn_object"].settimeout(5)
+                    buffer_out_reply = recv_all.main(self.config.scout_database[i]["conn_object"])
+                    self.config.scout_database[i]["conn_object"].close()
                     self.log.pos('Closed connection to scout of ID : ' + i)
                 except (socket.error, socket.timeout):
                     self.log.err('Could not close connection to scout of ID : ' + i)

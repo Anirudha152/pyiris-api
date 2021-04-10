@@ -5,20 +5,25 @@ import re
 
 def main(self, inp_data, context_type, operation):
 	data = inp_data.replace(' ', '')
+
 	if data == 'all':  # filter special cases
 		if context_type == 'components' and operation == 'load':
 			if self.config.scout_values['Windows'][0] == 'True':
-				return {"status": "ok", "message": "Generator ID formatting successful", "data": [str(i) for i in list(self.config.win_components.keys()) if not self.config.win_components[str(i)].startswith('windows/bases/')]}
+				return {"status": "ok", "message": "Generator ID formatting successful", "data": [str(i) for i in list(self.config.win_components.keys())]}
 			else:
-				return {"status": "ok", "message": "Generator ID formatting successful", "data": [str(i) for i in list(self.config.lin_components.keys()) if not self.config.lin_components[str(i)].startswith('linux/bases/')]}
+				return {"status": "ok", "message": "Generator ID formatting successful", "data": [str(i) for i in list(self.config.lin_components.keys())]}
 		elif operation == 'unload':
 			return {"status": "ok", "message": "Generator ID formatting successful", "data": ['all']}
 		elif context_type == 'encoders' and operation == 'load':
 			return {"status": "ok", "message": "Generator ID formatting successful", "data": list(self.config.encoders.keys())}
-
+		elif context_type == 'bases':
+			if self.config.scout_values['Windows'][0] == 'True':
+				return {"status": "ok", "message": "Generator ID formatting successful", "data": list(self.config.win_bases.keys())}
+			else:
+				return {"status": "ok", "message": "Generator ID formatting successful", "data": list(self.config.lin_bases.keys())}
 	# Actual formatting occurs here
 
-	error = False
+	invalid_term = False
 	output_list = []  # final list of individual sorted values
 	ranges = []  # ranges to process later
 	non_ranges = []
@@ -26,7 +31,7 @@ def main(self, inp_data, context_type, operation):
 	data = inp_data.split(',')  # split by comma
 	for i in range(len(data)):
 		data[i] = data[i].strip()
-	if context_type == 'components':
+	if context_type == 'components' or context_type == "bases":
 		data = list(set(data))  # remove all duplicates after comma split
 
 	for i in data:
@@ -39,12 +44,12 @@ def main(self, inp_data, context_type, operation):
 		try:
 			output_list.append(int(i))
 		except:
-			error = True  # indicate formatting error
+			invalid_term = True  # indicate formatting error
 			break
-	if error and output_list:  # we hit an error however we still hit a match indicating invalid format
+	if invalid_term and output_list:  # we hit an error however we still hit a match indicating invalid format
 		self.log.err('Invalid generator ID formatting : String detected while sorting for integer IDs')
 		return {"status": "error", "message": "String detected while sorting for integer IDs", "data": []}
-	elif error and not output_list and not ranges:  # nothing in non ranges is an integer and there are no proper ranges meaning string based input only
+	elif invalid_term and not output_list and not ranges:  # nothing in non ranges is an integer and there are no proper ranges meaning string based input only
 		self.log.err('Generator found no IDs')
 		if type(inp_data) is list:
 			return {"status": "error", "message": "Generator found no IDs", "data": inp_data}
@@ -73,7 +78,7 @@ def main(self, inp_data, context_type, operation):
 	except OverflowError:
 		self.log.err('Range value is too large')
 		return {"status": "error", "message": "Range value is too large", "data": []}
-	if context_type == 'components':
+	if context_type == 'components' or context_type == 'bases':
 		output_list = list(set(output_list))  # remove all duplicates in the range addition section ^
 		output_list.sort()  # sort for better eyecandy when loading components
 	self.log.pos('Generator ID formatting successful')

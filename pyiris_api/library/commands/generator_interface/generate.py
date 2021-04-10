@@ -7,17 +7,27 @@ import os
 
 
 def check_imports(self):
-    global tmp_win
-    tmp_win = list(self.config.win_components.values())
-    tmp_win.append('windows/bases/reverse_tcp_base')
-    for i in tmp_win:
+    global tmp_win_base
+    tmp_win_base = list(self.config.win_bases.values())
+    for i in tmp_win_base:
+        exec("global " + i.replace('/', '_'), globals())
+        exec(f"{i.replace('/', '_')} = __import__('pyiris_api.components', globals(), locals(), ['{i.replace('/', '.')}']).{i.replace('/', '.')}", globals())
+    self.log.pos('Loaded all windows bases into generator - OK')
+    global tmp_lin_base
+    tmp_lin_base = list(self.config.lin_components.values())
+    for i in tmp_lin_base:
+        exec("global " + i.replace('/', '_'), globals())
+        exec(f"{i.replace('/', '_')} = __import__('pyiris_api.components', globals(), locals(), ['{i.replace('/', '.')}']).{i.replace('/', '.')}", globals())
+    self.log.pos('Loaded all linux bases into generator - OK')
+    global tmp_win_comp
+    tmp_win_comp = list(self.config.win_components.values())
+    for i in tmp_win_comp:
         exec("global " + i.replace('/', '_'), globals())
         exec(f"{i.replace('/', '_')} = __import__('pyiris_api.components', globals(), locals(), ['{i.replace('/', '.')}']).{i.replace('/', '.')}", globals())
     self.log.pos('Loaded all windows components into generator - OK')
-    global tmp_lin
-    tmp_lin = list(self.config.lin_components.values())
-    tmp_lin.append('linux/bases/reverse_tcp_base')
-    for i in tmp_lin:
+    global tmp_lin_comp
+    tmp_lin_comp = list(self.config.lin_components.values())
+    for i in tmp_lin_comp:
         exec("global " + i.replace('/', '_'), globals())
         exec(f"{i.replace('/', '_')} = __import__('pyiris_api.components', globals(), locals(), ['{i.replace('/', '.')}']).{i.replace('/', '.')}", globals())
     self.log.pos('Loaded all linux components into generator - OK')
@@ -35,10 +45,9 @@ def main(self, generator_settings=None):
     try:
         original = os.getcwd()
         os.chdir(self.config.started_at)
-        comp_list = sorted([i for i in self.config.loaded_components.values() if not i.endswith('_base')]) # this looks for *_base which is our base network components, appends them to the top  of the list
-        for i in self.config.loaded_components.values():
-            if i.endswith('_base'): # this looks for *_base which is our base network components, appends them to the top  of the list
-                comp_list.insert(0, i)
+        self.log.pos('Loading and executing : ' + self.config.loaded_base)
+        exec(self.config.loaded_base.replace('/', '_') + '.main(self, "generate")')
+        comp_list = sorted(self.config.loaded_components.values())
         for i in comp_list:
             self.log.pos('Loading and executing : ' + i)
             try:
@@ -73,7 +82,7 @@ def main(self, generator_settings=None):
             for i in self.config.startup_end:
                 f.write(i + '\n')
             self.log.inf('Writing in component list for frontend...')
-            f.write("comp_list = " + str(comp_list) + "\n")
+            f.write(f"comp_list = {{'components': {str(comp_list)}, 'windows': {self.config.scout_values['Windows']}}}\n")
             self.log.inf('Writing in base component...')
             for i in self.config.logics:
                 save_data = save_data.replace('#Statements#', '#Statements#' + i)

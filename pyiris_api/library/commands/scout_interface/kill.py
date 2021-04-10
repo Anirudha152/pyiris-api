@@ -12,8 +12,8 @@ def main(self, scout_id):
             for i in list(self.config.scout_database.keys()):
                 try:
                     self.log.inf('Killing scout of ID : ' + i)
-                    send_all.main(self.config.scout_database[i][0], 'kill')
-                    data = recv_all.main(self.config.scout_database[i][0])
+                    send_all.main(self.config.scout_database[i]["conn_object"], 'kill')
+                    data = recv_all.main(self.config.scout_database[i]["conn_object"])
                     self.log.blank(data)
                     try:
                         del (self.config.scout_database[i])
@@ -34,8 +34,8 @@ def main(self, scout_id):
                 return {"status": "ok", "message": "Successfully killed scouts",  "data": {"scout_database": self.config.scout_database}}
         else:
             self.log.inf('Killing scout of ID : ' + scout_id)
-            send_all.main(self.config.scout_database[scout_id][0], 'kill')
-            data = recv_all.main(self.config.scout_database[scout_id][0])
+            send_all.main(self.config.scout_database[scout_id]["conn_object"], 'kill')
+            data = recv_all.main(self.config.scout_database[scout_id]["conn_object"])
             self.log.blank(data)
             try:
                 del (self.config.scout_database[scout_id])

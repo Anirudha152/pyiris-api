@@ -1,11 +1,11 @@
 from functools import wraps
-import pyiris_api.library.modules.generator_append as generator_append
+import pyiris_api.library.modules.check_loaded_components as check_loaded_components
 
 
-def run_generator_append(func):
+def run_component_check(func):
 	@wraps(func)
 	def wrapper(self, *args, **kwargs):
-		generator_append.main(self)
+		check_loaded_components.main(self)
 		return func(self, *args, **kwargs)
 	return wrapper
 

@@ -10,7 +10,7 @@ requires = ["opencv-python==4.4.0.44",
         "PyInstaller==4.0",
         "Pillow==8.0.1",
         "cryptography==3.1.1",
-        "PyAutoGUI==0.9.52"]
+        "pyautogui==0.9.52"]
 
 if platform.uname()[0] == 'Windows':
     requires += ["pywin32==228",
@@ -23,8 +23,8 @@ elif platform.uname()[0] == "Linux":
     requires += ["Xlib==0.21", "pyxhook==1.0.0", "python-crontab==2.5.1"]
 
 setuptools.setup(
-    name="pyiris-api-f", # Replace with your own username
-    version="2.0.0",
+    name="pyiris-api-h", # Replace with your own username
+    version="2.0.2",
     author="Anirudha152",
     author_email="anirudhasaraf123t@gmail.com",
     description="All the functionality of pyiris packaged into an API",

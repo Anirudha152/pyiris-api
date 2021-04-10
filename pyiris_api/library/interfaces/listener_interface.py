@@ -1,5 +1,5 @@
 # API
-#
+# done
 import pyiris_api.library.commands.listener_interface.kill as kill
 import pyiris_api.library.commands.listener_interface.more as more
 import pyiris_api.library.commands.listener_interface.rename as rename
@@ -22,7 +22,7 @@ class Main:
         return kill.main(self, to_kill)
 
     @decorators.reset_bridged
-    def more_listener(self, to_show):
+    def listener_info(self, to_show):
         return more.main(self, to_show)
 
     @decorators.reset_bridged
@@ -30,7 +30,7 @@ class Main:
         return rename.main(self, to_rename, rename_val)
 
     @decorators.reset_bridged
-    def reset_listener_values(self, to_reset):
+    def reset_option(self, to_reset):
         return reset.main(self, to_reset)
 
     @decorators.reset_bridged
@@ -38,7 +38,7 @@ class Main:
         return run.main(self)
 
     @decorators.reset_bridged
-    def set_listener_values(self, to_set, set_val):
+    def set_option(self, to_set, set_val):
         return set.main(self, to_set, set_val)
 
     @decorators.reset_bridged

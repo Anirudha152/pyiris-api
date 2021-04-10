@@ -1,6 +1,7 @@
 # API
 # done
 import os
+import pyiris_api.library.modules.check_loaded_components as check_loaded_components
 
 
 def main(self, to_reset):
@@ -10,7 +11,7 @@ def main(self, to_reset):
                                'Port': ['9999',
                                         'The local port to connect back on (Reverse) or the remote port to listen on (Bind)'],
                                'Timeout': ['5', 'The timeout value for the scout'],
-                               'Windows': [['True' if os.name != "nt" else "False"][0], 'When "True", will generate a windows scout, else a linux scout'],
+                               'Windows': [['True' if os.name == "nt" else "False"][0], 'When "True", will generate a windows scout, else a linux scout'],
                                'Dir': [os.path.join(self.config.started_at, 'generated'),
                                         'Directory to generate payload in'],
                                'Compile': ['False',
@@ -20,11 +21,13 @@ def main(self, to_reset):
         if option in local_static_values:
             self.config.scout_values[option] = local_static_values[option]
             self.log.pos('Reset option : ' + option)
+            check_loaded_components.main(self)
             return {"status": "ok", "message": "Reset option : " + option, "data": {"scout_values": self.config.scout_values}}
         elif option == 'all':
             self.config.scout_values = local_static_values
             self.log.pos('Reset all options')
-            return {"status": "ok", "message": "Reset all options : " + option, "data": {"scout_values": self.config.scout_values}}
+            check_loaded_components.main(self)
+            return {"status": "ok", "message": "Reset all options", "data": {"scout_values": self.config.scout_values}}
         else:
             self.log.err('Please specify a valid option to reset')
             return {"status": "error", "message": "Please specify a valid option to reset", "data": None}

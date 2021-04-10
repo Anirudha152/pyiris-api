@@ -19,11 +19,11 @@ def main(self, command):
             main_command = command.split(" ")[0]
             if main_command in self.special_commands:
                 custom_handler = [x["handler"] for x in self.config.scout_custom_handlers if x["command"] == main_command][0]
-                output = exec_with_return(f"{custom_handler.replace('.', '_')}.main(self, self.config.scout_database[self.config.bridged_to][0], command)", self=self, command=command)
+                output = exec_with_return(f"{custom_handler.replace('.', '_')}.main(self, self.config.scout_database[self.config.bridged_to][\"conn_object\"], command)", self=self, command=command)
                 return output
             else:
-                send_all.main(self.config.scout_database[self.config.bridged_to][0], command)
-                data = recv_all.main(self.config.scout_database[self.config.bridged_to][0])
+                send_all.main(self.config.scout_database[self.config.bridged_to]["conn_object"], command)
+                data = recv_all.main(self.config.scout_database[self.config.bridged_to]["conn_object"])
                 self.log.blank(data)
                 return {"status": "ok", "message": "", "data": {"scout_output": data}}
         else:

@@ -12,8 +12,8 @@ def main(self, scout_id, sleep_dur):
             for i in list(self.config.scout_database.keys()):
                 try:
                     self.log.inf('Sleeping scout of ID : ' + i)
-                    send_all.main(self.config.scout_database[i][0], 'sleep ' + sleep_dur)
-                    data = recv_all.main(self.config.scout_database[i][0])
+                    send_all.main(self.config.scout_database[i]["conn_object"], 'sleep ' + sleep_dur)
+                    data = recv_all.main(self.config.scout_database[i]["conn_object"])
                     self.log.blank(data)
                     try:
                         del (self.config.scout_database[i])
@@ -48,8 +48,8 @@ def main(self, scout_id, sleep_dur):
             sleep_dur = str(sleep_dur)
             self.log.inf(f"Sleep duration of {sleep_dur}s used")
             self.log.inf('Sleeping scout of ID : ' + str(scout_id))
-            send_all.main(self.config.scout_database[scout_id][0], 'sleep ' + sleep_dur)
-            data = recv_all.main(self.config.scout_database[scout_id][0])
+            send_all.main(self.config.scout_database[scout_id]["conn_object"], 'sleep ' + sleep_dur)
+            data = recv_all.main(self.config.scout_database[scout_id]["conn_object"])
             self.log.blank(data)
             try:
                 del (self.config.scout_database[scout_id])

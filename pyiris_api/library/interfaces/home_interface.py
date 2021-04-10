@@ -33,7 +33,7 @@ class Main:
         return reset.main(self, list_type)
 
     @decorators.reset_bridged
-    def remove_list(self, list_type, hostname):
+    def remove_from_list(self, list_type, hostname):
         return rm.main(self, list_type, hostname)
 
     @decorators.reset_bridged
