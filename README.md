@@ -64,6 +64,9 @@ Commands:
   - [`.send()`](#sendcommand)
   - [`.get_bridged()`](#get_bridged)
 
+Disclaimer:
+- [Disclaimer](#disclaimer)
+
 
 ## Basic Usage
 For a basic instance,
