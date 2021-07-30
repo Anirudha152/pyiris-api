@@ -475,3 +475,5 @@ Returns the ID of the currently bridged scout
 output = p.direct.get_bridged()
 print(output) # {'status': 'ok', 'message': '', 'data': {'scout_info': {'0': {'host': '192.168.1.7', 'port': '50201', 'connection_through': '0.0.0.0:9999', 'name': 'Vulnerable Windows 10 PC', 'connected_at': 'YYYY-MM-DD HH:MM:SS', 'connection_type': 'Reverse'}}}}
 ```
+# Disclaimer
+I am not held reponsible for anything illegal or unethical that you do with this framework, this framework was developed for ethical hackers, pentesters and for research purposes as a cyber security project. Please do NOT use this without the full consent of the victim. Use this framework to break stuff but legally please :).
