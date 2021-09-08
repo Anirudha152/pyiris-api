@@ -8,7 +8,7 @@ requires = ["opencv-python==4.4.0.44",
         "mss==6.0.0",
         "pyperclip==1.8.1",
         "PyInstaller==4.0",
-        "Pillow==8.0.1",
+        "Pillow==8.3.2",
         "cryptography==3.1.1",
         "pyautogui==0.9.52"]
 
